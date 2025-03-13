@@ -1,0 +1,55 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.Pages.TaskQueueView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid ClipToBounds="False" Margin="0,0,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="330" Width="7*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="7*" />
+        </Grid.ColumnDefinitions>
+        <suki:GlassCard Grid.Column="0" Margin="15">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid
+                    Grid.Row="0"
+                    Margin="0,0,5,4"
+                    MinWidth="150"
+                    VerticalAlignment="Top">
+
+                    <TextBlock
+                        Foreground="{DynamicResource SukiLowText}"
+                        HorizontalAlignment="Left"
+                        Margin="2,0,0,0"
+                        Text="{I18N {x:Static helper:LangKeys.TaskList}}"
+                        Width="55" />
+                </Grid>
+                <ListBox
+                    BorderThickness="0"
+                    Grid.Row="1"
+                    Margin="2,3,2,0"
+                    MinHeight="220">
+                    <ListBoxItem>1</ListBoxItem>
+                    <ListBoxItem>2</ListBoxItem>
+                    <ListBoxItem>3</ListBoxItem>
+                    <ListBoxItem>4</ListBoxItem>
+
+                </ListBox>
+            </Grid>
+        </suki:GlassCard>
+
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFAAvalonia", "MFAAvalonia\MFAAvalonia.csproj", "{0DEB7018-7094-4C4E-808E-46BA4A1D77FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyStaticGenerator", "LazyStaticGenerator\LazyStaticGenerator.csproj", "{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0DEB7018-7094-4C4E-808E-46BA4A1D77FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DEB7018-7094-4C4E-808E-46BA4A1D77FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DEB7018-7094-4C4E-808E-46BA4A1D77FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DEB7018-7094-4C4E-808E-46BA4A1D77FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

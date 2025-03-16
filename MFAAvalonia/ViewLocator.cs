@@ -1,35 +1,40 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using CommunityToolkit.Mvvm.ComponentModel;
+using MFAAvalonia.Helper;
 using MFAAvalonia.ViewModels;
+using System.Collections.Generic;
 
 namespace MFAAvalonia;
 
-public class ViewLocator : IDataTemplate
+public class ViewLocator(ViewsHelper views) : IDataTemplate
 {
-    public Control? Build(object? data)
+    private readonly Dictionary<object, Control> _controlCache = [];
+
+    public Control Build(object? param)
     {
-        if (data is null)
-            return null;
-
-        var name = data.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
-        var type = Type.GetType(name);
-
-        if (type != null)
+        if (param is null)
         {
-            var control = (Control)Activator.CreateInstance(type)!;
-            control.DataContext = data;
+            return CreateText("Data is null.");
+        }
+
+        if (_controlCache.TryGetValue(param, out var control))
+        {
             return control;
         }
 
-        return new TextBlock
+        if (views.TryCreateView(param, out var view))
         {
-            Text = "Not Found: " + name
-        };
+            _controlCache.Add(param, view);
+
+            return view;
+        }
+
+        return CreateText($"No View For {param.GetType().Name}.");
     }
 
-    public bool Match(object? data)
-    {
-        return data is ViewModelBase;
-    }
+    public bool Match(object? data) => data is ObservableObject;
+
+    private static TextBlock CreateText(string text) => new TextBlock { Text = text };
 }

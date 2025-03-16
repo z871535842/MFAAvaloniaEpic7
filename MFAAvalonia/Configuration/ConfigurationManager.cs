@@ -1,5 +1,5 @@
 ﻿using MFAAvalonia.Helper;
-using Microsoft.Extensions.Configuration;
+using MFAWPF.Helper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,30 +9,19 @@ using System.Text.Json;
 
 namespace MFAAvalonia.Configuration;
 
-public class ConfigurationManager
+public static class ConfigurationManager
 {
-    private static readonly IConfigurationRoot _configRoot;
     private static readonly string _configDir = Path.Combine(
-        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-        "MFAAvalonia/config");
-    public static readonly Dictionary<string, object> Maa = new();
+        AppContext.BaseDirectory,
+        "config");
+    public static readonly MFAConfiguration Maa = new("Maa", "maa_option", new Dictionary<string, object>());
+    public static MFAConfiguration Current = new("Default", "config", new Dictionary<string, object>());
     
-    
-    static ConfigurationManager()
-    {
-        // 初始化配置系统
-        var builder = new ConfigurationBuilder()
-            .SetBasePath(_configDir)
-            .AddJsonFile("config.json", optional: true)
-            .AddJsonFile("maa_option.json", optional: true);
-
-        _configRoot = builder.Build();
-    }
 
     public static ObservableCollection<MFAConfiguration> Configs { get; } = LoadConfigurations();
 
     public static int ConfigIndex { get; set; } = 0;
-    
+
     public static string ConfigName { get; set; } = "Default";
 
     public static string GetCurrentConfiguration() => ConfigName;
@@ -44,25 +33,39 @@ public class ConfigurationManager
         return GetCurrentConfiguration();
     }
 
+    public static void Initialize()
+    {
+        LoggerHelper.Info("Current Configuration: " + GetCurrentConfiguration());
+    }
+
     private static ObservableCollection<MFAConfiguration> LoadConfigurations()
     {
+        LoggerHelper.Info("Loading Configurations...");
         var collection = new ObservableCollection<MFAConfiguration>();
+
+        var defaultConfigPath = Path.Combine(_configDir, "config.json");
+        if (!Directory.Exists(_configDir))
+            Directory.CreateDirectory(_configDir);
+        if (!File.Exists(defaultConfigPath))
+            File.WriteAllText(defaultConfigPath, "{}");
+        collection.Add(Current.SetConfig(JsonHelper.LoadConfig("config", new Dictionary<string, object>())));
 
         foreach (var file in Directory.EnumerateFiles(_configDir, "*.json"))
         {
             var fileName = Path.GetFileNameWithoutExtension(file);
-            if (fileName == "maa_option") continue;
+            if (fileName == "maa_option" || fileName == "config") continue;
             var configs = JsonHelper.LoadConfig(fileName, new Dictionary<string, object>());
-            
-            var config = new MFAConfiguration
-            {
-                Name = fileName == "config" ? "Default" : fileName,
-                FileName = fileName,
-                Config = configs
-            };
+
+            var config = new MFAConfiguration(fileName, fileName, configs);
 
             collection.Add(config);
         }
+        
+        Maa.SetConfig(JsonHelper.LoadConfig("maa_option", new Dictionary<string, object>()));
+        Current = collection.FirstOrDefault(c
+                => !string.IsNullOrWhiteSpace(c.Name)
+                && c.Name.Equals(ConfigName, StringComparison.OrdinalIgnoreCase))
+            ?? Current;
 
         return collection;
     }
@@ -76,4 +79,3 @@ public class ConfigurationManager
         }
     }
 }
-

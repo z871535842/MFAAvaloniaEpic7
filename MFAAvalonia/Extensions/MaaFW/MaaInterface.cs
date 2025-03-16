@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace MFAAvalonia.Extensions.MaaFW;
 
@@ -224,24 +225,18 @@ public class MaaInterface
         private set
         {
             _instance = value;
-
-            if (value?.Resource != null)
+        
+            foreach (var customResource in value?.Resource ?? Enumerable.Empty<MaaInterfaceResource>())
             {
-                foreach (var customResource in value.Resource)
+                var nameKey = customResource.Name?.Trim() ?? string.Empty;
+                var paths = ReplacePlaceholder(customResource.Path ?? new(), AppContext.BaseDirectory);
+            
+                value!.Resources[nameKey] = new MaaInterfaceResource
                 {
-                    var paths = ReplacePlaceholder(customResource.Path ?? new List<string>(),
-                        AppContext.BaseDirectory);
-                    if (_instance != null)
-                    {
-                        _instance.Resources[customResource.Name ?? string.Empty] = new MaaInterfaceResource
-                        {
-                            Name = LanguageHelper.GetLocalizedString(customResource.Name),
-                            Path = paths,
-                        };
-                    }
-                }
+                    Name = LanguageHelper.GetLocalizedString(nameKey),
+                    Path = paths
+                };
             }
-
         }
     }
 

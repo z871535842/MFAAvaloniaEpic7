@@ -1,0 +1,100 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.UserControls.Settings.GuiSettingsUserControl"
+    x:DataType="settings:GuiSettingsUserControlModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
+    xmlns:pages1="clr-namespace:MFAAvalonia.Views.Pages"
+    xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.UsersControls.Settings"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <UserControl.Resources>
+        <converters:EqualityConverter x:Key="EqualityConverter" />
+    </UserControl.Resources>
+    <StackPanel>
+        <StackPanel
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="20">
+            <RadioButton
+                Classes="GigaChips"
+                GroupName="RadioBaseTheme"
+                Height="160"
+                IsChecked="{Binding IsLightTheme}"
+                Padding="0"
+                Width="180">
+                <Border
+                    Background="#fafafa"
+                    CornerRadius="{DynamicResource MediumCornerRadius}"
+                    Margin="-50">
+                    <Grid>
+                        <TextBlock
+                            FontWeight="DemiBold"
+                            Foreground="#555555"
+                            HorizontalAlignment="Center"
+                            Margin="58,42,42,42"
+                            Text="{I18N {x:Static helper:LangKeys.LightColor}}"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                </Border>
+            </RadioButton>
+
+            <RadioButton
+                Classes="GigaChips"
+                GroupName="RadioBaseTheme"
+                Height="160"
+                IsChecked="{Binding !IsLightTheme}"
+                Width="180">
+                <Border
+                    Background="#222222"
+                    CornerRadius="{DynamicResource MediumCornerRadius}"
+                    Margin="-50">
+                    <Grid>
+                        <TextBlock
+                            FontWeight="DemiBold"
+                            Foreground="#fafafa"
+                            HorizontalAlignment="Center"
+                            Margin="58,42,42,42"
+                            Text="{I18N {x:Static helper:LangKeys.DarkColor}}"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                </Border>
+            </RadioButton>
+        </StackPanel>
+        <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding AvailableColors}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="10" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="suki:SukiColorTheme">
+                    <RadioButton
+                        Classes="GigaChips"
+                        Command="{Binding ((pages:SettingsViewModel)DataContext).SwitchToColorThemeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type pages1:SettingsView}}}"
+                        CommandParameter="{Binding}"
+                        CornerRadius="50"
+                        GroupName="RadioColorTheme"
+                        Height="50"
+                        IsChecked="{Binding CurrentColorTheme, Source={x:Static helper:Instances.GuiSettingsUserControlModel}, Converter={StaticResource EqualityConverter}, ConverterParameter={Binding}}"
+                        Width="50">
+                        <Border
+                            Background="{Binding PrimaryBrush}"
+                            CornerRadius="50"
+                            Margin="-30" />
+                    </RadioButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+
+</UserControl>

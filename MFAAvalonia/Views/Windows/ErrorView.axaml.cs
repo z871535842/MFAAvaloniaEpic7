@@ -1,0 +1,114 @@
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using MFAAvalonia.Helper;
+using SukiUI.Controls;
+using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MFAAvalonia.Views.Windows;
+
+public partial class ErrorView : SukiWindow
+{
+    private bool _shouldExit;
+
+    public static readonly StyledProperty<string?> ExceptionMessageProperty =
+        AvaloniaProperty.Register<ErrorView, string?>(nameof(ExceptionMessage), string.Empty);
+
+    public string? ExceptionMessage
+    {
+        get => GetValue(ExceptionMessageProperty);
+        set => SetValue(ExceptionMessageProperty, value);
+    }
+
+    public static readonly StyledProperty<string?> ExceptionDetailsProperty =
+        AvaloniaProperty.Register<ErrorView, string?>(nameof(ExceptionDetails), string.Empty);
+
+    public string? ExceptionDetails
+    {
+        get => GetValue(ExceptionDetailsProperty);
+        set => SetValue(ExceptionDetailsProperty, value);
+    }
+
+    // 构造函数
+    public ErrorView()
+    {
+        DataContext = this;
+        InitializeComponent();
+        
+    }
+
+    public ErrorView(Exception? exception, bool shouldExit = false) : this()
+    {
+        var errorStr = new StringBuilder();
+        while (exception != null)
+        {
+            errorStr.Append(exception.Message);
+            if (exception.InnerException != null)
+            {
+                errorStr.AppendLine();
+                exception = exception.InnerException;
+            }
+            else break;
+        }
+
+        ExceptionMessage = errorStr.ToString();
+        ExceptionDetails = exception.ToString();
+        _shouldExit = shouldExit;
+    }
+    // 显示异常窗口
+    public static void ShowException(Exception e, bool shouldExit = false)
+    {
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            var errorView = new ErrorView(e, shouldExit);
+            errorView.ShowDialog(Instances.RootView);
+        });
+    }
+
+    // 复制到剪贴板
+    private async void CopyErrorMessage_Click(object sender, RoutedEventArgs e)
+    {
+        var text = $"{ExceptionMessage}\n\n{ExceptionDetails}";
+        await Clipboard.SetTextAsync(text);
+
+        // 显示提示（使用Avalonia原生ToolTip）
+        if (sender is Control control)
+        {
+            ToolTip.SetIsOpen(control, true);
+            await Task.Delay(3000);
+            ToolTip.SetIsOpen(control, false);
+        }
+    }
+
+    // 打开反馈链接
+    private void OpenFeedbackLink(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(MFAUrls.NewIssueUri)
+            {
+                UseShellExecute = true
+            });
+        }
+        catch
+        {
+        }
+    }
+
+    // 窗口关闭处理
+    protected override void OnClosed(EventArgs e)
+    {
+        if (_shouldExit)
+        {
+            Environment.Exit(0);
+        }
+        base.OnClosed(e);
+    }
+}

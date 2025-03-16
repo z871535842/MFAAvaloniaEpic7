@@ -3,53 +3,428 @@
     d:DesignWidth="800"
     mc:Ignorable="d"
     x:Class="MFAAvalonia.Views.Pages.TaskQueueView"
+    x:DataType="pages:TaskQueueViewModel"
     xmlns="https://github.com/avaloniaui"
+    xmlns:System="clr-namespace:System;assembly=System.Runtime"
+    xmlns:binding="clr-namespace:MaaFramework.Binding;assembly=MaaFramework.Binding"
+    xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+    xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ex="clr-namespace:MFAAvalonia.Extensions"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:maa="clr-namespace:MFAAvalonia.Extensions.MaaFW"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:type="clr-namespace:MFAAvalonia.Helper.ValueType"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.DataContext>
+        <pages:TaskQueueViewModel />
+    </Design.DataContext>
+    <UserControl.Resources>
+        <converters:DeviceDisplayConverter x:Key="DeviceDisplayConverter" />
+        <converters:EnumToBoolConverter x:Key="EnumConverter" />
+        <converters:DynamicWidthConverter x:Key="DynamicWidthConverter" />
+        <ContextMenu x:Key="TaskMenu">
+            <MenuItem Click="Delete" Header="{I18N {x:Static helper:LangKeys.Delete}}" />
+        </ContextMenu>
+    </UserControl.Resources>
     <Grid ClipToBounds="False" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition MaxWidth="330" Width="7*" />
             <ColumnDefinition Width="6*" />
             <ColumnDefinition Width="7*" />
         </Grid.ColumnDefinitions>
-        <suki:GlassCard Grid.Column="0" Margin="15">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="30" />
-                    <RowDefinition />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <Grid
-                    Grid.Row="0"
-                    Margin="0,0,5,4"
-                    MinWidth="150"
-                    VerticalAlignment="Top">
+        <Grid>
 
-                    <TextBlock
-                        Foreground="{DynamicResource SukiLowText}"
-                        HorizontalAlignment="Left"
-                        Margin="2,0,0,0"
-                        Text="{I18N {x:Static helper:LangKeys.TaskList}}"
-                        Width="55" />
-                </Grid>
-                <ListBox
-                    BorderThickness="0"
-                    Grid.Row="1"
-                    Margin="2,3,2,0"
-                    MinHeight="220">
-                    <ListBoxItem>1</ListBoxItem>
-                    <ListBoxItem>2</ListBoxItem>
-                    <ListBoxItem>3</ListBoxItem>
-                    <ListBoxItem>4</ListBoxItem>
+            <suki:GlassCard Grid.Column="0" Margin="15,15,15,25">
+                <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                        <Grid Grid.Row="0">
+                            <TextBlock
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource SukiLowText}"
+                                HorizontalAlignment="Left"
+                                Margin="2,0,0,0"
+                                Text="{I18N {x:Static helper:LangKeys.TaskList}}"
+                                VerticalAlignment="Center"
+                                Width="55" />
+                            <StackPanel
+                                HorizontalAlignment="Right"
+                                Margin="2,0,2,0"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                                <Button
+                                    Classes="Basic Round"
+                                    Command="{Binding SelectAllCommand}"
+                                    Height="16"
+                                    IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="7,0,0,0"
+                                    Padding="0"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.SelectAll}}"
+                                    Width="16">
+                                    <fluent:FluentIcon
+                                        Icon="SelectAllOn"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
+                                </Button>
+                                <Button
+                                    Classes="Basic Round"
+                                    Command="{Binding SelectNoneCommand}"
+                                    Height="16"
+                                    IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="7,0,0,0"
+                                    Padding="0"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.DeselectAll}}"
+                                    Width="16">
+                                    <fluent:FluentIcon
+                                        Icon="SelectAllOff"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
+                                </Button>
+                                <Button
+                                    Classes="Basic Round"
+                                    Command="{Binding AddTaskCommand}"
+                                    Height="16"
+                                    IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="7,0,8,0"
+                                    Padding="0"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.AddTask}}">
+                                    <fluent:FluentIcon
+                                        Icon="AddSquareMultiple"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </suki:GroupBox.Header>
+                    <Grid>
+                        <AdornerLayer>
+                            <ListBox
+                                DragDrop.AllowDrop="True"
+                                DragDrop.DragLeave="OnDragLeave"
+                                DragDrop.DragOver="OnDragOver"
+                                DragDrop.Drop="OnDrop"
+                                ItemsSource="{Binding Path=TaskItemViewModels}"
+                                Margin="0,3,0,0"
+                                MinHeight="220"
+                                PointerMoved="OnPointerMoved"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                                x:Name="TaskListBox">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid
+                                            Background="Transparent"
+                                            ColumnDefinitions="*,25"
+                                            ContextMenu="{StaticResource TaskMenu}"
+                                            x:Name="ListGrid">
+                                            <CheckBox
+                                                Content="{Binding Name}"
+                                                Grid.Column="0"
+                                                HorizontalAlignment="Left"
+                                                IsChecked="{Binding IsCheckedWithNull}"
+                                                ToolTip.Placement="Right"
+                                                ToolTip.Tip="{I18N {x:Static helper:LangKeys.TooltipDragLabel}}">
+                                                <CheckBox.ContentTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock
+                                                            Text="{Binding}"
+                                                            TextTrimming="CharacterEllipsis"
+                                                            TextWrapping="NoWrap"
+                                                            x:DataType="System:String" />
+                                                    </DataTemplate>
+                                                </CheckBox.ContentTemplate>
+                                            </CheckBox>
 
-                </ListBox>
-            </Grid>
-        </suki:GlassCard>
+                                            <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
+                                            <RadioButton
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Grid.Column="1"
+                                                GroupName="TaskSettings"
+                                                HorizontalContentAlignment="Left"
+                                                IsChecked="{Binding EnableSetting}"
+                                                IsVisible="False" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </AdornerLayer>
 
+                    </Grid>
+                </suki:GroupBox>
+
+            </suki:GlassCard>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button
+                    Classes="Flat Rounded"
+                    Command="{Binding StartTaskCommand}"
+                    Content="{I18N {x:Static helper:LangKeys.StartTask}}"
+                    FontWeight="DemiBold"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    IsVisible="{calcBinding:Binding '!IsRunning',
+                                                    Source={x:Static helper:Instances.RootViewModel}}"
+                    Margin="0,0,0,7"
+                    VerticalAlignment="Bottom"
+                    Width="160" />
+                <Button
+                    Classes="Flat Rounded"
+                    Command="{Binding StopTaskCommand}"
+                    Content="{I18N {x:Static helper:LangKeys.StopTask}}"
+                    FontWeight="DemiBold"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    IsVisible="{calcBinding:Binding 'IsRunning',
+                                                    Source={x:Static helper:Instances.RootViewModel}}"
+                    Margin="0,0,0,7"
+                    VerticalAlignment="Bottom"
+                    Width="160" />
+
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" MaxHeight="150" />
+            </Grid.RowDefinitions>
+            <suki:GlassCard Grid.Row="0" Margin="5,15,15,5">
+                <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                        <TextBlock
+                            FontSize="11"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource SukiLowText}"
+                            HorizontalAlignment="Left"
+                            Margin="2,0,0,0"
+                            Text="{I18N {x:Static helper:LangKeys.TaskSettings}}"
+                            VerticalAlignment="Center"
+                            Width="55" />
+                    </suki:GroupBox.Header>
+                </suki:GroupBox>
+            </suki:GlassCard>
+            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25">
+                <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                        <TextBlock
+                            FontSize="11"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource SukiLowText}"
+                            HorizontalAlignment="Left"
+                            Margin="2,0,0,0"
+                            Text="{I18N {x:Static helper:LangKeys.TaskDescription}}"
+                            VerticalAlignment="Center"
+                            Width="55" />
+                    </suki:GroupBox.Header>
+                </suki:GroupBox>
+            </suki:GlassCard>
+        </Grid>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" MaxHeight="250" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <suki:GlassCard Grid.Row="0" Margin="5,15,15,8">
+                <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                        <Grid>
+                            <TextBlock
+                                FontSize="11"
+                                FontWeight="Bold"
+                                Foreground="{DynamicResource SukiLowText}"
+                                HorizontalAlignment="Left"
+                                Margin="2,0,0,0"
+                                Text="{I18N {x:Static helper:LangKeys.Connection}}"
+                                VerticalAlignment="Center"
+                                Width="55" />
+
+                            <StackPanel
+                                HorizontalAlignment="Right"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+
+                                <Button
+                                    Classes="Basic Round"
+                                    Command="{Binding CustomAdbCommand}"
+                                    Height="16"
+                                    IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                    IsVisible="{calcBinding:Binding 'CurrentController == maa:MaaControllerTypes.Adb'}"
+                                    Margin="3,0,2,0"
+                                    Padding="0"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.Custom}}">
+                                    <fluent:FluentIcon
+                                        Height="18"
+                                        Icon="DesktopEdit"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
+                                </Button>
+                                <Button
+                                    Classes="Basic Round"
+                                    Command="{Binding RefreshCommand}"
+                                    Height="17"
+                                    IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="3,0,3,0"
+                                    Padding="0"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.TooltipRefresh}}"
+                                    VerticalAlignment="Center">
+                                    <fluent:FluentIcon
+                                        Height="18"
+                                        Icon="ArrowSync"
+                                        IconSize="Size16"
+                                        IconVariant="Regular" />
+                                </Button>
+                                <Path
+                                    Data="{StaticResource UnconnectedGeometry}"
+                                    Fill="Red"
+                                    Height="16"
+                                    IsVisible="{calcBinding:Binding '!IsConnected',
+                                                                    Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="3,3,4,0"
+                                    Stretch="Uniform"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.Unconnected}}"
+                                    VerticalAlignment="Center" />
+                                <Path
+                                    Data="{StaticResource ConnectedGeometry}"
+                                    Fill="LimeGreen"
+                                    Height="16"
+                                    IsVisible="{calcBinding:Binding 'IsConnected',
+                                                                    Source={x:Static helper:Instances.RootViewModel}}"
+                                    Margin="2,3,4,0"
+                                    Stretch="Uniform"
+                                    ToolTip.Placement="Right"
+                                    ToolTip.Tip="{I18N {x:Static helper:LangKeys.Connected}}"
+                                    Width="15" />
+                            </StackPanel>
+                        </Grid>
+                    </suki:GroupBox.Header>
+                    <WrapPanel HorizontalAlignment="Stretch" x:Name="connectionPanel">
+                        <!--  左侧按钮组  -->
+                        <WrapPanel HorizontalAlignment="Left" x:Name="Tab">
+                            <RadioButton
+                                Classes="GigaChips"
+                                Content="{I18N {x:Static helper:LangKeys.TabADB}}"
+                                FontSize="12"
+                                GroupName="Controller"
+                                IsChecked="{Binding CurrentController, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
+                                MinWidth="{Binding Bounds.Width, ElementName=SecondButton}"
+                                x:Name="FirstButton" />
+                            <RadioButton
+                                Classes="GigaChips"
+                                Content="{I18N {x:Static helper:LangKeys.TabWin32}}"
+                                FontSize="12"
+                                GroupName="Controller"
+                                IsChecked="{Binding CurrentController, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
+                                MinWidth="{Binding Bounds.Width, ElementName=FirstButton}"
+                                x:Name="SecondButton" />
+                        </WrapPanel>
+                        <DockPanel
+                            HorizontalAlignment="Stretch"
+                            LastChildFill="True"
+                            Margin="5,0"
+                            MinWidth="200">
+                            <DockPanel.Width>
+                                <MultiBinding Converter="{StaticResource DynamicWidthConverter}">
+                                    <!--  父容器宽度  -->
+                                    <Binding ElementName="connectionPanel" Path="Bounds.Width" />
+                                    <!--  同级元素宽度  -->
+                                    <Binding ElementName="Tab" Path="Bounds.Width" />
+                                    <!--  自身最小宽度  -->
+                                    <Binding Path="MinWidth" RelativeSource="{RelativeSource Self}" />
+                                </MultiBinding>
+                            </DockPanel.Width>
+                            <TextBlock
+                                FontSize="12"
+                                Foreground="{DynamicResource SukiLowText}"
+                                Grid.Column="0"
+                                Text="{I18N {x:Static helper:LangKeys.CurrentController}}"
+                                VerticalAlignment="Center" />
+                            <ComboBox
+                                IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                ItemsSource="{Binding Devices}"
+                                Margin="5,0,0,0"
+                                SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBox.DataTemplates>
+                                    <DataTemplate DataType="binding:AdbDeviceInfo">
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Converter={StaticResource DeviceDisplayConverter}}" />
+                                    </DataTemplate>
+
+                                    <DataTemplate DataType="binding:DesktopWindowInfo">
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ComboBox.DataTemplates>
+                            </ComboBox>
+                        </DockPanel>
+
+                    </WrapPanel>
+                </suki:GroupBox>
+            </suki:GlassCard>
+            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25">
+                <suki:GroupBox>
+                    <suki:GroupBox.Header>
+                        <TextBlock
+                            FontSize="11"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource SukiLowText}"
+                            HorizontalAlignment="Left"
+                            Margin="2,0,0,0"
+                            Text="{I18N {x:Static helper:LangKeys.LogRecord}}"
+                            VerticalAlignment="Center"
+                            Width="55" />
+                    </suki:GroupBox.Header>
+                    <ScrollViewer
+                        BorderBrush="LightGray"
+                        BorderThickness="1"
+                        ClipToBounds="False"
+                        Margin="15,8,10,5"
+                        VerticalAlignment="Top"
+                        VerticalContentAlignment="Top"
+                        ex:ScrollViewerExtensions.AutoScroll="True"
+                        ex:ScrollViewerExtensions.PanningMode="VerticalOnly">
+                        <ItemsControl ItemsSource="{Binding Path=LogItemViewModels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock
+                                            FontSize="12"
+                                            Foreground="{DynamicResource SukiDisabledText}"
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,5,2,0"
+                                            MinWidth="55"
+                                            Text="{Binding Time}"
+                                            TextWrapping="Wrap"
+                                            VerticalAlignment="Stretch" />
+                                        <TextBlock
+                                            FontSize="12"
+                                            FontWeight="{Binding Weight}"
+                                            Foreground="{Binding Color}"
+                                            Grid.Column="1"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,5"
+                                            Text="{Binding Content}"
+                                            TextWrapping="Wrap"
+                                            VerticalAlignment="Stretch" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </suki:GroupBox>
+            </suki:GlassCard>
+        </Grid>
 
     </Grid>
 </UserControl>

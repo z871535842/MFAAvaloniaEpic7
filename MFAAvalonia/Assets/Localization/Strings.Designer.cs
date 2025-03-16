@@ -168,6 +168,15 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 添加任务.
+        /// </summary>
+        internal static string AddTask {
+            get {
+                return ResourceManager.GetString("AddTask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to      高级设置     .
         /// </summary>
         internal static string AdvancedSetting {
@@ -825,15 +834,6 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 添加任务.
-        /// </summary>
-        internal static string EditTaskDialog_AddTask_Tooltip {
-            get {
-                return ResourceManager.GetString("EditTaskDialog_AddTask_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to 清空属性.
         /// </summary>
         internal static string EditTaskDialog_ClearAttribute_Tooltip {
@@ -947,15 +947,6 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string EditTaskDialog_Swipe_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Swipe_Tooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 任务列表：.
-        /// </summary>
-        internal static string EditTaskDialog_TaskList_Label {
-            get {
-                return ResourceManager.GetString("EditTaskDialog_TaskList_Label", resourceCulture);
             }
         }
         
@@ -1757,6 +1748,15 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string LoadResourcesFailed {
             get {
                 return ResourceManager.GetString("LoadResourcesFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 日志.
+        /// </summary>
+        internal static string LogRecord {
+            get {
+                return ResourceManager.GetString("LogRecord", resourceCulture);
             }
         }
         
@@ -2580,20 +2580,20 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 任务列表：.
+        ///   Looks up a localized string similar to 任务说明.
         /// </summary>
-        internal static string TaskList {
+        internal static string TaskDescription {
             get {
-                return ResourceManager.GetString("TaskList", resourceCulture);
+                return ResourceManager.GetString("TaskDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 任务列表：.
+        ///   Looks up a localized string similar to 任务列表.
         /// </summary>
-        internal static string TaskListHeader {
+        internal static string TaskList {
             get {
-                return ResourceManager.GetString("TaskListHeader", resourceCulture);
+                return ResourceManager.GetString("TaskList", resourceCulture);
             }
         }
         

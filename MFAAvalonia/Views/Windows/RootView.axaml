@@ -1,5 +1,8 @@
 <suki:SukiWindow
-    Title="{I18N {x:Static helper:LangKeys.AppTitle}}"
+    BackgroundAnimationEnabled="True"
+    BackgroundStyle="GradientSoft"
+    MinHeight="360"
+    MinWidth="650"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d"
@@ -7,16 +10,55 @@
     x:DataType="windows:RootViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
+    xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+    xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:MFAAvalonia.Views.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:userControls="clr-namespace:MFAAvalonia.Views.UserControls"
     xmlns:vm="using:MFAAvalonia.ViewModels"
     xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <suki:SukiWindow.Resources>
+        <converters:TitleConverter x:Key="TitleConverter" />
+    </suki:SukiWindow.Resources>
+    <suki:SukiWindow.Styles>
+        <Style Selector="ToggleButton.SP:pointerover">
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
+        </Style>
+        <Style Selector="ToggleButton.SP:checked">
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
+        </Style>
+    </suki:SukiWindow.Styles>
+    <suki:SukiWindow.Title>
+        <MultiBinding Converter="{StaticResource TitleConverter}" Mode="OneWay">
+            <Binding Path="CustomTitle" />
+            <Binding Path="IsCustomTitleVisible" />
+            <Binding Path="Title" />
+            <Binding Path="Version" />
+            <Binding Path="ResourceName" />
+            <Binding Path="ResourceVersion" />
+            <Binding Path="IsResourceNameVisible" />
+        </MultiBinding>
+    </suki:SukiWindow.Title>
+    <suki:SukiWindow.RightWindowTitleBarControls>
+        <ToggleButton
+            Classes="SP Basic Round"
+            IsCheckedChanged="ToggleWindowTopMost"
+            Margin="0,-3,0,-3"
+            x:Name="btnPin">
+            <ToggleButton.RenderTransform>
+                <TranslateTransform X="-8" />
+            </ToggleButton.RenderTransform>
+
+            <fluent:FluentIcon Icon="Pin" IconSize="Size16" />
+        </ToggleButton>
+    </suki:SukiWindow.RightWindowTitleBarControls>
     <suki:SukiWindow.LogoContent>
         <Image
             Height="20"
@@ -28,40 +70,51 @@
     <Design.DataContext>
         <windows:RootViewModel />
     </Design.DataContext>
-
-    <suki:SukiSideMenu IsMenuExpanded="False" IsSearchEnabled="False">
-        <suki:SukiSideMenu.Styles>
-            <Style Selector="Image.AppIcon">
-                <Setter Property="Transitions">
-                    <Transitions>
-                        <DoubleTransition Duration="0.1" Property="Opacity" />
-                    </Transitions>
-                </Setter>
-                <Style Selector="^:pointerover">
-                    <Setter Property="Opacity" Value="0.5" />
+    <suki:SukiWindow.Hosts>
+        <suki:SukiToastHost Manager="{x:Static helper:Instances.ToastManager}" />
+        <suki:SukiDialogHost Manager="{x:Static helper:Instances.DialogManager}" />
+    </suki:SukiWindow.Hosts>
+    <Grid>
+        <suki:SukiSideMenu IsMenuExpanded="False" IsSearchEnabled="False">
+            <suki:SukiSideMenu.Styles>
+                <Style Selector="Image.AppIcon">
+                    <Setter Property="Transitions">
+                        <Transitions>
+                            <DoubleTransition Duration="0.1" Property="Opacity" />
+                        </Transitions>
+                    </Setter>
+                    <Style Selector="^:pointerover">
+                        <Setter Property="Opacity" Value="0.5" />
+                    </Style>
                 </Style>
-            </Style>
-        </suki:SukiSideMenu.Styles>
-        <suki:SukiSideMenu.Items>
-            <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Home}}">
-                <suki:SukiSideMenuItem.Icon>
-                    <fluent:FluentIcon Icon="TasksApp" IconVariant="Regular" />
-                </suki:SukiSideMenuItem.Icon>
-                <suki:SukiSideMenuItem.PageContent>
-                    <pages:TaskQueueView />
-                </suki:SukiSideMenuItem.PageContent>
-            </suki:SukiSideMenuItem>
+            </suki:SukiSideMenu.Styles>
+            <suki:SukiSideMenu.Items>
+                <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Home}}" PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:TaskQueueView}}">
+                    <suki:SukiSideMenuItem.Icon>
+                        <fluent:FluentIcon Icon="TasksApp" IconVariant="Regular" />
+                    </suki:SukiSideMenuItem.Icon>
+                </suki:SukiSideMenuItem>
+                <!-- <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Connection}}"> -->
+                <!--     <suki:SukiSideMenuItem.Icon> -->
+                <!--         <fluent:FluentIcon Icon="Connected" IconVariant="Regular" /> -->
+                <!--     </suki:SukiSideMenuItem.Icon> -->
+                <!--     <suki:SukiSideMenuItem.PageContent> -->
+                <!--         <ContentControl /> -->
+                <!--     </suki:SukiSideMenuItem.PageContent> -->
+                <!-- </suki:SukiSideMenuItem> -->
+                <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Settings}}" PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:SettingsView}}">
+                    <suki:SukiSideMenuItem.Icon>
+                        <fluent:FluentIcon Icon="Settings" IconVariant="Regular" />
+                    </suki:SukiSideMenuItem.Icon>
+                </suki:SukiSideMenuItem>
+            </suki:SukiSideMenu.Items>
 
-            <!--  其他页面  -->
+            <suki:SukiSideMenu.HeaderContent>
+                <!--  Header Content  -->
+            </suki:SukiSideMenu.HeaderContent>
 
-        </suki:SukiSideMenu.Items>
+            <suki:SukiSideMenu.FooterContent />
+        </suki:SukiSideMenu>
+    </Grid>
 
-        <suki:SukiSideMenu.HeaderContent>
-            <!--  Header Content  -->
-        </suki:SukiSideMenu.HeaderContent>
-
-        <suki:SukiSideMenu.FooterContent>
-            <!--  Footer Content  -->
-        </suki:SukiSideMenu.FooterContent>
-    </suki:SukiSideMenu>
 </suki:SukiWindow>

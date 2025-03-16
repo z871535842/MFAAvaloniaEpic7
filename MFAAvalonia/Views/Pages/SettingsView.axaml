@@ -1,0 +1,79 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="1400"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.Pages.SettingsView"
+    x:DataType="pages:SettingsViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
+    xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
+    xmlns:pages1="clr-namespace:MFAAvalonia.Views.Pages"
+    xmlns:settings="clr-namespace:MFAAvalonia.Views.UserControls.Settings"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:userControls="clr-namespace:MFAAvalonia.Views.UserControls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Design.DataContext>
+        <pages:SettingsViewModel />
+    </Design.DataContext>
+    <suki:SukiStackPage Margin="20">
+        <suki:SukiStackPage.Content>
+            <suki:SettingsLayout Name="{I18N {x:Static helper:LangKeys.Settings}}">
+                <suki:SettingsLayout.Items>
+                    <objectModel:ObservableCollection x:TypeArguments="suki:SettingsLayoutItem">
+                        <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:GuiSettingsUserControl}}" Header="界面设置" />
+                        <suki:SettingsLayoutItem Header="Background">
+                            <suki:SettingsLayoutItem.Content>
+                                <StackPanel>
+                                    <suki:GlassCard Margin="0,25,0,0" Padding="25">
+                                        <StackPanel Spacing="40">
+                                            <DockPanel>
+                                                <ToggleSwitch
+                                                    Classes="Switch"
+                                                    DockPanel.Dock="Right"
+                                                    IsChecked="{Binding BackgroundAnimations}"
+                                                    VerticalAlignment="Top" />
+                                                <StackPanel HorizontalAlignment="Left">
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="DemiBold"
+                                                        Text="Animated Background" />
+                                                    <TextBlock
+                                                        Foreground="{DynamicResource SukiLowText}"
+                                                        Margin="0,12,70,0"
+                                                        Text="Enable/disable the animations for the background, which are driven by the currently active effect."
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DockPanel>
+                                            <DockPanel>
+                                                <ToggleSwitch
+                                                    DockPanel.Dock="Right"
+                                                    IsChecked="{Binding BackgroundTransitions}"
+                                                    VerticalAlignment="Top" />
+                                                <StackPanel HorizontalAlignment="Left">
+                                                    <TextBlock
+                                                        FontSize="16"
+                                                        FontWeight="DemiBold"
+                                                        Text="Background Transitions" />
+                                                    <TextBlock
+                                                        Foreground="{DynamicResource SukiLowText}"
+                                                        Margin="0,12,70,0"
+                                                        Text="Enable/disable the transitions for the background, these will fade between the active effects when changed."
+                                                        TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </DockPanel>
+
+                                        </StackPanel>
+                                    </suki:GlassCard>
+                                </StackPanel>
+                            </suki:SettingsLayoutItem.Content>
+                        </suki:SettingsLayoutItem>
+                    </objectModel:ObservableCollection>
+                </suki:SettingsLayout.Items>
+            </suki:SettingsLayout>
+        </suki:SukiStackPage.Content>
+    </suki:SukiStackPage>
+</UserControl>

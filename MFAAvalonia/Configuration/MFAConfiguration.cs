@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
 using MFAWPF.Helper;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -11,13 +12,13 @@ using System.Linq;
 
 namespace MFAAvalonia.Configuration;
 
-public partial class MFAConfiguration : ObservableObject
+public partial class MFAConfiguration(string name, string fileName, Dictionary<string, object> config) : ObservableObject
 {
-    [ObservableProperty] private string _name;
+    [ObservableProperty] private string _name = name;
 
-    [ObservableProperty] private string _fileName;
+    [ObservableProperty] private string _fileName = fileName;
 
-    [ObservableProperty] private Dictionary<string, object> _config = new();
+    [ObservableProperty] private Dictionary<string, object> _config = config;
 
     [RelayCommand]
     private void DeleteConfiguration()
@@ -44,14 +45,15 @@ public partial class MFAConfiguration : ObservableObject
             $"YourAppName/config/{FileName}.json");
 
 
-    public void SetConfig(string key, object? value)
+    public void SetValue(string key, object? value)
     {
         if (Config == null || value == null) return;
         Config[key] = value;
-        JsonHelper.SaveJson(FileName, Config, new MaaInterfaceSelectOptionConverter(false));
+
+        JsonHelper.SaveConfig(FileName, Config, new MaaInterfaceSelectOptionConverter(false));
     }
 
-    public T GetConfig<T>(string key, T defaultValue)
+    public T GetValue<T>(string key, T defaultValue)
     {
         if (Config.TryGetValue(key, out var data) == true)
         {
@@ -80,5 +82,71 @@ public partial class MFAConfiguration : ObservableObject
 
         return defaultValue;
     }
+
+    public T GetValue<T>(string key, T defaultValue, T? noValue = default, params JsonConverter[] valueConverters)
+    {
+        if (Config.TryGetValue(key, out var data))
+        {
+            try
+            {
+                var settings = new JsonSerializerSettings();
+                foreach (var converter in valueConverters)
+                {
+                    settings.Converters.Add(converter);
+                }
+                var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data), settings) ?? defaultValue;
+                if (result.Equals(noValue))
+                    return defaultValue;
+                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data), settings) ?? defaultValue;
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.Error($"类型转换失败: {e.Message}");
+                return defaultValue;
+            }
+        }
+        return defaultValue;
+    }
+
+    public bool TryGetValue<T>(string key, out T output, params JsonConverter[] valueConverters)
+    {
+        if (Config.TryGetValue(key, out var data))
+        {
+            try
+            {
+                var settings = new JsonSerializerSettings();
+                foreach (var converter in valueConverters)
+                {
+                    settings.Converters.Add(converter);
+                }
+                output = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data), settings) ?? default;
+                return true;
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.Error($"类型转换失败: {e.Message}");
+            }
+        }
+        output = default;
+        return false;
+    }
+
     public override string ToString() => Name;
+
+    public MFAConfiguration SetName(string name)
+    {
+        Name = name;
+        return this;
+    }
+    public MFAConfiguration SetFileName(string name)
+    {
+        FileName = name;
+        return this;
+    }
+
+    public MFAConfiguration SetConfig(Dictionary<string, object> config)
+    {
+        Config = config;
+        return this;
+    }
 }

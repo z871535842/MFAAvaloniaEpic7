@@ -48,13 +48,13 @@
         <value>Add</value>
     </data>
     <data name="AdvancedSetting" xml:space="preserve">
-        <value> Advanced </value>
+        <value>Advanced</value>
     </data>
     <data name="AfterTaskOption" xml:space="preserve">
         <value>Post-task Actions</value>
     </data>
     <data name="AllFilter" xml:space="preserve">
-        <value>All Files (*.*)|*.*</value>
+        <value>All Files</value>
     </data>
     <data name="AllowAdbHardRestart" xml:space="preserve">
         <value>Attempt to kill and restart ADB process after connection failure</value>
@@ -266,7 +266,7 @@
     <data name="EditTaskDialog_AddAttribute_Tooltip" xml:space="preserve">
         <value>Add Attribute</value>
     </data>
-    <data name="EditTaskDialog_AddTask_Tooltip" xml:space="preserve">
+    <data name="AddTask" xml:space="preserve">
         <value>Add Task</value>
     </data>
     <data name="EditTaskDialog_ClearAttribute_Tooltip" xml:space="preserve">
@@ -307,9 +307,6 @@
     </data>
     <data name="EditTaskDialog_Swipe_Tooltip" xml:space="preserve">
         <value>Swipe</value>
-    </data>
-    <data name="EditTaskDialog_TaskList_Label" xml:space="preserve">
-        <value>Task List:</value>
     </data>
     <data name="EditTaskDialog_TaskName_Title" xml:space="preserve">
         <value>Task Name:</value>
@@ -854,9 +851,6 @@
     <data name="TaskList" xml:space="preserve">
         <value>Task List:</value>
     </data>
-    <data name="TaskListHeader" xml:space="preserve">
-        <value>Task List:</value>
-    </data>
     <data name="TaskNotFoundError" xml:space="preserve">
         <value>The task "{1}" used in {0} does not exist in the Pipeline file!</value>
     </data>
@@ -955,5 +949,17 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>Yes</value>
+    </data>
+    <data name="TaskDescription" xml:space="preserve">
+        <value>Task Description</value>
+    </data>
+    <data name="LogRecord" xml:space="preserve">
+        <value>Log</value>
+    </data>
+    <data name="BaseTheme" xml:space="preserve">
+        <value>Basic Theme</value>
+    </data>
+    <data name="ColorTheme" xml:space="preserve">
+        <value>Color Theme</value>
     </data>
 </root>

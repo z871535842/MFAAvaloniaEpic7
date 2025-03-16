@@ -48,13 +48,13 @@
         <value>新增</value>
     </data>
     <data name="AdvancedSetting" xml:space="preserve">
-        <value> 進階設定 </value>
+        <value>進階設定</value>
     </data>
     <data name="AfterTaskOption" xml:space="preserve">
         <value>結束後操作</value>
     </data>
     <data name="AllFilter" xml:space="preserve">
-        <value>所有檔案 (*.*)|*.*</value>
+        <value>所有檔案</value>
     </data>
     <data name="AllowAdbHardRestart" xml:space="preserve">
         <value>連接失敗後嘗試重開 ADB 程式</value>
@@ -266,7 +266,7 @@
     <data name="EditTaskDialog_AddAttribute_Tooltip" xml:space="preserve">
         <value>新增屬性</value>
     </data>
-    <data name="EditTaskDialog_AddTask_Tooltip" xml:space="preserve">
+    <data name="AddTask" xml:space="preserve">
         <value>新增任務</value>
     </data>
     <data name="EditTaskDialog_ClearAttribute_Tooltip" xml:space="preserve">
@@ -307,9 +307,6 @@
     </data>
     <data name="EditTaskDialog_Swipe_Tooltip" xml:space="preserve">
         <value>滑動</value>
-    </data>
-    <data name="EditTaskDialog_TaskList_Label" xml:space="preserve">
-        <value>任務清單：</value>
     </data>
     <data name="EditTaskDialog_TaskName_Title" xml:space="preserve">
         <value>任務名稱:</value>
@@ -852,10 +849,7 @@
         <value>任務已完成</value>
     </data>
     <data name="TaskList" xml:space="preserve">
-        <value>任務清單：</value>
-    </data>
-    <data name="TaskListHeader" xml:space="preserve">
-        <value>任務清單：</value>
+        <value>任務清單</value>
     </data>
     <data name="TaskNotFoundError" xml:space="preserve">
         <value>Pipeline檔案中任務的{0}使用了不存在的任務:"{1}"！</value>
@@ -955,5 +949,17 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>是</value>
+    </data>
+    <data name="TaskDescription" xml:space="preserve">
+        <value>任務說明</value>
+    </data>
+    <data name="LogRecord" xml:space="preserve">
+        <value>日誌</value>
+    </data>
+    <data name="BaseTheme" xml:space="preserve">
+        <value>基本主題​</value>
+    </data>
+    <data name="ColorTheme" xml:space="preserve">
+        <value>顏色主題</value>
     </data>
 </root>

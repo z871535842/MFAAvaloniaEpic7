@@ -1,19 +1,26 @@
 <Application
-    RequestedThemeVariant="Default"
+    RequestedThemeVariant="Light"
     x:Class="MFAAvalonia.App"
     xmlns="https://github.com/avaloniaui"
     xmlns:local="using:MFAAvalonia"
     xmlns:nlnet="https://www.nlnet.com/avalonia"
     xmlns:sukiUi="clr-namespace:SukiUI;assembly=SukiUI"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator />
-    </Application.DataTemplates>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://MFAAvalonia/Assets/Style/Geometry.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceInclude Source="avares://MFAAvalonia/Assets/Theme/LightTheme.axaml" x:Key="Light" />
+                <ResourceInclude Source="avares://MFAAvalonia/Assets/Theme/DarkTheme.axaml" x:Key="Dark" />
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
 
-    <Application.Resources />
+    </Application.Resources>
     <Application.Styles>
         <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue" />
+
     </Application.Styles>
 </Application>

@@ -58,7 +58,7 @@ public partial class ConnectSettingsUserControlModel : ViewModelBase
     [ObservableProperty] private Win32InputMethod _win32ControlInputType =
         ConfigurationManager.Current.GetValue(ConfigurationKeys.Win32ControlInputType, Win32InputMethod.SendMessage, Win32InputMethod.None, new UniversalEnumConverter<Win32InputMethod>());
 
-    partial void OnAdbControlScreenCapTypeChanged(AdbScreencapMethods value)
+    partial void OnAdbControlScreenCapTypeChanged(AdbScreencapMethods value) 
     {
         ConfigurationManager.Current.SetValue(ConfigurationKeys.AdbControlScreenCapType, value.ToString());
         MaaProcessor.Instance.SetTasker();

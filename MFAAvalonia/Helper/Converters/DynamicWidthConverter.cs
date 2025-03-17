@@ -1,12 +1,15 @@
 ﻿using Avalonia.Data.Converters;
+using Avalonia.Markup.Xaml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 
 namespace MFAAvalonia.Helper.Converters;
 
-public class DynamicWidthConverter : IMultiValueConverter
+public class DynamicWidthConverter : MarkupExtension, IMultiValueConverter
 {
+    public override object ProvideValue(IServiceProvider serviceProvider) => this;
+    
     public object Convert(IList<object> values, Type targetType, object parameter, CultureInfo culture)
     {
         var minWidth = 100d;

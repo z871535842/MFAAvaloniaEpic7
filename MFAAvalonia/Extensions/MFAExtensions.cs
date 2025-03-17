@@ -15,7 +15,7 @@ public static class MFAExtensions
     {
         return string.Format(format, args);
     }
-    
+
     public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> newItems)
     {
         if (collection == null)
@@ -30,11 +30,12 @@ public static class MFAExtensions
                 collection.Add(newItem);
         }
     }
-    
+
     public static string ToLocalization(this string? key)
     {
         if (string.IsNullOrWhiteSpace(key))
             return string.Empty;
+
         return I18NExtension.Translate(key, key) ?? key;
     }
 

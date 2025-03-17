@@ -47,6 +47,9 @@
     <data name="AddConfiguration" xml:space="preserve">
         <value>Add</value>
     </data>
+    <data name="AddTask" xml:space="preserve">
+        <value>Add Task</value>
+    </data>
     <data name="AdvancedSetting" xml:space="preserve">
         <value>Advanced</value>
     </data>
@@ -61,6 +64,12 @@
     </data>
     <data name="AllowAdbRestart" xml:space="preserve">
         <value>Attempt to restart ADB Server after connection failure</value>
+    </data>
+    <data name="AnimatedBackgroundDescription" xml:space="preserve">
+        <value>Enable/disable background animations, which are driven by the currently active effect.</value>
+    </data>
+    <data name="AnimatedBackgroundTitle" xml:space="preserve">
+        <value>Animated Background</value>
     </data>
     <data name="Announcement" xml:space="preserve">
         <value>Announcement</value>
@@ -94,6 +103,21 @@
     </data>
     <data name="AutoStartOption" xml:space="preserve">
         <value>Post-start operation</value>
+    </data>
+    <data name="BackgroundStyleDescription" xml:space="preserve">
+        <value>Select from the built-in background styles.</value>
+    </data>
+    <data name="BackgroundStyleTitle" xml:space="preserve">
+        <value>Background Style</value>
+    </data>
+    <data name="BackgroundTransitionsDescription" xml:space="preserve">
+        <value>Enable/disable background transitions with smooth fading effects when changing styles.</value>
+    </data>
+    <data name="BackgroundTransitionsTitle" xml:space="preserve">
+        <value>Background Transitions</value>
+    </data>
+    <data name="BaseTheme" xml:space="preserve">
+        <value>Basic Theme</value>
     </data>
     <data name="BlueStacks" xml:space="preserve">
         <value>BlueStacks</value>
@@ -142,6 +166,9 @@
     </data>
     <data name="ColorPickerTitle" xml:space="preserve">
         <value>Color Picker</value>
+    </data>
+    <data name="ColorTheme" xml:space="preserve">
+        <value>Color Theme</value>
     </data>
     <data name="CommonSetting" xml:space="preserve">
         <value> Common </value>
@@ -265,9 +292,6 @@
     </data>
     <data name="EditTaskDialog_AddAttribute_Tooltip" xml:space="preserve">
         <value>Add Attribute</value>
-    </data>
-    <data name="AddTask" xml:space="preserve">
-        <value>Add Task</value>
     </data>
     <data name="EditTaskDialog_ClearAttribute_Tooltip" xml:space="preserve">
         <value>Clear Attributes</value>
@@ -539,6 +563,9 @@
     <data name="LanguageOption" xml:space="preserve">
         <value>Language(语言)</value>
     </data>
+    <data name="LanguageOptionDescription" xml:space="preserve">
+        <value>Select application display language, changes will take effect immediately.</value>
+    </data>
     <data name="LanguageSettings" xml:space="preserve">
         <value>Language Setting</value>
     </data>
@@ -574,6 +601,9 @@
     </data>
     <data name="LoadResourcesFailed" xml:space="preserve">
         <value>Failed to load resources!</value>
+    </data>
+    <data name="LogRecord" xml:space="preserve">
+        <value>Log</value>
     </data>
     <data name="MaaFwIsLatestVersion" xml:space="preserve">
         <value>MaaFW is already in the latest version!</value>
@@ -848,6 +878,9 @@
     <data name="TaskCompleted" xml:space="preserve">
         <value>Task has been completed</value>
     </data>
+    <data name="TaskDescription" xml:space="preserve">
+        <value>Task Description</value>
+    </data>
     <data name="TaskList" xml:space="preserve">
         <value>Task List:</value>
     </data>
@@ -949,17 +982,5 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>Yes</value>
-    </data>
-    <data name="TaskDescription" xml:space="preserve">
-        <value>Task Description</value>
-    </data>
-    <data name="LogRecord" xml:space="preserve">
-        <value>Log</value>
-    </data>
-    <data name="BaseTheme" xml:space="preserve">
-        <value>Basic Theme</value>
-    </data>
-    <data name="ColorTheme" xml:space="preserve">
-        <value>Color Theme</value>
     </data>
 </root>

@@ -47,6 +47,9 @@
     <data name="AddConfiguration" xml:space="preserve">
         <value>新增</value>
     </data>
+    <data name="AddTask" xml:space="preserve">
+        <value>新增任務</value>
+    </data>
     <data name="AdvancedSetting" xml:space="preserve">
         <value>進階設定</value>
     </data>
@@ -61,6 +64,12 @@
     </data>
     <data name="AllowAdbRestart" xml:space="preserve">
         <value>連接失敗後嘗試重開 ADB 伺服器</value>
+    </data>
+    <data name="AnimatedBackgroundDescription" xml:space="preserve">
+        <value>啟用/停用背景動畫，動畫由當前活動效果驅動。</value>
+    </data>
+    <data name="AnimatedBackgroundTitle" xml:space="preserve">
+        <value>動態背景動畫</value>
     </data>
     <data name="Announcement" xml:space="preserve">
         <value>公告</value>
@@ -94,6 +103,21 @@
     </data>
     <data name="AutoStartOption" xml:space="preserve">
         <value>啟動後操作</value>
+    </data>
+    <data name="BackgroundStyleDescription" xml:space="preserve">
+        <value>從內建背景樣式中選擇。</value>
+    </data>
+    <data name="BackgroundStyleTitle" xml:space="preserve">
+        <value>背景樣式</value>
+    </data>
+    <data name="BackgroundTransitionsDescription" xml:space="preserve">
+        <value>啟用/停用背景過渡效果，切換效果時會有漸變過渡。</value>
+    </data>
+    <data name="BackgroundTransitionsTitle" xml:space="preserve">
+        <value>背景過渡效果</value>
+    </data>
+    <data name="BaseTheme" xml:space="preserve">
+        <value>基本主題​</value>
     </data>
     <data name="BlueStacks" xml:space="preserve">
         <value>藍疊模擬器</value>
@@ -142,6 +166,9 @@
     </data>
     <data name="ColorPickerTitle" xml:space="preserve">
         <value>取色器</value>
+    </data>
+    <data name="ColorTheme" xml:space="preserve">
+        <value>顏色主題</value>
     </data>
     <data name="CommonSetting" xml:space="preserve">
         <value> 常規設定 </value>
@@ -265,9 +292,6 @@
     </data>
     <data name="EditTaskDialog_AddAttribute_Tooltip" xml:space="preserve">
         <value>新增屬性</value>
-    </data>
-    <data name="AddTask" xml:space="preserve">
-        <value>新增任務</value>
     </data>
     <data name="EditTaskDialog_ClearAttribute_Tooltip" xml:space="preserve">
         <value>清空屬性</value>
@@ -539,6 +563,9 @@
     <data name="LanguageOption" xml:space="preserve">
         <value>語言(Language)</value>
     </data>
+    <data name="LanguageOptionDescription" xml:space="preserve">
+        <value>選擇應用程式的顯示語言，變更將立即生效。</value>
+    </data>
     <data name="LanguageSettings" xml:space="preserve">
         <value>語言設定</value>
     </data>
@@ -574,6 +601,9 @@
     </data>
     <data name="LoadResourcesFailed" xml:space="preserve">
         <value>資源載入失敗！ </value>
+    </data>
+    <data name="LogRecord" xml:space="preserve">
+        <value>日誌</value>
     </data>
     <data name="MaaFwIsLatestVersion" xml:space="preserve">
         <value>框架已為最新版本！</value>
@@ -848,6 +878,9 @@
     <data name="TaskCompleted" xml:space="preserve">
         <value>任務已完成</value>
     </data>
+    <data name="TaskDescription" xml:space="preserve">
+        <value>任務說明</value>
+    </data>
     <data name="TaskList" xml:space="preserve">
         <value>任務清單</value>
     </data>
@@ -949,17 +982,5 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>是</value>
-    </data>
-    <data name="TaskDescription" xml:space="preserve">
-        <value>任務說明</value>
-    </data>
-    <data name="LogRecord" xml:space="preserve">
-        <value>日誌</value>
-    </data>
-    <data name="BaseTheme" xml:space="preserve">
-        <value>基本主題​</value>
-    </data>
-    <data name="ColorTheme" xml:space="preserve">
-        <value>顏色主題</value>
     </data>
 </root>

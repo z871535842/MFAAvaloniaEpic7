@@ -5,18 +5,23 @@
     x:Class="MFAAvalonia.Views.UserControls.Settings.GuiSettingsUserControl"
     x:DataType="settings:GuiSettingsUserControlModel"
     xmlns="https://github.com/avaloniaui"
+    xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+    xmlns:controls="clr-namespace:MFAAvalonia.Views.UserControls.Settings"
     xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:other="clr-namespace:MFAAvalonia.ViewModels.Other"
     xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:pages1="clr-namespace:MFAAvalonia.Views.Pages"
     xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.UsersControls.Settings"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <UserControl.Resources>
-        <converters:EqualityConverter x:Key="EqualityConverter" />
-    </UserControl.Resources>
+    <Design.DataContext>
+        <settings:GuiSettingsUserControlModel />
+    </Design.DataContext>
     <StackPanel>
         <StackPanel
             HorizontalAlignment="Center"
@@ -26,8 +31,9 @@
                 Classes="GigaChips"
                 GroupName="RadioBaseTheme"
                 Height="160"
-                IsChecked="{Binding IsLightTheme}"
+                IsChecked="{Binding BaseTheme, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static ThemeVariant.Light}, Mode=TwoWay}"
                 Padding="0"
+                Tag="Light"
                 Width="180">
                 <Border
                     Background="#fafafa"
@@ -49,7 +55,8 @@
                 Classes="GigaChips"
                 GroupName="RadioBaseTheme"
                 Height="160"
-                IsChecked="{Binding !IsLightTheme}"
+                IsChecked="{Binding BaseTheme, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static ThemeVariant.Dark}, Mode=TwoWay}"
+                Tag="Dark"
                 Width="180">
                 <Border
                     Background="#222222"
@@ -67,7 +74,10 @@
                 </Border>
             </RadioButton>
         </StackPanel>
-        <ItemsControl HorizontalAlignment="Center" ItemsSource="{Binding AvailableColors}">
+        <ItemsControl
+            HorizontalAlignment="Center"
+            ItemsSource="{Binding ThemeItems}"
+            Margin="20">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel
@@ -77,24 +87,102 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="suki:SukiColorTheme">
+                <DataTemplate x:DataType="other:ThemeItemViewModel">
                     <RadioButton
                         Classes="GigaChips"
-                        Command="{Binding ((pages:SettingsViewModel)DataContext).SwitchToColorThemeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type pages1:SettingsView}}}"
-                        CommandParameter="{Binding}"
                         CornerRadius="50"
                         GroupName="RadioColorTheme"
                         Height="50"
-                        IsChecked="{Binding CurrentColorTheme, Source={x:Static helper:Instances.GuiSettingsUserControlModel}, Converter={StaticResource EqualityConverter}, ConverterParameter={Binding}}"
+                        IsChecked="{Binding IsSelected}"
                         Width="50">
                         <Border
-                            Background="{Binding PrimaryBrush}"
+                            Background="{Binding Theme.PrimaryBrush}"
                             CornerRadius="50"
                             Margin="-30" />
                     </RadioButton>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-    </StackPanel>
+        <suki:GlassCard Margin="0,25,0,0" Padding="25">
+            <StackPanel Spacing="20">
+                <DockPanel>
+                    <ComboBox
+                        DockPanel.Dock="Right"
+                        ItemsSource="{Binding AvailableBackgroundStyles}"
+                        MaxWidth="180"
+                        SelectedItem="{Binding BackgroundStyle}" />
+                    <StackPanel HorizontalAlignment="Left">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="DemiBold"
+                            Text="{I18N {x:Static helper:LangKeys.BackgroundStyleTitle}}" />
+                        <TextBlock
+                            Foreground="{DynamicResource SukiLowText}"
+                            Margin="0,12,70,0"
+                            Text="{I18N {x:Static helper:LangKeys.BackgroundStyleDescription}}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
 
+                <DockPanel>
+                    <ToggleSwitch
+                        Classes="Switch"
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding BackgroundAnimations}"
+                        VerticalAlignment="Top" />
+                    <StackPanel HorizontalAlignment="Left">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="DemiBold"
+                            Text="{I18N {x:Static helper:LangKeys.AnimatedBackgroundTitle}}" />
+                        <TextBlock
+                            Foreground="{DynamicResource SukiLowText}"
+                            Margin="0,12,70,0"
+                            Text="{I18N {x:Static helper:LangKeys.AnimatedBackgroundDescription}}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+
+                <DockPanel>
+                    <ToggleSwitch
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding BackgroundTransitions}"
+                        VerticalAlignment="Top" />
+                    <StackPanel HorizontalAlignment="Left">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="DemiBold"
+                            Text="{I18N {x:Static helper:LangKeys.BackgroundTransitionsTitle}}" />
+                        <TextBlock
+                            Foreground="{DynamicResource SukiLowText}"
+                            Margin="0,12,70,0"
+                            Text="{I18N {x:Static helper:LangKeys.BackgroundTransitionsDescription}}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </suki:GlassCard>
+        <suki:GlassCard Margin="0,25,0,0" Padding="25">
+            <DockPanel>
+                <ComboBox
+                    DisplayMemberBinding="{Binding Name}"
+                    DockPanel.Dock="Right"
+                    ItemsSource="{Binding SupportedLanguages}"
+                    MaxWidth="180"
+                    SelectedValue="{Binding CurrentLanguage}"
+                    SelectedValueBinding="{Binding Key}" />
+                <StackPanel HorizontalAlignment="Left">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="DemiBold"
+                        Text="{I18N {x:Static helper:LangKeys.LanguageOption}}" />
+                    <TextBlock
+                        Foreground="{DynamicResource SukiLowText}"
+                        Margin="0,12,70,0"
+                        Text="{I18N {x:Static helper:LangKeys.LanguageOptionDescription}}"
+                        TextWrapping="Wrap" />
+                </StackPanel>
+            </DockPanel>
+        </suki:GlassCard>
+    </StackPanel>
 </UserControl>

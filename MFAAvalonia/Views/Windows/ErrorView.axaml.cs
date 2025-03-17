@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Threading;
 using MFAAvalonia.Helper;
+using MFAAvalonia.Utilities;
 using SukiUI.Controls;
 using System;
 using System.ComponentModel;
@@ -90,16 +91,7 @@ public partial class ErrorView : SukiWindow
     // 打开反馈链接
     private void OpenFeedbackLink(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            Process.Start(new ProcessStartInfo(MFAUrls.NewIssueUri)
-            {
-                UseShellExecute = true
-            });
-        }
-        catch
-        {
-        }
+        UrlUtilities.OpenUrl(MFAUrls.NewIssueUri);
     }
 
     // 窗口关闭处理

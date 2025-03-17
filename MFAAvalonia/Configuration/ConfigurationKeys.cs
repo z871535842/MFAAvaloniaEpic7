@@ -11,7 +11,7 @@ public static class ConfigurationKeys
     public const string ForceScheduledStart = "ForceScheduledStart";
     public const string CustomConfig = "CustomConfig";
     public const string NoAutoStart = "NoAutoStart";
-    
+
     #endregion
 
     #region 主页设置
@@ -65,15 +65,22 @@ public static class ConfigurationKeys
 
     #endregion
 
-
     #region 界面设置
 
     public const string LangIndex = "LangIndex";
+    public const string CurrentLanguage = "CurrentLanguage";
     public const string ThemeIndex = "ThemeIndex";
     public const string ShouldMinimizeToTray = "ShouldMinimizeToTray";
     public const string EnableShowIcon = "EnableShowIcon";
 
+    public const string BackgroundStyle = "BackgroundStyle";
+    public const string BaseTheme = "BaseTheme";
+    public const string BackgroundAnimations = "BackgroundAnimations";
+    public const string BackgroundTransitions = "BackgroundTransitions";
+    public const string ColorTheme = "ColorTheme";
+
     #endregion
+
     #region 外部通知
 
     public const string ExternalNotificationEnabled = "ExternalNotificationEnabled";

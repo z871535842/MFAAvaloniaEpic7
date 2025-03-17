@@ -177,7 +177,7 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to      高级设置     .
+        ///   Looks up a localized string similar to 高级设置.
         /// </summary>
         internal static string AdvancedSetting {
             get {
@@ -195,7 +195,7 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 所有文件 (*.*)|*.*.
+        ///   Looks up a localized string similar to 所有文件.
         /// </summary>
         internal static string AllFilter {
             get {
@@ -218,6 +218,24 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string AllowAdbRestart {
             get {
                 return ResourceManager.GetString("AllowAdbRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 启用/禁用背景动画，动画由当前活动效果驱动。.
+        /// </summary>
+        internal static string AnimatedBackgroundDescription {
+            get {
+                return ResourceManager.GetString("AnimatedBackgroundDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 动态背景动画.
+        /// </summary>
+        internal static string AnimatedBackgroundTitle {
+            get {
+                return ResourceManager.GetString("AnimatedBackgroundTitle", resourceCulture);
             }
         }
         
@@ -317,6 +335,51 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string AutoStartOption {
             get {
                 return ResourceManager.GetString("AutoStartOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 从内置背景样式中选择。.
+        /// </summary>
+        internal static string BackgroundStyleDescription {
+            get {
+                return ResourceManager.GetString("BackgroundStyleDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 背景样式.
+        /// </summary>
+        internal static string BackgroundStyleTitle {
+            get {
+                return ResourceManager.GetString("BackgroundStyleTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 启用/禁用背景过渡效果，切换效果时会有渐变过渡。.
+        /// </summary>
+        internal static string BackgroundTransitionsDescription {
+            get {
+                return ResourceManager.GetString("BackgroundTransitionsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 背景过渡效果.
+        /// </summary>
+        internal static string BackgroundTransitionsTitle {
+            get {
+                return ResourceManager.GetString("BackgroundTransitionsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 基本主题.
+        /// </summary>
+        internal static string BaseTheme {
+            get {
+                return ResourceManager.GetString("BaseTheme", resourceCulture);
             }
         }
         
@@ -461,6 +524,15 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string ColorPickerTitle {
             get {
                 return ResourceManager.GetString("ColorPickerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 颜色主题.
+        /// </summary>
+        internal static string ColorTheme {
+            get {
+                return ResourceManager.GetString("ColorTheme", resourceCulture);
             }
         }
         
@@ -1640,6 +1712,15 @@ namespace MFAAvalonia.Assets.Localization {
         internal static string LanguageOption {
             get {
                 return ResourceManager.GetString("LanguageOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择应用程序的显示语言，更改将立即生效。.
+        /// </summary>
+        internal static string LanguageOptionDescription {
+            get {
+                return ResourceManager.GetString("LanguageOptionDescription", resourceCulture);
             }
         }
         

@@ -49,13 +49,12 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
     {
         if (Config == null || value == null) return;
         Config[key] = value;
-
         JsonHelper.SaveConfig(FileName, Config, new MaaInterfaceSelectOptionConverter(false));
     }
 
     public T GetValue<T>(string key, T defaultValue)
     {
-        if (Config.TryGetValue(key, out var data) == true)
+        if (Config.TryGetValue(key, out var data))
         {
             try
             {
@@ -64,14 +63,58 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
                     return (T)(object)Convert.ToInt32(longValue);
                 }
 
+                if (data is T t)
+                {
+                    return t;
+                }
+
                 if (data is JArray jArray)
                 {
                     return jArray.ToObject<T>();
+                }
+                
+                if (data is JObject jObject)
+                {
+                    return jObject.ToObject<T>();
+                }
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.Error("在进行类型转换时发生错误!", e);
+            }
+        }
+
+        return defaultValue;
+    }
+    public T GetValue<T>(string key, T defaultValue, Dictionary<object, T> options)
+    {
+
+        if (Config.TryGetValue(key, out var data))
+        {
+            if (options != null && options.TryGetValue(data, out var result))
+            {
+                return result;
+            }
+            try
+            {
+                if (data is long longValue && typeof(T) == typeof(int))
+                {
+                    return (T)(object)Convert.ToInt32(longValue);
                 }
 
                 if (data is T t)
                 {
                     return t;
+                }
+
+                if (data is JArray jArray)
+                {
+                    return jArray.ToObject<T>();
+                }
+
+                if (data is JObject jObject)
+                {
+                    return jObject.ToObject<T>();
                 }
             }
             catch (Exception e)
@@ -85,6 +128,7 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
 
     public T GetValue<T>(string key, T defaultValue, T? noValue = default, params JsonConverter[] valueConverters)
     {
+
         if (Config.TryGetValue(key, out var data))
         {
             try
@@ -97,7 +141,7 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
                 var result = JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data), settings) ?? defaultValue;
                 if (result.Equals(noValue))
                     return defaultValue;
-                return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(data), settings) ?? defaultValue;
+                return result;
             }
             catch (Exception e)
             {

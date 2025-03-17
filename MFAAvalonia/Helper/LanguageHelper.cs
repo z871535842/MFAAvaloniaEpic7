@@ -1,4 +1,5 @@
-﻿using Avalonia.Markup.Xaml.MarkupExtensions;
+﻿using Avalonia.Collections;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ public static class LanguageHelper
         public string? Key => key;
     }
 
-    public static readonly ObservableCollection<SupportedLanguage> SupportedLanguages =
+    public static readonly AvaloniaList<SupportedLanguage> SupportedLanguages =
     [
         new("zh-hans", "简体中文"),
         new("zh-hant", "繁體中文"),
@@ -40,14 +41,21 @@ public static class LanguageHelper
     public static void ChangeLanguage(SupportedLanguage language)
     {
         // 设置应用程序的文化
-        I18NExtension.Culture = CultureInfo.CreateSpecificCulture(language.Key);
-
+        I18NExtension.Culture = new CultureInfo(language.Key);
         _currentLanguage = language.Key;
 
-        // 触发语言变化事件
         LanguageChanged?.Invoke(null, EventArgs.Empty);
     }
+    
+    public static void ChangeLanguage(string language)
+    {
+        // 设置应用程序的文化
+        I18NExtension.Culture = new CultureInfo(language);
+        _currentLanguage = language;
 
+        LanguageChanged?.Invoke(null, EventArgs.Empty);
+    }
+    
     // 存储语言的字典
     private static readonly Dictionary<string, Dictionary<string, string>> Langs = new();
     private static string _currentLanguage = SupportedLanguages[0].Key;

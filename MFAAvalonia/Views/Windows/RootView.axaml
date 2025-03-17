@@ -1,6 +1,7 @@
 <suki:SukiWindow
-    BackgroundAnimationEnabled="True"
-    BackgroundStyle="GradientSoft"
+    BackgroundAnimationEnabled="{Binding BackgroundAnimations, Source={x:Static helper:Instances.GuiSettingsUserControlModel}}"
+    BackgroundStyle="{Binding BackgroundStyle, Source={x:Static helper:Instances.GuiSettingsUserControlModel}}"
+    BackgroundTransitionsEnabled="{Binding BackgroundTransitions, Source={x:Static helper:Instances.GuiSettingsUserControlModel}}"
     MinHeight="360"
     MinWidth="650"
     d:DesignHeight="450"
@@ -17,6 +18,7 @@
     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:MFAAvalonia.Views.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
@@ -24,9 +26,6 @@
     xmlns:vm="using:MFAAvalonia.ViewModels"
     xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <suki:SukiWindow.Resources>
-        <converters:TitleConverter x:Key="TitleConverter" />
-    </suki:SukiWindow.Resources>
     <suki:SukiWindow.Styles>
         <Style Selector="ToggleButton.SP:pointerover">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
@@ -36,10 +35,10 @@
         </Style>
     </suki:SukiWindow.Styles>
     <suki:SukiWindow.Title>
-        <MultiBinding Converter="{StaticResource TitleConverter}" Mode="OneWay">
+        <MultiBinding Converter="{converters:TitleConverter}" Mode="OneWay">
             <Binding Path="CustomTitle" />
             <Binding Path="IsCustomTitleVisible" />
-            <Binding Path="Title" />
+            <LanguageBinding Key="{x:Static helper:LangKeys.AppTitle}" />
             <Binding Path="Version" />
             <Binding Path="ResourceName" />
             <Binding Path="ResourceVersion" />

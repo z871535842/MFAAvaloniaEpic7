@@ -14,6 +14,7 @@
     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:maa="clr-namespace:MFAAvalonia.Extensions.MaaFW"
+    xmlns:markup="https://codewf.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
@@ -23,9 +24,6 @@
         <pages:TaskQueueViewModel />
     </Design.DataContext>
     <UserControl.Resources>
-        <converters:DeviceDisplayConverter x:Key="DeviceDisplayConverter" />
-        <converters:EnumToBoolConverter x:Key="EnumConverter" />
-        <converters:DynamicWidthConverter x:Key="DynamicWidthConverter" />
         <ContextMenu x:Key="TaskMenu">
             <MenuItem Click="Delete" Header="{I18N {x:Static helper:LangKeys.Delete}}" />
         </ContextMenu>
@@ -49,8 +47,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="2,0,0,0"
                                 Text="{I18N {x:Static helper:LangKeys.TaskList}}"
-                                VerticalAlignment="Center"
-                                Width="55" />
+                                VerticalAlignment="Center" />
                             <StackPanel
                                 HorizontalAlignment="Right"
                                 Margin="2,0,2,0"
@@ -204,8 +201,7 @@
                             HorizontalAlignment="Left"
                             Margin="2,0,0,0"
                             Text="{I18N {x:Static helper:LangKeys.TaskSettings}}"
-                            VerticalAlignment="Center"
-                            Width="55" />
+                            VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
                 </suki:GroupBox>
             </suki:GlassCard>
@@ -219,8 +215,7 @@
                             HorizontalAlignment="Left"
                             Margin="2,0,0,0"
                             Text="{I18N {x:Static helper:LangKeys.TaskDescription}}"
-                            VerticalAlignment="Center"
-                            Width="55" />
+                            VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
                 </suki:GroupBox>
             </suki:GlassCard>
@@ -241,8 +236,7 @@
                                 HorizontalAlignment="Left"
                                 Margin="2,0,0,0"
                                 Text="{I18N {x:Static helper:LangKeys.Connection}}"
-                                VerticalAlignment="Center"
-                                Width="55" />
+                                VerticalAlignment="Center" />
 
                             <StackPanel
                                 HorizontalAlignment="Right"
@@ -314,7 +308,7 @@
                                 Content="{I18N {x:Static helper:LangKeys.TabADB}}"
                                 FontSize="12"
                                 GroupName="Controller"
-                                IsChecked="{Binding CurrentController, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
+                                IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
                                 MinWidth="{Binding Bounds.Width, ElementName=SecondButton}"
                                 x:Name="FirstButton" />
                             <RadioButton
@@ -322,7 +316,7 @@
                                 Content="{I18N {x:Static helper:LangKeys.TabWin32}}"
                                 FontSize="12"
                                 GroupName="Controller"
-                                IsChecked="{Binding CurrentController, Converter={StaticResource EnumConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
+                                IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
                                 MinWidth="{Binding Bounds.Width, ElementName=FirstButton}"
                                 x:Name="SecondButton" />
                         </WrapPanel>
@@ -332,7 +326,7 @@
                             Margin="5,0"
                             MinWidth="200">
                             <DockPanel.Width>
-                                <MultiBinding Converter="{StaticResource DynamicWidthConverter}">
+                                <MultiBinding Converter="{converters:DynamicWidthConverter}">
                                     <!--  父容器宽度  -->
                                     <Binding ElementName="connectionPanel" Path="Bounds.Width" />
                                     <!--  同级元素宽度  -->
@@ -354,7 +348,7 @@
                                 SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.DataTemplates>
                                     <DataTemplate DataType="binding:AdbDeviceInfo">
-                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Converter={StaticResource DeviceDisplayConverter}}" />
+                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Converter={converters:DeviceDisplayConverter}}" />
                                     </DataTemplate>
 
                                     <DataTemplate DataType="binding:DesktopWindowInfo">
@@ -377,8 +371,7 @@
                             HorizontalAlignment="Left"
                             Margin="2,0,0,0"
                             Text="{I18N {x:Static helper:LangKeys.LogRecord}}"
-                            VerticalAlignment="Center"
-                            Width="55" />
+                            VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
                     <ScrollViewer
                         BorderBrush="LightGray"

@@ -1,11 +1,16 @@
 ﻿using Avalonia.Collections;
 using Avalonia.Markup.Xaml.MarkupExtensions;
+using AvaloniaExtensions.Axaml.Markup;
+using CommunityToolkit.Mvvm.ComponentModel;
+using MFAAvalonia.ViewModels.Other;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace MFAAvalonia.Helper;
 
@@ -13,49 +18,45 @@ public static class LanguageHelper
 {
     public static event EventHandler? LanguageChanged;
 
-    public class SupportedLanguage(string key, string name)
-    {
-        public string? Name => name;
-        public string? Key => key;
-    }
 
-    public static readonly AvaloniaList<SupportedLanguage> SupportedLanguages =
+
+    public static readonly List<SupportedLanguage> SupportedLanguages =
     [
         new("zh-hans", "简体中文"),
         new("zh-hant", "繁體中文"),
         new("en-us", "English"),
     ];
 
+    public static Dictionary<string, CultureInfo> Cultures { get; } = new()
+    {
+        ["zh-hans"] = Thread.CurrentThread.CurrentCulture,
+    };
+
     public static SupportedLanguage GetLanguage(string key)
     {
-        foreach (var lang in SupportedLanguages)
-        {
-            if (lang.Key == key)
-            {
-                return lang;
-            }
-        }
-        throw new ArgumentException($"不支持的语言代码: {key}");
+        return SupportedLanguages.FirstOrDefault(lang => lang.Key == key, SupportedLanguages[0]);
     }
 
     public static void ChangeLanguage(SupportedLanguage language)
     {
         // 设置应用程序的文化
-        I18NExtension.Culture = new CultureInfo(language.Key);
+        I18nManager.Instance.Culture = Cultures.TryGetValue(language.Key, out var culture)
+            ? culture
+            : Cultures[language.Key] = new CultureInfo(language.Key);
         _currentLanguage = language.Key;
 
         LanguageChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     public static void ChangeLanguage(string language)
     {
-        // 设置应用程序的文化
-        I18NExtension.Culture = new CultureInfo(language);
+        I18nManager.Instance.Culture = Cultures.TryGetValue(language, out var culture)
+            ? culture
+            : Cultures[language] = new CultureInfo(language);
         _currentLanguage = language;
-
         LanguageChanged?.Invoke(null, EventArgs.Empty);
     }
-    
+
     // 存储语言的字典
     private static readonly Dictionary<string, Dictionary<string, string>> Langs = new();
     private static string _currentLanguage = SupportedLanguages[0].Key;

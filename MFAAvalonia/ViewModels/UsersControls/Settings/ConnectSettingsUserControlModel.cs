@@ -58,47 +58,24 @@ public partial class ConnectSettingsUserControlModel : ViewModelBase
     [ObservableProperty] private Win32InputMethod _win32ControlInputType =
         ConfigurationManager.Current.GetValue(ConfigurationKeys.Win32ControlInputType, Win32InputMethod.SendMessage, Win32InputMethod.None, new UniversalEnumConverter<Win32InputMethod>());
 
-    partial void OnAdbControlScreenCapTypeChanged(AdbScreencapMethods value) 
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.AdbControlScreenCapType, value.ToString());
-        MaaProcessor.Instance.SetTasker();
-    }
+    partial void OnAdbControlScreenCapTypeChanged(AdbScreencapMethods value) => HandlePropertyChanged(ConfigurationKeys.AdbControlScreenCapType, value.ToString(), () => MaaProcessor.Instance.SetTasker());
 
-    partial void OnAdbControlInputTypeChanged(AdbInputMethods value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.AdbControlInputType, value.ToString());
-        MaaProcessor.Instance.SetTasker();
-    }
+    partial void OnAdbControlInputTypeChanged(AdbInputMethods value) => HandlePropertyChanged(ConfigurationKeys.AdbControlInputType, value.ToString(), () => MaaProcessor.Instance.SetTasker());
 
-    partial void OnWin32ControlScreenCapTypeChanged(Win32ScreencapMethod value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.Win32ControlScreenCapType, value.ToString());
-        MaaProcessor.Instance.SetTasker();
-    }
+    partial void OnWin32ControlScreenCapTypeChanged(Win32ScreencapMethod value) => HandlePropertyChanged(ConfigurationKeys.Win32ControlScreenCapType, value.ToString(), () => MaaProcessor.Instance.SetTasker());
 
-    partial void OnWin32ControlInputTypeChanged(Win32InputMethod value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.Win32ControlInputType, value.ToString());
-        MaaProcessor.Instance.SetTasker();
-    }
+    partial void OnWin32ControlInputTypeChanged(Win32InputMethod value) => HandlePropertyChanged(ConfigurationKeys.Win32ControlInputType, value.ToString(), () => MaaProcessor.Instance.SetTasker());
 
     [ObservableProperty] private bool _retryOnDisconnected = ConfigurationManager.Current.GetValue(ConfigurationKeys.RetryOnDisconnected, false);
 
-    partial void OnRetryOnDisconnectedChanged(bool value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.RetryOnDisconnected, value);
-    }
+    partial void OnRetryOnDisconnectedChanged(bool value) => HandlePropertyChanged(ConfigurationKeys.RetryOnDisconnected, value);
+
     [ObservableProperty] private bool _allowAdbRestart = ConfigurationManager.Current.GetValue(ConfigurationKeys.AllowAdbRestart, true);
 
-    partial void OnAllowAdbRestartChanged(bool value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.AllowAdbRestart, value);
-    }
+    partial void OnAllowAdbRestartChanged(bool value) => HandlePropertyChanged(ConfigurationKeys.AllowAdbRestart, value);
+
 
     [ObservableProperty] private bool _allowAdbHardRestart = ConfigurationManager.Current.GetValue(ConfigurationKeys.AllowAdbHardRestart, true);
 
-    partial void OnAllowAdbHardRestartChanged(bool value)
-    {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.AllowAdbHardRestart, value);
-    }
+    partial void OnAllowAdbHardRestartChanged(bool value) => HandlePropertyChanged(ConfigurationKeys.AllowAdbHardRestart, value);
 }

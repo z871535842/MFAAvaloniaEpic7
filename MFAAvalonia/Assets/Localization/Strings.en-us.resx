@@ -686,7 +686,7 @@
     <data name="PipelineLoadError" xml:space="preserve">
         <value>Error occurred while loading Pipeline file: {0}</value>
     </data>
-    <data name="Post-script" xml:space="preserve">
+    <data name="Postscript" xml:space="preserve">
         <value>Post-script</value>
     </data>
     <data name="Prescript" xml:space="preserve">
@@ -982,5 +982,29 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>Yes</value>
+    </data>
+    <data name="CurrentConfig" xml:space="preserve">
+        <value>Current Configuration</value>
+    </data>
+    <data name="ViewOrSwitchConfig" xml:space="preserve">
+        <value>View or Switch Existing Configuration</value>
+    </data>
+    <data name="NewConfigName" xml:space="preserve">
+        <value>New Configuration Name</value>
+    </data>
+    <data name="SetUniqueIdentifier" xml:space="preserve">
+        <value>	Set Unique Identifier for Custom Configuration</value>
+    </data>
+    <data name="CreateNewConfig" xml:space="preserve">
+        <value>Create New Configuration</value>
+    </data>
+    <data name="CreateFromCurrent" xml:space="preserve">
+        <value>Create New Template from Current Configuration</value>
+    </data>
+    <data name="TriggerTime" xml:space="preserve">
+        <value>Trigger Time</value>
+    </data>
+    <data name="SelectedConfig" xml:space="preserve">
+        <value>Selected Config</value>
     </data>
 </root>

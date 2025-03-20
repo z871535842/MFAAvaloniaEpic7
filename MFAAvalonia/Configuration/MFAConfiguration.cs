@@ -20,6 +20,7 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
 
     [ObservableProperty] private Dictionary<string, object> _config = config;
 
+
     [RelayCommand]
     private void DeleteConfiguration()
     {
@@ -41,15 +42,19 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
 
     private string GetConfigFilePath() =>
         Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            $"YourAppName/config/{FileName}.json");
-
+            AppContext.BaseDirectory, "config",
+            $"{FileName}.json");
 
     public void SetValue(string key, object? value)
     {
         if (Config == null || value == null) return;
         Config[key] = value;
         JsonHelper.SaveConfig(FileName, Config, new MaaInterfaceSelectOptionConverter(false));
+    }
+    public T GetValue<T>(string key, T defaultValue, List<T> whitelist)
+    {
+        var value = GetValue(key, defaultValue);
+        return whitelist.Contains(value) ? value : defaultValue;
     }
 
     public T GetValue<T>(string key, T defaultValue)
@@ -72,7 +77,7 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
                 {
                     return jArray.ToObject<T>();
                 }
-                
+
                 if (data is JObject jObject)
                 {
                     return jObject.ToObject<T>();
@@ -174,6 +179,10 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
         output = default;
         return false;
     }
+    public string GetDecrypt(string key, string defaultValue = "") => SimpleEncryptionHelper.Decrypt(GetValue(key, defaultValue));
+    public void SetEncrypted(string key, string value) =>
+        SetValue(key, SimpleEncryptionHelper.Encrypt(value));
+
 
     public override string ToString() => Name;
 
@@ -182,6 +191,7 @@ public partial class MFAConfiguration(string name, string fileName, Dictionary<s
         Name = name;
         return this;
     }
+
     public MFAConfiguration SetFileName(string name)
     {
         FileName = name;

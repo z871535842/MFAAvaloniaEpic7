@@ -58,17 +58,19 @@ public partial class TaskQueueViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void StartTask()
+    public void StartTask()
     {
         ToastHelper.Success("启动任务", "你的任务正在执行");
         Instances.RootViewModel.IsRunning = true;
+        Instances.RootViewModel.Idle = false;
     }
 
     [RelayCommand]
-    private void StopTask()
+    public void StopTask()
     {
         ToastHelper.Error("停止任务", "你的任务已被停止");
         Instances.RootViewModel.IsRunning = false;
+        Instances.RootViewModel.Idle = true;
     }
 
     [RelayCommand]

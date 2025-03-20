@@ -11,6 +11,7 @@ using SukiUI.Enums;
 using SukiUI.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace MFAAvalonia.ViewModels.UsersControls.Settings;
@@ -19,7 +20,7 @@ public partial class GuiSettingsUserControlModel : ViewModelBase
 {
     private static readonly SukiTheme _theme = SukiTheme.GetInstance();
     public IAvaloniaReadOnlyList<SukiBackgroundStyle> AvailableBackgroundStyles { get; set; }
-
+    public IAvaloniaReadOnlyList<string> Test { get; set; }
     [ObservableProperty] private bool _backgroundAnimations =
         ConfigurationManager.Current.GetValue(ConfigurationKeys.BackgroundAnimations, false);
 
@@ -33,20 +34,25 @@ public partial class GuiSettingsUserControlModel : ViewModelBase
 
     [ObservableProperty] private SukiColorTheme _currentColorTheme;
     public IAvaloniaReadOnlyList<ThemeItemViewModel> ThemeItems { get; set; }
-    public IAvaloniaReadOnlyList<LanguageHelper.SupportedLanguage> SupportedLanguages => LanguageHelper.SupportedLanguages;
+    public IAvaloniaReadOnlyList<SupportedLanguage> SupportedLanguages { get; set; }
+
     [ObservableProperty] private string _currentLanguage;
+    [ObservableProperty] private bool _shouldMinimizeToTray = ConfigurationManager.Current.GetValue(ConfigurationKeys.ShouldMinimizeToTray, false);
+    partial void OnShouldMinimizeToTrayChanged(bool value) => HandlePropertyChanged(ConfigurationKeys.ShouldMinimizeToTray, value);
+    
     protected override void Initialize()
     {
+        SupportedLanguages = new AvaloniaList<SupportedLanguage>(LanguageHelper.SupportedLanguages);
         AvailableBackgroundStyles = new AvaloniaList<SukiBackgroundStyle>(Enum.GetValues<SukiBackgroundStyle>());
         CurrentColorTheme =
             ConfigurationManager.Current.GetValue(ConfigurationKeys.ColorTheme, _theme.ColorThemes.First(t => t.DisplayName.Equals("blue", StringComparison.OrdinalIgnoreCase)));
         BaseTheme =
-            ConfigurationManager.Current.GetValue(ConfigurationKeys.BaseTheme, ThemeVariant.Light, new Dictionary<object, ThemeVariant>()
+            ConfigurationManager.Current.GetValue(ConfigurationKeys.BaseTheme, ThemeVariant.Light, new Dictionary<object, ThemeVariant>
             {
                 ["Dark"] = ThemeVariant.Dark,
                 ["Light"] = ThemeVariant.Light,
             });
-        CurrentLanguage = ConfigurationManager.Current.GetValue(ConfigurationKeys.CurrentLanguage, LanguageHelper.SupportedLanguages[0].Key);
+        CurrentLanguage = ConfigurationManager.Current.GetValue(ConfigurationKeys.CurrentLanguage, LanguageHelper.SupportedLanguages[0].Key, ["zh-hans", "zh-hant", "en-us"]);
         ThemeItems = new AvaloniaList<ThemeItemViewModel>(
             _theme.ColorThemes.ToList().Select(t => new ThemeItemViewModel(t, this))
         );
@@ -60,7 +66,7 @@ public partial class GuiSettingsUserControlModel : ViewModelBase
 
     partial void OnBackgroundTransitionsChanged(bool value) => HandlePropertyChanged(ConfigurationKeys.BackgroundTransitions, value);
 
-    partial void OnBackgroundStyleChanged(SukiBackgroundStyle value) => HandlePropertyChanged(ConfigurationKeys.BackgroundStyle, value);
+    partial void OnBackgroundStyleChanged(SukiBackgroundStyle value) => HandlePropertyChanged(ConfigurationKeys.BackgroundStyle, value.ToString());
 
     partial void OnCurrentLanguageChanged(string value) => HandlePropertyChanged(ConfigurationKeys.CurrentLanguage, value, LanguageHelper.ChangeLanguage);
 }

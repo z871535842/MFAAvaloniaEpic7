@@ -162,7 +162,10 @@ public class MaaInterface
 
     [JsonProperty("mirrorchyan_rid")]
     public string? RID { get; set; }
-
+    
+    [JsonProperty("mirrorchyan_multiplatform")]
+    public bool? Multiplatform { get; set; }
+    
     [JsonProperty("name")]
     public string? Name { get; set; }
 
@@ -199,6 +202,7 @@ public class MaaInterface
 
     [JsonExtensionData]
     public Dictionary<string, object> AdditionalData { get; set; } = new();
+
     private static MaaInterface? _instance;
 
 
@@ -225,12 +229,12 @@ public class MaaInterface
         private set
         {
             _instance = value;
-        
+
             foreach (var customResource in value?.Resource ?? Enumerable.Empty<MaaInterfaceResource>())
             {
                 var nameKey = customResource.Name?.Trim() ?? string.Empty;
                 var paths = ReplacePlaceholder(customResource.Path ?? new(), AppContext.BaseDirectory);
-            
+
                 value!.Resources[nameKey] = new MaaInterfaceResource
                 {
                     Name = LanguageHelper.GetLocalizedString(nameKey),

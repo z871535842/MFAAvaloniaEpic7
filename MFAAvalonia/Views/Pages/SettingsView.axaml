@@ -12,7 +12,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=System.ObjectModel"
     xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
-    xmlns:pages1="clr-namespace:MFAAvalonia.Views.Pages"
     xmlns:settings="clr-namespace:MFAAvalonia.Views.UserControls.Settings"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:userControls="clr-namespace:MFAAvalonia.Views.UserControls"
@@ -20,15 +19,30 @@
     <Design.DataContext>
         <pages:SettingsViewModel />
     </Design.DataContext>
-    <suki:SukiStackPage Margin="20">
-        <suki:SukiStackPage.Content>
-            <suki:SettingsLayout Name="{I18N {x:Static helper:LangKeys.Settings}}">
-                <suki:SettingsLayout.Items>
-                    <objectModel:ObservableCollection x:TypeArguments="suki:SettingsLayoutItem">
-                        <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:GuiSettingsUserControl}}" Header="{I18N {x:Static helper:LangKeys.UiSettings}}" />
-                    </objectModel:ObservableCollection>
-                </suki:SettingsLayout.Items>
-            </suki:SettingsLayout>
-        </suki:SukiStackPage.Content>
-    </suki:SukiStackPage>
+    <Grid>
+        <TextBlock
+            FontSize="30"
+            FontWeight="DemiBold"
+            Margin="60,30,0,0"
+            Text="{markup:I18n {x:Static helper:LangKeys.Settings}}" />
+        <suki:SukiStackPage Margin="20,0,20,20" Name="Settings">
+            <suki:SukiStackPage.Content>
+                <suki:SettingsLayout>
+                    <suki:SettingsLayout.Items>
+                        <objectModel:ObservableCollection x:TypeArguments="suki:SettingsLayoutItem">
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:ConfigurationMgrUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.SwitchConfiguration}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:TimerSettingsUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.ScheduleSettings}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:PerformanceUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.PerformanceSettings}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:GameSettingsUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.RunningSettings}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:ConnectSettingsUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.ConnectionSettings}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:GuiSettingsUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.UiSettings}}" />
+                            <suki:SettingsLayoutItem Content="{extensions:ServiceProvider ServiceType={x:Type settings:ExternalNotificationSettingsUserControl}}" Header="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationSettings}}" />
+
+                        </objectModel:ObservableCollection>
+                    </suki:SettingsLayout.Items>
+                </suki:SettingsLayout>
+            </suki:SukiStackPage.Content>
+        </suki:SukiStackPage>
+    </Grid>
+
 </UserControl>

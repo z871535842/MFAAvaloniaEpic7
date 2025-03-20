@@ -18,20 +18,20 @@
         <TextBlock
             FontSize="18"
             FontWeight="DemiBold"
-            Text="{I18N {x:Static helper:LangKeys.AdbEditor}}" />
+            Text="{markup:I18n {x:Static helper:LangKeys.AdbEditor}}" />
 
 
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"
             Margin="8,27,0,0"
-            Text="{I18N {x:Static helper:LangKeys.AdbName}}" />
+            Text="{markup:I18n {x:Static helper:LangKeys.AdbName}}" />
         <TextBox Text="{Binding AdbName}" />
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"
             Margin="8,15,0,0"
-            Text="{I18N {x:Static helper:LangKeys.AdbPath}}" />
+            Text="{markup:I18n {x:Static helper:LangKeys.AdbPath}}" />
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -50,7 +50,7 @@
                 Height="35"
                 Margin="0,0,5,0"
                 ToolTip.Placement="Right"
-                ToolTip.Tip="{I18N {x:Static helper:LangKeys.Load}}">
+                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Load}}">
                 <fluent:FluentIcon
                     Height="25"
                     Icon="FolderArrowLeft"
@@ -62,13 +62,13 @@
             FontSize="12"
             FontWeight="DemiBold"
             Margin="8,15,0,0"
-            Text="{I18N {x:Static helper:LangKeys.AdbSerial}}" />
+            Text="{markup:I18n {x:Static helper:LangKeys.AdbSerial}}" />
         <TextBox Text="{Binding AdbSerial}" />
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"
             Margin="8,15,0,0"
-            Text="{I18N {x:Static helper:LangKeys.AdbConfig}}" />
+            Text="{markup:I18n {x:Static helper:LangKeys.AdbConfig}}" />
         <TextBox Text="{Binding AdbConfig}" />
 
         <StackPanel
@@ -79,7 +79,7 @@
             <Button
                 Classes="Flat Rounded"
                 Command="{Binding SaveCommand}"
-                Content="{I18N {x:Static helper:LangKeys.ButtonSave}}" />
+                Content="{markup:I18n {x:Static helper:LangKeys.ButtonSave}}" />
         </StackPanel>
 
     </StackPanel>
@@ -88,13 +88,13 @@
     <!--  <TextBlock  -->
     <!--  FontWeight="DemiBold"  -->
     <!--  Margin="8,8,0,0"  -->
-    <!--  Text="{I18N  {x:Static helper:LangKeys.AdbEditor}}" />  -->
+    <!--  Text="{markup:I18n  {x:Static helper:LangKeys.AdbEditor}}" />  -->
     <!--     </suki:GroupBox.Header> -->
     <!--     <StackPanel> -->
     <!--    -->
     <!--  <Button  -->
     <!--  Command="{Binding SaveCommand}"  -->
-    <!--  Content="{I18N  {x:Static helper:LangKeys.ButtonSave}}"  -->
+    <!--  Content="{markup:I18n  {x:Static helper:LangKeys.ButtonSave}}"  -->
     <!--  Margin="5,5,8,5" />  -->
     <!--     </StackPanel> -->
     <!-- </suki:GroupBox> -->

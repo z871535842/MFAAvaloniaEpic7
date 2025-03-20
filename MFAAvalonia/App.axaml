@@ -21,6 +21,6 @@
     </Application.Resources>
     <Application.Styles>
         <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue" />
-
+        <StyleInclude Source="avares://MFAAvalonia/Views/UserControls/PasswordBox.axaml" />
     </Application.Styles>
 </Application>

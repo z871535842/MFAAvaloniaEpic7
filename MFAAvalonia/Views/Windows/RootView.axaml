@@ -19,6 +19,7 @@
     xmlns:hc="https://handyorg.github.io/handycontrol"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:markup="https://codewf.com"
+    xmlns:markupExtensions="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:MFAAvalonia.Views.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
@@ -38,11 +39,21 @@
         <MultiBinding Converter="{converters:TitleConverter}" Mode="OneWay">
             <Binding Path="CustomTitle" />
             <Binding Path="IsCustomTitleVisible" />
-            <LanguageBinding Key="{x:Static helper:LangKeys.AppTitle}" />
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.AppTitle" />
+                </x:Arguments>
+            </markup:I18nBinding>
             <Binding Path="Version" />
             <Binding Path="ResourceName" />
             <Binding Path="ResourceVersion" />
             <Binding Path="IsResourceNameVisible" />
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.DebugMode" />
+                </x:Arguments>
+            </markup:I18nBinding>
+            <Binding Path="IsDebugMode" />
         </MultiBinding>
     </suki:SukiWindow.Title>
     <suki:SukiWindow.RightWindowTitleBarControls>
@@ -75,37 +86,34 @@
     </suki:SukiWindow.Hosts>
     <Grid>
         <suki:SukiSideMenu IsMenuExpanded="False" IsSearchEnabled="False">
-            <suki:SukiSideMenu.Styles>
-                <Style Selector="Image.AppIcon">
-                    <Setter Property="Transitions">
-                        <Transitions>
-                            <DoubleTransition Duration="0.1" Property="Opacity" />
-                        </Transitions>
-                    </Setter>
-                    <Style Selector="^:pointerover">
-                        <Setter Property="Opacity" Value="0.5" />
-                    </Style>
-                </Style>
-            </suki:SukiSideMenu.Styles>
+            <!-- <suki:SukiSideMenu.Styles> -->
+            <!--     <Style Selector="Image.AppIcon"> -->
+            <!--         <Setter Property="Transitions"> -->
+            <!--             <Transitions> -->
+            <!--                 <DoubleTransition Duration="0.1" Property="Opacity" /> -->
+            <!--             </Transitions> -->
+            <!--         </Setter> -->
+            <!--         <Style Selector="^:pointerover"> -->
+            <!--             <Setter Property="Opacity" Value="0.5" /> -->
+            <!--         </Style> -->
+            <!--     </Style> -->
+            <!-- </suki:SukiSideMenu.Styles> -->
             <suki:SukiSideMenu.Items>
-                <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Home}}" PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:TaskQueueView}}">
-                    <suki:SukiSideMenuItem.Icon>
-                        <fluent:FluentIcon Icon="TasksApp" IconVariant="Regular" />
-                    </suki:SukiSideMenuItem.Icon>
-                </suki:SukiSideMenuItem>
-                <!-- <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Connection}}"> -->
-                <!--     <suki:SukiSideMenuItem.Icon> -->
-                <!--         <fluent:FluentIcon Icon="Connected" IconVariant="Regular" /> -->
-                <!--     </suki:SukiSideMenuItem.Icon> -->
-                <!--     <suki:SukiSideMenuItem.PageContent> -->
-                <!--         <ContentControl /> -->
-                <!--     </suki:SukiSideMenuItem.PageContent> -->
-                <!-- </suki:SukiSideMenuItem> -->
-                <suki:SukiSideMenuItem Header="{I18N {x:Static helper:LangKeys.Settings}}" PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:SettingsView}}">
-                    <suki:SukiSideMenuItem.Icon>
-                        <fluent:FluentIcon Icon="Settings" IconVariant="Regular" />
-                    </suki:SukiSideMenuItem.Icon>
-                </suki:SukiSideMenuItem>
+                <suki:SukiSideMenuItem
+                    Header="{markup:I18n {x:Static helper:LangKeys.Home}}"
+                    Icon="{markupExtensions:FluentIcon Icon=TasksApp,
+                                                       IconVariant=Regular}"
+                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:TaskQueueView}}" />
+                <suki:SukiSideMenuItem
+                    Header="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
+                    Icon="{markupExtensions:FluentIcon Icon=Apps,
+                                                       IconVariant=Regular}"
+                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:ResourcesView}}" />
+                <suki:SukiSideMenuItem
+                    Header="{markup:I18n {x:Static helper:LangKeys.Settings}}"
+                    Icon="{markupExtensions:FluentIcon Icon=Settings,
+                                                       IconVariant=Regular}"
+                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:SettingsView}}" />
             </suki:SukiSideMenu.Items>
 
             <suki:SukiSideMenu.HeaderContent>

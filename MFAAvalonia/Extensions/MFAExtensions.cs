@@ -1,5 +1,7 @@
 ﻿using Avalonia.Markup.Xaml.MarkupExtensions;
+using AvaloniaExtensions.Axaml.Markup;
 using MFAAvalonia.Helper;
+using MFAAvalonia.ViewModels.Other;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -36,7 +38,7 @@ public static class MFAExtensions
         if (string.IsNullOrWhiteSpace(key))
             return string.Empty;
 
-        return I18NExtension.Translate(key, key) ?? key;
+        return I18nManager.GetString(key) ?? key;
     }
 
     public static string ToLocalizationFormatted(this string? key, bool transformKey = true, params string[] args)
@@ -54,5 +56,10 @@ public static class MFAExtensions
         {
             return localizedKey.FormatWith(processedArgs);
         }
+    }
+    
+    public static bool ContainsKey(this IEnumerable<LocalizationViewModel> settingViewModels, string key)
+    {
+        return settingViewModels.Any(vm => vm.ResourceKey == key);
     }
 }

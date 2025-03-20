@@ -21,21 +21,21 @@ namespace MFAAvalonia.Assets.Localization {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Strings {
+    public class Strings {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Strings() {
+        public Strings() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MFAAvalonia.Assets.Localization.Strings", typeof(Strings).Assembly);
@@ -50,7 +50,7 @@ namespace MFAAvalonia.Assets.Localization {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -62,7 +62,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关于我们.
         /// </summary>
-        internal static string About {
+        public static string About {
             get {
                 return ResourceManager.GetString("About", resourceCulture);
             }
@@ -71,7 +71,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 捕获模式:.
         /// </summary>
-        internal static string AdbCaptureMode {
+        public static string AdbCaptureMode {
             get {
                 return ResourceManager.GetString("AdbCaptureMode", resourceCulture);
             }
@@ -80,7 +80,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 额外参数.
         /// </summary>
-        internal static string AdbConfig {
+        public static string AdbConfig {
             get {
                 return ResourceManager.GetString("AdbConfig", resourceCulture);
             }
@@ -89,7 +89,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Adb 编辑器.
         /// </summary>
-        internal static string AdbEditor {
+        public static string AdbEditor {
             get {
                 return ResourceManager.GetString("AdbEditor", resourceCulture);
             }
@@ -98,7 +98,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to AdbInput (不推荐).
         /// </summary>
-        internal static string AdbInput {
+        public static string AdbInput {
             get {
                 return ResourceManager.GetString("AdbInput", resourceCulture);
             }
@@ -107,7 +107,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 触控模式:.
         /// </summary>
-        internal static string AdbInputMode {
+        public static string AdbInputMode {
             get {
                 return ResourceManager.GetString("AdbInputMode", resourceCulture);
             }
@@ -116,7 +116,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Adb名称.
         /// </summary>
-        internal static string AdbName {
+        public static string AdbName {
             get {
                 return ResourceManager.GetString("AdbName", resourceCulture);
             }
@@ -125,7 +125,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Adb路径.
         /// </summary>
-        internal static string AdbPath {
+        public static string AdbPath {
             get {
                 return ResourceManager.GetString("AdbPath", resourceCulture);
             }
@@ -134,7 +134,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Adb地址.
         /// </summary>
-        internal static string AdbSerial {
+        public static string AdbSerial {
             get {
                 return ResourceManager.GetString("AdbSerial", resourceCulture);
             }
@@ -143,7 +143,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加至上方.
         /// </summary>
-        internal static string AddAbove {
+        public static string AddAbove {
             get {
                 return ResourceManager.GetString("AddAbove", resourceCulture);
             }
@@ -152,7 +152,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加至下方.
         /// </summary>
-        internal static string AddBelow {
+        public static string AddBelow {
             get {
                 return ResourceManager.GetString("AddBelow", resourceCulture);
             }
@@ -161,7 +161,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加.
         /// </summary>
-        internal static string AddConfiguration {
+        public static string AddConfiguration {
             get {
                 return ResourceManager.GetString("AddConfiguration", resourceCulture);
             }
@@ -170,7 +170,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加任务.
         /// </summary>
-        internal static string AddTask {
+        public static string AddTask {
             get {
                 return ResourceManager.GetString("AddTask", resourceCulture);
             }
@@ -179,7 +179,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 高级设置.
         /// </summary>
-        internal static string AdvancedSetting {
+        public static string AdvancedSetting {
             get {
                 return ResourceManager.GetString("AdvancedSetting", resourceCulture);
             }
@@ -188,7 +188,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 结束后操作.
         /// </summary>
-        internal static string AfterTaskOption {
+        public static string AfterTaskOption {
             get {
                 return ResourceManager.GetString("AfterTaskOption", resourceCulture);
             }
@@ -197,7 +197,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 所有文件.
         /// </summary>
-        internal static string AllFilter {
+        public static string AllFilter {
             get {
                 return ResourceManager.GetString("AllFilter", resourceCulture);
             }
@@ -206,7 +206,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接失败后尝试关闭并重启 ADB 进程.
         /// </summary>
-        internal static string AllowAdbHardRestart {
+        public static string AllowAdbHardRestart {
             get {
                 return ResourceManager.GetString("AllowAdbHardRestart", resourceCulture);
             }
@@ -215,7 +215,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接失败后尝试重启 ADB Server.
         /// </summary>
-        internal static string AllowAdbRestart {
+        public static string AllowAdbRestart {
             get {
                 return ResourceManager.GetString("AllowAdbRestart", resourceCulture);
             }
@@ -224,7 +224,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启用/禁用背景动画，动画由当前活动效果驱动。.
         /// </summary>
-        internal static string AnimatedBackgroundDescription {
+        public static string AnimatedBackgroundDescription {
             get {
                 return ResourceManager.GetString("AnimatedBackgroundDescription", resourceCulture);
             }
@@ -233,7 +233,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 动态背景动画.
         /// </summary>
-        internal static string AnimatedBackgroundTitle {
+        public static string AnimatedBackgroundTitle {
             get {
                 return ResourceManager.GetString("AnimatedBackgroundTitle", resourceCulture);
             }
@@ -242,7 +242,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 公告.
         /// </summary>
-        internal static string Announcement {
+        public static string Announcement {
             get {
                 return ResourceManager.GetString("Announcement", resourceCulture);
             }
@@ -251,7 +251,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择要应用的控制器类型.
         /// </summary>
-        internal static string ApplyControllerType {
+        public static string ApplyControllerType {
             get {
                 return ResourceManager.GetString("ApplyControllerType", resourceCulture);
             }
@@ -260,7 +260,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在应用更新......
         /// </summary>
-        internal static string ApplyingUpdate {
+        public static string ApplyingUpdate {
             get {
                 return ResourceManager.GetString("ApplyingUpdate", resourceCulture);
             }
@@ -269,7 +269,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MFA 任务管理器.
         /// </summary>
-        internal static string AppTitle {
+        public static string AppTitle {
             get {
                 return ResourceManager.GetString("AppTitle", resourceCulture);
             }
@@ -278,7 +278,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to AutoDetect (自动检测).
         /// </summary>
-        internal static string AutoDetect {
+        public static string AutoDetect {
             get {
                 return ResourceManager.GetString("AutoDetect", resourceCulture);
             }
@@ -287,7 +287,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自动检测更新.
         /// </summary>
-        internal static string AutomaticDetectionUpdate {
+        public static string AutomaticDetectionUpdate {
             get {
                 return ResourceManager.GetString("AutomaticDetectionUpdate", resourceCulture);
             }
@@ -296,7 +296,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动 MFA 后直接隐藏.
         /// </summary>
-        internal static string AutomaticHide {
+        public static string AutomaticHide {
             get {
                 return ResourceManager.GetString("AutomaticHide", resourceCulture);
             }
@@ -305,7 +305,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动 MFA 后直接最小化.
         /// </summary>
-        internal static string AutomaticMinimize {
+        public static string AutomaticMinimize {
             get {
                 return ResourceManager.GetString("AutomaticMinimize", resourceCulture);
             }
@@ -314,7 +314,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自动更新软件.
         /// </summary>
-        internal static string AutomaticUpdateMFA {
+        public static string AutomaticUpdateMFA {
             get {
                 return ResourceManager.GetString("AutomaticUpdateMFA", resourceCulture);
             }
@@ -323,7 +323,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自动更新资源.
         /// </summary>
-        internal static string AutomaticUpdateResource {
+        public static string AutomaticUpdateResource {
             get {
                 return ResourceManager.GetString("AutomaticUpdateResource", resourceCulture);
             }
@@ -332,7 +332,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动后操作.
         /// </summary>
-        internal static string AutoStartOption {
+        public static string AutoStartOption {
             get {
                 return ResourceManager.GetString("AutoStartOption", resourceCulture);
             }
@@ -341,7 +341,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 从内置背景样式中选择。.
         /// </summary>
-        internal static string BackgroundStyleDescription {
+        public static string BackgroundStyleDescription {
             get {
                 return ResourceManager.GetString("BackgroundStyleDescription", resourceCulture);
             }
@@ -350,7 +350,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 背景样式.
         /// </summary>
-        internal static string BackgroundStyleTitle {
+        public static string BackgroundStyleTitle {
             get {
                 return ResourceManager.GetString("BackgroundStyleTitle", resourceCulture);
             }
@@ -359,7 +359,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启用/禁用背景过渡效果，切换效果时会有渐变过渡。.
         /// </summary>
-        internal static string BackgroundTransitionsDescription {
+        public static string BackgroundTransitionsDescription {
             get {
                 return ResourceManager.GetString("BackgroundTransitionsDescription", resourceCulture);
             }
@@ -368,7 +368,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 背景过渡效果.
         /// </summary>
-        internal static string BackgroundTransitionsTitle {
+        public static string BackgroundTransitionsTitle {
             get {
                 return ResourceManager.GetString("BackgroundTransitionsTitle", resourceCulture);
             }
@@ -377,7 +377,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 基本主题.
         /// </summary>
-        internal static string BaseTheme {
+        public static string BaseTheme {
             get {
                 return ResourceManager.GetString("BaseTheme", resourceCulture);
             }
@@ -386,7 +386,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 蓝叠模拟器.
         /// </summary>
-        internal static string BlueStacks {
+        public static string BlueStacks {
             get {
                 return ResourceManager.GetString("BlueStacks", resourceCulture);
             }
@@ -395,7 +395,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加.
         /// </summary>
-        internal static string ButtonAdd {
+        public static string ButtonAdd {
             get {
                 return ResourceManager.GetString("ButtonAdd", resourceCulture);
             }
@@ -404,7 +404,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 取消.
         /// </summary>
-        internal static string ButtonCancel {
+        public static string ButtonCancel {
             get {
                 return ResourceManager.GetString("ButtonCancel", resourceCulture);
             }
@@ -413,7 +413,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 清空.
         /// </summary>
-        internal static string ButtonClear {
+        public static string ButtonClear {
             get {
                 return ResourceManager.GetString("ButtonClear", resourceCulture);
             }
@@ -422,7 +422,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关闭.
         /// </summary>
-        internal static string ButtonClose {
+        public static string ButtonClose {
             get {
                 return ResourceManager.GetString("ButtonClose", resourceCulture);
             }
@@ -431,7 +431,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存.
         /// </summary>
-        internal static string ButtonSave {
+        public static string ButtonSave {
             get {
                 return ResourceManager.GetString("ButtonSave", resourceCulture);
             }
@@ -440,7 +440,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 无法启动任务.
         /// </summary>
-        internal static string CannotStart {
+        public static string CannotStart {
             get {
                 return ResourceManager.GetString("CannotStart", resourceCulture);
             }
@@ -449,7 +449,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 捕获方式.
         /// </summary>
-        internal static string CaptureModeOption {
+        public static string CaptureModeOption {
             get {
                 return ResourceManager.GetString("CaptureModeOption", resourceCulture);
             }
@@ -458,7 +458,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 检查软件.
         /// </summary>
-        internal static string CheckMFA {
+        public static string CheckMFA {
             get {
                 return ResourceManager.GetString("CheckMFA", resourceCulture);
             }
@@ -467,7 +467,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 检查资源.
         /// </summary>
-        internal static string CheckResource {
+        public static string CheckResource {
             get {
                 return ResourceManager.GetString("CheckResource", resourceCulture);
             }
@@ -476,7 +476,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 目前剪贴板中数据不可转换为文本.
         /// </summary>
-        internal static string ClipboardDataError {
+        public static string ClipboardDataError {
             get {
                 return ResourceManager.GetString("ClipboardDataError", resourceCulture);
             }
@@ -485,7 +485,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关闭软件.
         /// </summary>
-        internal static string CloseEmulator {
+        public static string CloseEmulator {
             get {
                 return ResourceManager.GetString("CloseEmulator", resourceCulture);
             }
@@ -494,7 +494,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关闭MFA和软件.
         /// </summary>
-        internal static string CloseEmulatorAndMFA {
+        public static string CloseEmulatorAndMFA {
             get {
                 return ResourceManager.GetString("CloseEmulatorAndMFA", resourceCulture);
             }
@@ -503,7 +503,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重启MFA和关闭软件.
         /// </summary>
-        internal static string CloseEmulatorAndRestartMFA {
+        public static string CloseEmulatorAndRestartMFA {
             get {
                 return ResourceManager.GetString("CloseEmulatorAndRestartMFA", resourceCulture);
             }
@@ -512,7 +512,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关闭MFA.
         /// </summary>
-        internal static string CloseMFA {
+        public static string CloseMFA {
             get {
                 return ResourceManager.GetString("CloseMFA", resourceCulture);
             }
@@ -521,7 +521,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 取色器.
         /// </summary>
-        internal static string ColorPickerTitle {
+        public static string ColorPickerTitle {
             get {
                 return ResourceManager.GetString("ColorPickerTitle", resourceCulture);
             }
@@ -530,7 +530,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 颜色主题.
         /// </summary>
-        internal static string ColorTheme {
+        public static string ColorTheme {
             get {
                 return ResourceManager.GetString("ColorTheme", resourceCulture);
             }
@@ -539,7 +539,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to  常规设置 .
         /// </summary>
-        internal static string CommonSetting {
+        public static string CommonSetting {
             get {
                 return ResourceManager.GetString("CommonSetting", resourceCulture);
             }
@@ -548,7 +548,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 配置 &lt;{0}&gt; 添加成功！.
         /// </summary>
-        internal static string ConfigAddedSuccessfully {
+        public static string ConfigAddedSuccessfully {
             get {
                 return ResourceManager.GetString("ConfigAddedSuccessfully", resourceCulture);
             }
@@ -557,7 +557,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 配置名称 &lt;{0}&gt; 已存在！.
         /// </summary>
-        internal static string ConfigNameAlreadyExists {
+        public static string ConfigNameAlreadyExists {
             get {
                 return ResourceManager.GetString("ConfigNameAlreadyExists", resourceCulture);
             }
@@ -566,7 +566,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 配置文件名不能为空！.
         /// </summary>
-        internal static string ConfigNameCannotBeEmpty {
+        public static string ConfigNameCannotBeEmpty {
             get {
                 return ResourceManager.GetString("ConfigNameCannotBeEmpty", resourceCulture);
             }
@@ -575,7 +575,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 配置名称.
         /// </summary>
-        internal static string ConfigurationName {
+        public static string ConfigurationName {
             get {
                 return ResourceManager.GetString("ConfigurationName", resourceCulture);
             }
@@ -584,7 +584,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 确认.
         /// </summary>
-        internal static string Confirm {
+        public static string Confirm {
             get {
                 return ResourceManager.GetString("Confirm", resourceCulture);
             }
@@ -593,7 +593,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 确定要退出吗？.
         /// </summary>
-        internal static string ConfirmExitText {
+        public static string ConfirmExitText {
             get {
                 return ResourceManager.GetString("ConfirmExitText", resourceCulture);
             }
@@ -602,7 +602,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MFA 正在运行任务.
         /// </summary>
-        internal static string ConfirmExitTitle {
+        public static string ConfirmExitTitle {
             get {
                 return ResourceManager.GetString("ConfirmExitTitle", resourceCulture);
             }
@@ -611,7 +611,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 已连接.
         /// </summary>
-        internal static string Connected {
+        public static string Connected {
             get {
                 return ResourceManager.GetString("Connected", resourceCulture);
             }
@@ -620,7 +620,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接失败.
         /// </summary>
-        internal static string ConnectFailed {
+        public static string ConnectFailed {
             get {
                 return ResourceManager.GetString("ConnectFailed", resourceCulture);
             }
@@ -629,7 +629,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接{0}时发生错误！.
         /// </summary>
-        internal static string ConnectingEmulatorOrWindow {
+        public static string ConnectingEmulatorOrWindow {
             get {
                 return ResourceManager.GetString("ConnectingEmulatorOrWindow", resourceCulture);
             }
@@ -638,7 +638,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在连接至{0}.......
         /// </summary>
-        internal static string ConnectingTo {
+        public static string ConnectingTo {
             get {
                 return ResourceManager.GetString("ConnectingTo", resourceCulture);
             }
@@ -647,7 +647,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接.
         /// </summary>
-        internal static string Connection {
+        public static string Connection {
             get {
                 return ResourceManager.GetString("Connection", resourceCulture);
             }
@@ -656,7 +656,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 连接设置.
         /// </summary>
-        internal static string ConnectionSettings {
+        public static string ConnectionSettings {
             get {
                 return ResourceManager.GetString("ConnectionSettings", resourceCulture);
             }
@@ -665,7 +665,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 控制器类型.
         /// </summary>
-        internal static string ControllerType {
+        public static string ControllerType {
             get {
                 return ResourceManager.GetString("ControllerType", resourceCulture);
             }
@@ -674,7 +674,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 已复制到剪切板.
         /// </summary>
-        internal static string CopiedToClipboard {
+        public static string CopiedToClipboard {
             get {
                 return ResourceManager.GetString("CopiedToClipboard", resourceCulture);
             }
@@ -683,7 +683,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 复制.
         /// </summary>
-        internal static string Copy {
+        public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
             }
@@ -692,7 +692,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 复制错误信息.
         /// </summary>
-        internal static string CopyErrorMessage {
+        public static string CopyErrorMessage {
             get {
                 return ResourceManager.GetString("CopyErrorMessage", resourceCulture);
             }
@@ -701,7 +701,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 复制键.
         /// </summary>
-        internal static string CopyKey {
+        public static string CopyKey {
             get {
                 return ResourceManager.GetString("CopyKey", resourceCulture);
             }
@@ -710,7 +710,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 复制值.
         /// </summary>
-        internal static string CopyValue {
+        public static string CopyValue {
             get {
                 return ResourceManager.GetString("CopyValue", resourceCulture);
             }
@@ -719,7 +719,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 当前控制器.
         /// </summary>
-        internal static string CurrentController {
+        public static string CurrentController {
             get {
                 return ResourceManager.GetString("CurrentController", resourceCulture);
             }
@@ -728,7 +728,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 该资源操作暂不支持 GitHub.
         /// </summary>
-        internal static string CurrentResourcesNotSupportGitHub {
+        public static string CurrentResourcesNotSupportGitHub {
             get {
                 return ResourceManager.GetString("CurrentResourcesNotSupportGitHub", resourceCulture);
             }
@@ -737,7 +737,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 该资源操作暂不支持 Mirror酱.
         /// </summary>
-        internal static string CurrentResourcesNotSupportMirror {
+        public static string CurrentResourcesNotSupportMirror {
             get {
                 return ResourceManager.GetString("CurrentResourcesNotSupportMirror", resourceCulture);
             }
@@ -746,7 +746,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自定义.
         /// </summary>
-        internal static string Custom {
+        public static string Custom {
             get {
                 return ResourceManager.GetString("Custom", resourceCulture);
             }
@@ -755,7 +755,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 剪切.
         /// </summary>
-        internal static string Cut {
+        public static string Cut {
             get {
                 return ResourceManager.GetString("Cut", resourceCulture);
             }
@@ -764,7 +764,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 深色.
         /// </summary>
-        internal static string DarkColor {
+        public static string DarkColor {
             get {
                 return ResourceManager.GetString("DarkColor", resourceCulture);
             }
@@ -773,7 +773,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to [调试模式].
         /// </summary>
-        internal static string DebugMode {
+        public static string DebugMode {
             get {
                 return ResourceManager.GetString("DebugMode", resourceCulture);
             }
@@ -782,7 +782,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 调试模式已开启。此模式会保存运行期间的截图、操作数据及图像识别可视化结果，可能会占用大量的存储空间！.
         /// </summary>
-        internal static string DebugModeWarning {
+        public static string DebugModeWarning {
             get {
                 return ResourceManager.GetString("DebugModeWarning", resourceCulture);
             }
@@ -791,7 +791,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 删除.
         /// </summary>
-        internal static string Delete {
+        public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
             }
@@ -800,7 +800,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 全部不选.
         /// </summary>
-        internal static string DeselectAll {
+        public static string DeselectAll {
             get {
                 return ResourceManager.GetString("DeselectAll", resourceCulture);
             }
@@ -809,7 +809,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 钉钉.
         /// </summary>
-        internal static string DingTalk {
+        public static string DingTalk {
             get {
                 return ResourceManager.GetString("DingTalk", resourceCulture);
             }
@@ -818,7 +818,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 钉钉群发送消息通知.
         /// </summary>
-        internal static string DingTalkMessageAsync {
+        public static string DingTalkMessageAsync {
             get {
                 return ResourceManager.GetString("DingTalkMessageAsync", resourceCulture);
             }
@@ -827,7 +827,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 新版本下载失败.
         /// </summary>
-        internal static string DownloadFailed {
+        public static string DownloadFailed {
             get {
                 return ResourceManager.GetString("DownloadFailed", resourceCulture);
             }
@@ -836,7 +836,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 下载中......
         /// </summary>
-        internal static string Downloading {
+        public static string Downloading {
             get {
                 return ResourceManager.GetString("Downloading", resourceCulture);
             }
@@ -845,7 +845,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Pipeline文件中存在重复的任务名称:&quot;{0}&quot;！.
         /// </summary>
-        internal static string DuplicateTaskError {
+        public static string DuplicateTaskError {
             get {
                 return ResourceManager.GetString("DuplicateTaskError", resourceCulture);
             }
@@ -854,7 +854,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务列表中已存在命名为&quot;{0}&quot;的任务.
         /// </summary>
-        internal static string DuplicateTaskNameError {
+        public static string DuplicateTaskNameError {
             get {
                 return ResourceManager.GetString("DuplicateTaskNameError", resourceCulture);
             }
@@ -863,7 +863,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 编辑.
         /// </summary>
-        internal static string Edit {
+        public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
             }
@@ -872,7 +872,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 属性编辑器.
         /// </summary>
-        internal static string EditAttributeDialogTitle {
+        public static string EditAttributeDialogTitle {
             get {
                 return ResourceManager.GetString("EditAttributeDialogTitle", resourceCulture);
             }
@@ -881,7 +881,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 编辑控制器配置.
         /// </summary>
-        internal static string EditControllerConfiguration {
+        public static string EditControllerConfiguration {
             get {
                 return ResourceManager.GetString("EditControllerConfiguration", resourceCulture);
             }
@@ -890,7 +890,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 编辑任务.
         /// </summary>
-        internal static string EditTask {
+        public static string EditTask {
             get {
                 return ResourceManager.GetString("EditTask", resourceCulture);
             }
@@ -899,7 +899,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 添加属性.
         /// </summary>
-        internal static string EditTaskDialog_AddAttribute_Tooltip {
+        public static string EditTaskDialog_AddAttribute_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_AddAttribute_Tooltip", resourceCulture);
             }
@@ -908,7 +908,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 清空属性.
         /// </summary>
-        internal static string EditTaskDialog_ClearAttribute_Tooltip {
+        public static string EditTaskDialog_ClearAttribute_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_ClearAttribute_Tooltip", resourceCulture);
             }
@@ -917,7 +917,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 清空任务.
         /// </summary>
-        internal static string EditTaskDialog_ClearTask_Tooltip {
+        public static string EditTaskDialog_ClearTask_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_ClearTask_Tooltip", resourceCulture);
             }
@@ -926,7 +926,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 取色.
         /// </summary>
-        internal static string EditTaskDialog_ColorExtraction_Tooltip {
+        public static string EditTaskDialog_ColorExtraction_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_ColorExtraction_Tooltip", resourceCulture);
             }
@@ -935,7 +935,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务编辑器.
         /// </summary>
-        internal static string EditTaskDialog_Header {
+        public static string EditTaskDialog_Header {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Header", resourceCulture);
             }
@@ -944,7 +944,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 导入Pipeline文件.
         /// </summary>
-        internal static string EditTaskDialog_Load_Tooltip {
+        public static string EditTaskDialog_Load_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Load_Tooltip", resourceCulture);
             }
@@ -953,7 +953,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Pipeline文件名称.
         /// </summary>
-        internal static string EditTaskDialog_PipelineFileName_Placeholder {
+        public static string EditTaskDialog_PipelineFileName_Placeholder {
             get {
                 return ResourceManager.GetString("EditTaskDialog_PipelineFileName_Placeholder", resourceCulture);
             }
@@ -962,7 +962,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 文字识别.
         /// </summary>
-        internal static string EditTaskDialog_RecognitionText_Tooltip {
+        public static string EditTaskDialog_RecognitionText_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_RecognitionText_Tooltip", resourceCulture);
             }
@@ -971,7 +971,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存Pipeline文件.
         /// </summary>
-        internal static string EditTaskDialog_SavePipeline_Tooltip {
+        public static string EditTaskDialog_SavePipeline_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_SavePipeline_Tooltip", resourceCulture);
             }
@@ -980,7 +980,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存任务名称.
         /// </summary>
-        internal static string EditTaskDialog_SaveTask_Button {
+        public static string EditTaskDialog_SaveTask_Button {
             get {
                 return ResourceManager.GetString("EditTaskDialog_SaveTask_Button", resourceCulture);
             }
@@ -989,7 +989,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 裁剪图片.
         /// </summary>
-        internal static string EditTaskDialog_Screenshot_Tooltip {
+        public static string EditTaskDialog_Screenshot_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Screenshot_Tooltip", resourceCulture);
             }
@@ -998,7 +998,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择区域.
         /// </summary>
-        internal static string EditTaskDialog_SelectionRegion_Tooltip {
+        public static string EditTaskDialog_SelectionRegion_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_SelectionRegion_Tooltip", resourceCulture);
             }
@@ -1007,7 +1007,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 流程图.
         /// </summary>
-        internal static string EditTaskDialog_ShowChart_Button {
+        public static string EditTaskDialog_ShowChart_Button {
             get {
                 return ResourceManager.GetString("EditTaskDialog_ShowChart_Button", resourceCulture);
             }
@@ -1016,7 +1016,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 滑动.
         /// </summary>
-        internal static string EditTaskDialog_Swipe_Tooltip {
+        public static string EditTaskDialog_Swipe_Tooltip {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Swipe_Tooltip", resourceCulture);
             }
@@ -1025,7 +1025,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务名称:.
         /// </summary>
-        internal static string EditTaskDialog_TaskName_Title {
+        public static string EditTaskDialog_TaskName_Title {
             get {
                 return ResourceManager.GetString("EditTaskDialog_TaskName_Title", resourceCulture);
             }
@@ -1034,7 +1034,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务编辑器.
         /// </summary>
-        internal static string EditTaskDialog_Title {
+        public static string EditTaskDialog_Title {
             get {
                 return ResourceManager.GetString("EditTaskDialog_Title", resourceCulture);
             }
@@ -1043,7 +1043,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 编辑任务.
         /// </summary>
-        internal static string EditTaskTooltip {
+        public static string EditTaskTooltip {
             get {
                 return ResourceManager.GetString("EditTaskTooltip", resourceCulture);
             }
@@ -1052,7 +1052,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 邮箱.
         /// </summary>
-        internal static string Email {
+        public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
             }
@@ -1061,7 +1061,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 模拟器.
         /// </summary>
-        internal static string Emulator {
+        public static string Emulator {
             get {
                 return ResourceManager.GetString("Emulator", resourceCulture);
             }
@@ -1070,7 +1070,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 开始搜索模拟器!.
         /// </summary>
-        internal static string EmulatorDetectionStarted {
+        public static string EmulatorDetectionStarted {
             get {
                 return ResourceManager.GetString("EmulatorDetectionStarted", resourceCulture);
             }
@@ -1079,7 +1079,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to EmulatorExtras (特化).
         /// </summary>
-        internal static string EmulatorExtras {
+        public static string EmulatorExtras {
             get {
                 return ResourceManager.GetString("EmulatorExtras", resourceCulture);
             }
@@ -1088,7 +1088,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 已选择模拟器:{0}.
         /// </summary>
-        internal static string EmulatorSelectionMessage {
+        public static string EmulatorSelectionMessage {
             get {
                 return ResourceManager.GetString("EmulatorSelectionMessage", resourceCulture);
             }
@@ -1097,7 +1097,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启用保存录像 (用于调试).
         /// </summary>
-        internal static string EnableRecording {
+        public static string EnableRecording {
             get {
                 return ResourceManager.GetString("EnableRecording", resourceCulture);
             }
@@ -1106,7 +1106,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启用保存截图 (用于调试).
         /// </summary>
-        internal static string EnableSaveDraw {
+        public static string EnableSaveDraw {
             get {
                 return ResourceManager.GetString("EnableSaveDraw", resourceCulture);
             }
@@ -1115,7 +1115,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 请输入任务名称.
         /// </summary>
-        internal static string EnterTaskName {
+        public static string EnterTaskName {
             get {
                 return ResourceManager.GetString("EnterTaskName", resourceCulture);
             }
@@ -1124,7 +1124,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 错误.
         /// </summary>
-        internal static string Error {
+        public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
             }
@@ -1133,7 +1133,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 详细信息.
         /// </summary>
-        internal static string ErrorDetails {
+        public static string ErrorDetails {
             get {
                 return ResourceManager.GetString("ErrorDetails", resourceCulture);
             }
@@ -1142,7 +1142,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 创建 GitHub issue.
         /// </summary>
-        internal static string ErrorFeedbackLinkText {
+        public static string ErrorFeedbackLinkText {
             get {
                 return ResourceManager.GetString("ErrorFeedbackLinkText", resourceCulture);
             }
@@ -1151,7 +1151,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MFA 遇到了问题.
         /// </summary>
-        internal static string ErrorProlog {
+        public static string ErrorProlog {
             get {
                 return ResourceManager.GetString("ErrorProlog", resourceCulture);
             }
@@ -1160,7 +1160,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 可运行文件 (*.exe*)|*.exe*.
         /// </summary>
-        internal static string ExeFilter {
+        public static string ExeFilter {
             get {
                 return ResourceManager.GetString("ExeFilter", resourceCulture);
             }
@@ -1169,7 +1169,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 机器人 Token.
         /// </summary>
-        internal static string ExternalNotificationBotToken {
+        public static string ExternalNotificationBotToken {
             get {
                 return ResourceManager.GetString("ExternalNotificationBotToken", resourceCulture);
             }
@@ -1178,7 +1178,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 钉钉 Secret.
         /// </summary>
-        internal static string ExternalNotificationDingTalkSecret {
+        public static string ExternalNotificationDingTalkSecret {
             get {
                 return ResourceManager.GetString("ExternalNotificationDingTalkSecret", resourceCulture);
             }
@@ -1187,7 +1187,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 钉钉 Token.
         /// </summary>
-        internal static string ExternalNotificationDingTalkToken {
+        public static string ExternalNotificationDingTalkToken {
             get {
                 return ResourceManager.GetString("ExternalNotificationDingTalkToken", resourceCulture);
             }
@@ -1196,7 +1196,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 用户 ID.
         /// </summary>
-        internal static string ExternalNotificationDiscordUserId {
+        public static string ExternalNotificationDiscordUserId {
             get {
                 return ResourceManager.GetString("ExternalNotificationDiscordUserId", resourceCulture);
             }
@@ -1205,7 +1205,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 邮箱 账户.
         /// </summary>
-        internal static string ExternalNotificationEmailAccount {
+        public static string ExternalNotificationEmailAccount {
             get {
                 return ResourceManager.GetString("ExternalNotificationEmailAccount", resourceCulture);
             }
@@ -1214,7 +1214,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 邮箱 Secret.
         /// </summary>
-        internal static string ExternalNotificationEmailSecret {
+        public static string ExternalNotificationEmailSecret {
             get {
                 return ResourceManager.GetString("ExternalNotificationEmailSecret", resourceCulture);
             }
@@ -1223,7 +1223,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启用的通知配置.
         /// </summary>
-        internal static string ExternalNotificationEnabled {
+        public static string ExternalNotificationEnabled {
             get {
                 return ResourceManager.GetString("ExternalNotificationEnabled", resourceCulture);
             }
@@ -1232,7 +1232,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 飞书 ID.
         /// </summary>
-        internal static string ExternalNotificationLarkID {
+        public static string ExternalNotificationLarkID {
             get {
                 return ResourceManager.GetString("ExternalNotificationLarkID", resourceCulture);
             }
@@ -1241,7 +1241,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 机器人 QQ.
         /// </summary>
-        internal static string ExternalNotificationQmsgBot {
+        public static string ExternalNotificationQmsgBot {
             get {
                 return ResourceManager.GetString("ExternalNotificationQmsgBot", resourceCulture);
             }
@@ -1250,7 +1250,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Key.
         /// </summary>
-        internal static string ExternalNotificationQmsgKey {
+        public static string ExternalNotificationQmsgKey {
             get {
                 return ResourceManager.GetString("ExternalNotificationQmsgKey", resourceCulture);
             }
@@ -1259,7 +1259,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Server.
         /// </summary>
-        internal static string ExternalNotificationQmsgServer {
+        public static string ExternalNotificationQmsgServer {
             get {
                 return ResourceManager.GetString("ExternalNotificationQmsgServer", resourceCulture);
             }
@@ -1268,7 +1268,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 用户 QQ.
         /// </summary>
-        internal static string ExternalNotificationQmsgUser {
+        public static string ExternalNotificationQmsgUser {
             get {
                 return ResourceManager.GetString("ExternalNotificationQmsgUser", resourceCulture);
             }
@@ -1277,7 +1277,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 发送测试.
         /// </summary>
-        internal static string ExternalNotificationSendTest {
+        public static string ExternalNotificationSendTest {
             get {
                 return ResourceManager.GetString("ExternalNotificationSendTest", resourceCulture);
             }
@@ -1286,7 +1286,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 外部通知.
         /// </summary>
-        internal static string ExternalNotificationSettings {
+        public static string ExternalNotificationSettings {
             get {
                 return ResourceManager.GetString("ExternalNotificationSettings", resourceCulture);
             }
@@ -1295,7 +1295,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 需要登录.
         /// </summary>
-        internal static string ExternalNotificationSmtpAuth {
+        public static string ExternalNotificationSmtpAuth {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpAuth", resourceCulture);
             }
@@ -1304,7 +1304,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 发件人.
         /// </summary>
-        internal static string ExternalNotificationSmtpFrom {
+        public static string ExternalNotificationSmtpFrom {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpFrom", resourceCulture);
             }
@@ -1313,7 +1313,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 密码.
         /// </summary>
-        internal static string ExternalNotificationSmtpPassword {
+        public static string ExternalNotificationSmtpPassword {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpPassword", resourceCulture);
             }
@@ -1322,7 +1322,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 端口.
         /// </summary>
-        internal static string ExternalNotificationSmtpPort {
+        public static string ExternalNotificationSmtpPort {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpPort", resourceCulture);
             }
@@ -1331,7 +1331,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to SMTP 服务器.
         /// </summary>
-        internal static string ExternalNotificationSmtpServer {
+        public static string ExternalNotificationSmtpServer {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpServer", resourceCulture);
             }
@@ -1340,7 +1340,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 使用 SSL.
         /// </summary>
-        internal static string ExternalNotificationSmtpSsl {
+        public static string ExternalNotificationSmtpSsl {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpSsl", resourceCulture);
             }
@@ -1349,7 +1349,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 收件人.
         /// </summary>
-        internal static string ExternalNotificationSmtpTo {
+        public static string ExternalNotificationSmtpTo {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpTo", resourceCulture);
             }
@@ -1358,7 +1358,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 用户名.
         /// </summary>
-        internal static string ExternalNotificationSmtpUser {
+        public static string ExternalNotificationSmtpUser {
             get {
                 return ResourceManager.GetString("ExternalNotificationSmtpUser", resourceCulture);
             }
@@ -1367,7 +1367,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 聊天 ID.
         /// </summary>
-        internal static string ExternalNotificationTelegramChatId {
+        public static string ExternalNotificationTelegramChatId {
             get {
                 return ResourceManager.GetString("ExternalNotificationTelegramChatId", resourceCulture);
             }
@@ -1376,7 +1376,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 请注意：外部通知功能目前仅会发送“所有任务完成”的通知。.
         /// </summary>
-        internal static string ExternalNotificationTips {
+        public static string ExternalNotificationTips {
             get {
                 return ResourceManager.GetString("ExternalNotificationTips", resourceCulture);
             }
@@ -1385,7 +1385,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 用户 UID.
         /// </summary>
-        internal static string ExternalNotificationWxPusherUID {
+        public static string ExternalNotificationWxPusherUID {
             get {
                 return ResourceManager.GetString("ExternalNotificationWxPusherUID", resourceCulture);
             }
@@ -1394,7 +1394,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 获取当前版本信息失败，无法更新。.
         /// </summary>
-        internal static string FailToGetCurrentVersionInfo {
+        public static string FailToGetCurrentVersionInfo {
             get {
                 return ResourceManager.GetString("FailToGetCurrentVersionInfo", resourceCulture);
             }
@@ -1403,7 +1403,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 无法获取资源下载链接，更新失败。.
         /// </summary>
-        internal static string FailToGetDownloadUrl {
+        public static string FailToGetDownloadUrl {
             get {
                 return ResourceManager.GetString("FailToGetDownloadUrl", resourceCulture);
             }
@@ -1412,7 +1412,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 获取最新版本信息失败.
         /// </summary>
-        internal static string FailToGetLatestVersionInfo {
+        public static string FailToGetLatestVersionInfo {
             get {
                 return ResourceManager.GetString("FailToGetLatestVersionInfo", resourceCulture);
             }
@@ -1421,7 +1421,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 跟随系统.
         /// </summary>
-        internal static string FollowingSystem {
+        public static string FollowingSystem {
             get {
                 return ResourceManager.GetString("FollowingSystem", resourceCulture);
             }
@@ -1430,7 +1430,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 强制定时启动.
         /// </summary>
-        internal static string ForceScheduledStart {
+        public static string ForceScheduledStart {
             get {
                 return ResourceManager.GetString("ForceScheduledStart", resourceCulture);
             }
@@ -1439,7 +1439,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 停止当前任务，重启游戏并开始新任务.
         /// </summary>
-        internal static string ForceScheduledStartTip {
+        public static string ForceScheduledStartTip {
             get {
                 return ResourceManager.GetString("ForceScheduledStartTip", resourceCulture);
             }
@@ -1448,7 +1448,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 游戏资源已更新，请重启软件。.
         /// </summary>
-        internal static string GameResourceUpdated {
+        public static string GameResourceUpdated {
             get {
                 return ResourceManager.GetString("GameResourceUpdated", resourceCulture);
             }
@@ -1457,7 +1457,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 通用模式.
         /// </summary>
-        internal static string General {
+        public static string General {
             get {
                 return ResourceManager.GetString("General", resourceCulture);
             }
@@ -1466,7 +1466,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在获取最新框架......
         /// </summary>
-        internal static string GettingLatestMaaFW {
+        public static string GettingLatestMaaFW {
             get {
                 return ResourceManager.GetString("GettingLatestMaaFW", resourceCulture);
             }
@@ -1475,7 +1475,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在获取最新资源......
         /// </summary>
-        internal static string GettingLatestResources {
+        public static string GettingLatestResources {
             get {
                 return ResourceManager.GetString("GettingLatestResources", resourceCulture);
             }
@@ -1484,7 +1484,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在获取最新软件......
         /// </summary>
-        internal static string GettingLatestSoftware {
+        public static string GettingLatestSoftware {
             get {
                 return ResourceManager.GetString("GettingLatestSoftware", resourceCulture);
             }
@@ -1493,7 +1493,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 源码: GitHub.
         /// </summary>
-        internal static string Github {
+        public static string Github {
             get {
                 return ResourceManager.GetString("Github", resourceCulture);
             }
@@ -1502,7 +1502,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 此选项页为全局配置.
         /// </summary>
-        internal static string GlobalConfigTip {
+        public static string GlobalConfigTip {
             get {
                 return ResourceManager.GetString("GlobalConfigTip", resourceCulture);
             }
@@ -1511,7 +1511,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自动.
         /// </summary>
-        internal static string GpuOptionAuto {
+        public static string GpuOptionAuto {
             get {
                 return ResourceManager.GetString("GpuOptionAuto", resourceCulture);
             }
@@ -1520,7 +1520,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 不使用.
         /// </summary>
-        internal static string GpuOptionDisable {
+        public static string GpuOptionDisable {
             get {
                 return ResourceManager.GetString("GpuOptionDisable", resourceCulture);
             }
@@ -1529,7 +1529,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在尝试关闭并重启 ADB 进程.
         /// </summary>
-        internal static string HardRestartAdb {
+        public static string HardRestartAdb {
             get {
                 return ResourceManager.GetString("HardRestartAdb", resourceCulture);
             }
@@ -1538,7 +1538,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 隐藏.
         /// </summary>
-        internal static string Hide {
+        public static string Hide {
             get {
                 return ResourceManager.GetString("Hide", resourceCulture);
             }
@@ -1547,7 +1547,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 主页.
         /// </summary>
-        internal static string Home {
+        public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
             }
@@ -1556,7 +1556,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 键入 退格/Esc/Delete 清除当前热键.
         /// </summary>
-        internal static string HotKeyChangingTip {
+        public static string HotKeyChangingTip {
             get {
                 return ResourceManager.GetString("HotKeyChangingTip", resourceCulture);
             }
@@ -1565,7 +1565,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to [热键] 开始/停止任务.
         /// </summary>
-        internal static string HotKeyLinkStart {
+        public static string HotKeyLinkStart {
             get {
                 return ResourceManager.GetString("HotKeyLinkStart", resourceCulture);
             }
@@ -1574,7 +1574,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 未设置.
         /// </summary>
-        internal static string HotKeyNotSet {
+        public static string HotKeyNotSet {
             get {
                 return ResourceManager.GetString("HotKeyNotSet", resourceCulture);
             }
@@ -1583,7 +1583,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to ⚠️ 该热键已被占用.
         /// </summary>
-        internal static string HotKeyOccupiedWarning {
+        public static string HotKeyOccupiedWarning {
             get {
                 return ResourceManager.GetString("HotKeyOccupiedWarning", resourceCulture);
             }
@@ -1592,7 +1592,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 按下任意组合键....
         /// </summary>
-        internal static string HotKeyPressing {
+        public static string HotKeyPressing {
             get {
                 return ResourceManager.GetString("HotKeyPressing", resourceCulture);
             }
@@ -1601,7 +1601,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 热键设置.
         /// </summary>
-        internal static string HotKeySettings {
+        public static string HotKeySettings {
             get {
                 return ResourceManager.GetString("HotKeySettings", resourceCulture);
             }
@@ -1610,7 +1610,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to [热键] 显示/隐藏软件.
         /// </summary>
-        internal static string HotKeyShowGui {
+        public static string HotKeyShowGui {
             get {
                 return ResourceManager.GetString("HotKeyShowGui", resourceCulture);
             }
@@ -1619,7 +1619,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 图片浏览器.
         /// </summary>
-        internal static string ImageBrowserTitle {
+        public static string ImageBrowserTitle {
             get {
                 return ResourceManager.GetString("ImageBrowserTitle", resourceCulture);
             }
@@ -1628,7 +1628,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 图片文件 (*.png;*.jpg;*.jpeg;*.bmp)|*.png;*.jpg;*.jpeg;*.bmp.
         /// </summary>
-        internal static string ImageFilter {
+        public static string ImageFilter {
             get {
                 return ResourceManager.GetString("ImageFilter", resourceCulture);
             }
@@ -1637,7 +1637,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 初始化控制器时发生错误！.
         /// </summary>
-        internal static string InitControllerFailed {
+        public static string InitControllerFailed {
             get {
                 return ResourceManager.GetString("InitControllerFailed", resourceCulture);
             }
@@ -1646,7 +1646,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 初始化控制器成功.
         /// </summary>
-        internal static string InitControllerSuccess {
+        public static string InitControllerSuccess {
             get {
                 return ResourceManager.GetString("InitControllerSuccess", resourceCulture);
             }
@@ -1655,7 +1655,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 初始化MAA实例失败，发生连接错误或资源文件损坏，请参阅日志..
         /// </summary>
-        internal static string InitInstanceFailed {
+        public static string InitInstanceFailed {
             get {
                 return ResourceManager.GetString("InitInstanceFailed", resourceCulture);
             }
@@ -1664,7 +1664,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 载入资源成功.
         /// </summary>
-        internal static string InitResourcesSuccess {
+        public static string InitResourcesSuccess {
             get {
                 return ResourceManager.GetString("InitResourcesSuccess", resourceCulture);
             }
@@ -1673,7 +1673,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 触控模式.
         /// </summary>
-        internal static string InputModeOption {
+        public static string InputModeOption {
             get {
                 return ResourceManager.GetString("InputModeOption", resourceCulture);
             }
@@ -1682,7 +1682,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 问题反馈.
         /// </summary>
-        internal static string Issue {
+        public static string Issue {
             get {
                 return ResourceManager.GetString("Issue", resourceCulture);
             }
@@ -1691,7 +1691,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to JSON 文件 (*.json)|*.json|所有文件 (*.*)|*.*.
         /// </summary>
-        internal static string JSONFilter {
+        public static string JSONFilter {
             get {
                 return ResourceManager.GetString("JSONFilter", resourceCulture);
             }
@@ -1700,7 +1700,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 属性类型:.
         /// </summary>
-        internal static string LabelPropertyType {
+        public static string LabelPropertyType {
             get {
                 return ResourceManager.GetString("LabelPropertyType", resourceCulture);
             }
@@ -1709,7 +1709,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 语言(Language).
         /// </summary>
-        internal static string LanguageOption {
+        public static string LanguageOption {
             get {
                 return ResourceManager.GetString("LanguageOption", resourceCulture);
             }
@@ -1718,7 +1718,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择应用程序的显示语言，更改将立即生效。.
         /// </summary>
-        internal static string LanguageOptionDescription {
+        public static string LanguageOptionDescription {
             get {
                 return ResourceManager.GetString("LanguageOptionDescription", resourceCulture);
             }
@@ -1727,7 +1727,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 语言设置.
         /// </summary>
-        internal static string LanguageSettings {
+        public static string LanguageSettings {
             get {
                 return ResourceManager.GetString("LanguageSettings", resourceCulture);
             }
@@ -1736,7 +1736,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 飞书.
         /// </summary>
-        internal static string Lark {
+        public static string Lark {
             get {
                 return ResourceManager.GetString("Lark", resourceCulture);
             }
@@ -1745,7 +1745,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 雷电模拟器.
         /// </summary>
-        internal static string LDPlayer {
+        public static string LDPlayer {
             get {
                 return ResourceManager.GetString("LDPlayer", resourceCulture);
             }
@@ -1754,7 +1754,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 浅色.
         /// </summary>
-        internal static string LightColor {
+        public static string LightColor {
             get {
                 return ResourceManager.GetString("LightColor", resourceCulture);
             }
@@ -1763,7 +1763,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 导入.
         /// </summary>
-        internal static string Load {
+        public static string Load {
             get {
                 return ResourceManager.GetString("Load", resourceCulture);
             }
@@ -1772,7 +1772,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择 任意 文件.
         /// </summary>
-        internal static string LoadFileTitle {
+        public static string LoadFileTitle {
             get {
                 return ResourceManager.GetString("LoadFileTitle", resourceCulture);
             }
@@ -1781,7 +1781,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择图片文件.
         /// </summary>
-        internal static string LoadImageTitle {
+        public static string LoadImageTitle {
             get {
                 return ResourceManager.GetString("LoadImageTitle", resourceCulture);
             }
@@ -1790,7 +1790,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在初始化控制器.
         /// </summary>
-        internal static string LoadingController {
+        public static string LoadingController {
             get {
                 return ResourceManager.GetString("LoadingController", resourceCulture);
             }
@@ -1799,7 +1799,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在载入资源.
         /// </summary>
-        internal static string LoadingResources {
+        public static string LoadingResources {
             get {
                 return ResourceManager.GetString("LoadingResources", resourceCulture);
             }
@@ -1808,7 +1808,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Pipeline文件加载或解析失败: {0}.
         /// </summary>
-        internal static string LoadPipelineErrorMessage {
+        public static string LoadPipelineErrorMessage {
             get {
                 return ResourceManager.GetString("LoadPipelineErrorMessage", resourceCulture);
             }
@@ -1817,7 +1817,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择 Pipeline 文件.
         /// </summary>
-        internal static string LoadPipelineTitle {
+        public static string LoadPipelineTitle {
             get {
                 return ResourceManager.GetString("LoadPipelineTitle", resourceCulture);
             }
@@ -1826,7 +1826,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源加载失败！.
         /// </summary>
-        internal static string LoadResourcesFailed {
+        public static string LoadResourcesFailed {
             get {
                 return ResourceManager.GetString("LoadResourcesFailed", resourceCulture);
             }
@@ -1835,7 +1835,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 日志.
         /// </summary>
-        internal static string LogRecord {
+        public static string LogRecord {
             get {
                 return ResourceManager.GetString("LogRecord", resourceCulture);
             }
@@ -1844,7 +1844,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 框架已为最新版本！.
         /// </summary>
-        internal static string MaaFwIsLatestVersion {
+        public static string MaaFwIsLatestVersion {
             get {
                 return ResourceManager.GetString("MaaFwIsLatestVersion", resourceCulture);
             }
@@ -1853,7 +1853,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 框架版本.
         /// </summary>
-        internal static string MaaFWVersion {
+        public static string MaaFWVersion {
             get {
                 return ResourceManager.GetString("MaaFWVersion", resourceCulture);
             }
@@ -1862,7 +1862,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MaaTouch (实验功能).
         /// </summary>
-        internal static string MaaTouch {
+        public static string MaaTouch {
             get {
                 return ResourceManager.GetString("MaaTouch", resourceCulture);
             }
@@ -1871,7 +1871,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 软件已为最新版本！.
         /// </summary>
-        internal static string MFAIsLatestVersion {
+        public static string MFAIsLatestVersion {
             get {
                 return ResourceManager.GetString("MFAIsLatestVersion", resourceCulture);
             }
@@ -1880,7 +1880,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 最小化时隐藏至托盘.
         /// </summary>
-        internal static string MinimizeToTray {
+        public static string MinimizeToTray {
             get {
                 return ResourceManager.GetString("MinimizeToTray", resourceCulture);
             }
@@ -1889,7 +1889,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MiniTouch (默认).
         /// </summary>
-        internal static string MiniTouch {
+        public static string MiniTouch {
             get {
                 return ResourceManager.GetString("MiniTouch", resourceCulture);
             }
@@ -1898,7 +1898,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 请购买 Mirror 酱服务以实现自动更新，或将下载源切换至 GitHub.
         /// </summary>
-        internal static string MirrorAutoUpdatePrompt {
+        public static string MirrorAutoUpdatePrompt {
             get {
                 return ResourceManager.GetString("MirrorAutoUpdatePrompt", resourceCulture);
             }
@@ -1907,7 +1907,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Mirror 酱.
         /// </summary>
-        internal static string MirrorChyan {
+        public static string MirrorChyan {
             get {
                 return ResourceManager.GetString("MirrorChyan", resourceCulture);
             }
@@ -1916,7 +1916,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Mirror 酱的使用已达到上限.
         /// </summary>
-        internal static string MirrorUseLimitReached {
+        public static string MirrorUseLimitReached {
             get {
                 return ResourceManager.GetString("MirrorUseLimitReached", resourceCulture);
             }
@@ -1925,7 +1925,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to MuMu模拟器12.
         /// </summary>
-        internal static string MuMuEmulator12 {
+        public static string MuMuEmulator12 {
             get {
                 return ResourceManager.GetString("MuMuEmulator12", resourceCulture);
             }
@@ -1934,7 +1934,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 有新版本可用！最新版本:.
         /// </summary>
-        internal static string NewVersionAvailableLatestVersion {
+        public static string NewVersionAvailableLatestVersion {
             get {
                 return ResourceManager.GetString("NewVersionAvailableLatestVersion", resourceCulture);
             }
@@ -1943,7 +1943,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 新版本下载完成.
         /// </summary>
-        internal static string NewVersionDownloadCompletedTitle {
+        public static string NewVersionDownloadCompletedTitle {
             get {
                 return ResourceManager.GetString("NewVersionDownloadCompletedTitle", resourceCulture);
             }
@@ -1952,7 +1952,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在后台下载…….
         /// </summary>
-        internal static string NewVersionFoundDescDownloading {
+        public static string NewVersionFoundDescDownloading {
             get {
                 return ResourceManager.GetString("NewVersionFoundDescDownloading", resourceCulture);
             }
@@ -1961,7 +1961,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 否.
         /// </summary>
-        internal static string No {
+        public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
             }
@@ -1970,7 +1970,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 未找到模拟器!.
         /// </summary>
-        internal static string NoEmulatorFound {
+        public static string NoEmulatorFound {
             get {
                 return ResourceManager.GetString("NoEmulatorFound", resourceCulture);
             }
@@ -1979,7 +1979,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 无.
         /// </summary>
-        internal static string None {
+        public static string None {
             get {
                 return ResourceManager.GetString("None", resourceCulture);
             }
@@ -1988,7 +1988,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 当前没有可结束的任务!.
         /// </summary>
-        internal static string NoTaskToStop {
+        public static string NoTaskToStop {
             get {
                 return ResourceManager.GetString("NoTaskToStop", resourceCulture);
             }
@@ -1997,7 +1997,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 未找到窗口!.
         /// </summary>
-        internal static string NoWindowFound {
+        public static string NoWindowFound {
             get {
                 return ResourceManager.GetString("NoWindowFound", resourceCulture);
             }
@@ -2006,7 +2006,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 夜神模拟器.
         /// </summary>
-        internal static string Nox {
+        public static string Nox {
             get {
                 return ResourceManager.GetString("Nox", resourceCulture);
             }
@@ -2015,7 +2015,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关闭.
         /// </summary>
-        internal static string Off {
+        public static string Off {
             get {
                 return ResourceManager.GetString("Off", resourceCulture);
             }
@@ -2024,7 +2024,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 好的.
         /// </summary>
-        internal static string Ok {
+        public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
             }
@@ -2033,7 +2033,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择要操作的控制器.
         /// </summary>
-        internal static string OperateController {
+        public static string OperateController {
             get {
                 return ResourceManager.GetString("OperateController", resourceCulture);
             }
@@ -2042,7 +2042,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 粘贴.
         /// </summary>
-        internal static string Paste {
+        public static string Paste {
             get {
                 return ResourceManager.GetString("Paste", resourceCulture);
             }
@@ -2051,7 +2051,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 粘贴到上方.
         /// </summary>
-        internal static string PasteAbove {
+        public static string PasteAbove {
             get {
                 return ResourceManager.GetString("PasteAbove", resourceCulture);
             }
@@ -2060,7 +2060,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 粘贴到下方.
         /// </summary>
-        internal static string PasteBelow {
+        public static string PasteBelow {
             get {
                 return ResourceManager.GetString("PasteBelow", resourceCulture);
             }
@@ -2069,7 +2069,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 性能设置.
         /// </summary>
-        internal static string PerformanceSettings {
+        public static string PerformanceSettings {
             get {
                 return ResourceManager.GetString("PerformanceSettings", resourceCulture);
             }
@@ -2078,7 +2078,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 载入Pipeline文件时出现错误: {0}.
         /// </summary>
-        internal static string PipelineLoadError {
+        public static string PipelineLoadError {
             get {
                 return ResourceManager.GetString("PipelineLoadError", resourceCulture);
             }
@@ -2087,7 +2087,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 结束后脚本.
         /// </summary>
-        internal static string Post_script {
+        public static string Post_script {
             get {
                 return ResourceManager.GetString("Post-script", resourceCulture);
             }
@@ -2096,7 +2096,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 开始前脚本.
         /// </summary>
-        internal static string Prescript {
+        public static string Prescript {
             get {
                 return ResourceManager.GetString("Prescript", resourceCulture);
             }
@@ -2105,7 +2105,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 项目链接: .
         /// </summary>
-        internal static string ProjectLink {
+        public static string ProjectLink {
             get {
                 return ResourceManager.GetString("ProjectLink", resourceCulture);
             }
@@ -2114,7 +2114,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 购买链接.
         /// </summary>
-        internal static string PurchaseLink {
+        public static string PurchaseLink {
             get {
                 return ResourceManager.GetString("PurchaseLink", resourceCulture);
             }
@@ -2123,7 +2123,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 退出.
         /// </summary>
-        internal static string Quit {
+        public static string Quit {
             get {
                 return ResourceManager.GetString("Quit", resourceCulture);
             }
@@ -2132,7 +2132,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 区域选择器.
         /// </summary>
-        internal static string RegionSelectorTitle {
+        public static string RegionSelectorTitle {
             get {
                 return ResourceManager.GetString("RegionSelectorTitle", resourceCulture);
             }
@@ -2141,7 +2141,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 注册自定义Action:{0}.
         /// </summary>
-        internal static string RegisterCustomAction {
+        public static string RegisterCustomAction {
             get {
                 return ResourceManager.GetString("RegisterCustomAction", resourceCulture);
             }
@@ -2150,7 +2150,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 注册自定义Recognizer:{0}.
         /// </summary>
-        internal static string RegisterCustomRecognizer {
+        public static string RegisterCustomRecognizer {
             get {
                 return ResourceManager.GetString("RegisterCustomRecognizer", resourceCulture);
             }
@@ -2159,7 +2159,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在注册自定义行动.
         /// </summary>
-        internal static string RegisteringCustomAction {
+        public static string RegisteringCustomAction {
             get {
                 return ResourceManager.GetString("RegisteringCustomAction", resourceCulture);
             }
@@ -2168,7 +2168,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在注册自定义识别器.
         /// </summary>
-        internal static string RegisteringCustomRecognizer {
+        public static string RegisteringCustomRecognizer {
             get {
                 return ResourceManager.GetString("RegisteringCustomRecognizer", resourceCulture);
             }
@@ -2177,7 +2177,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 记住连接.
         /// </summary>
-        internal static string RememberAdb {
+        public static string RememberAdb {
             get {
                 return ResourceManager.GetString("RememberAdb", resourceCulture);
             }
@@ -2186,7 +2186,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重复次数.
         /// </summary>
-        internal static string RepeatOption {
+        public static string RepeatOption {
             get {
                 return ResourceManager.GetString("RepeatOption", resourceCulture);
             }
@@ -2195,7 +2195,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重新扫描控制器.
         /// </summary>
-        internal static string RescanController {
+        public static string RescanController {
             get {
                 return ResourceManager.GetString("RescanController", resourceCulture);
             }
@@ -2204,7 +2204,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源下载源.
         /// </summary>
-        internal static string ResourceDownloadSource {
+        public static string ResourceDownloadSource {
             get {
                 return ResourceManager.GetString("ResourceDownloadSource", resourceCulture);
             }
@@ -2213,7 +2213,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源链接: .
         /// </summary>
-        internal static string ResourceLink {
+        public static string ResourceLink {
             get {
                 return ResourceManager.GetString("ResourceLink", resourceCulture);
             }
@@ -2222,7 +2222,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源名称.
         /// </summary>
-        internal static string ResourceName {
+        public static string ResourceName {
             get {
                 return ResourceManager.GetString("ResourceName", resourceCulture);
             }
@@ -2231,7 +2231,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源类型.
         /// </summary>
-        internal static string ResourceOption {
+        public static string ResourceOption {
             get {
                 return ResourceManager.GetString("ResourceOption", resourceCulture);
             }
@@ -2240,7 +2240,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源已为最新版本！.
         /// </summary>
-        internal static string ResourcesAreLatestVersion {
+        public static string ResourcesAreLatestVersion {
             get {
                 return ResourceManager.GetString("ResourcesAreLatestVersion", resourceCulture);
             }
@@ -2249,7 +2249,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源版本.
         /// </summary>
-        internal static string ResourceVersion {
+        public static string ResourceVersion {
             get {
                 return ResourceManager.GetString("ResourceVersion", resourceCulture);
             }
@@ -2258,7 +2258,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重新启动.
         /// </summary>
-        internal static string Restart {
+        public static string Restart {
             get {
                 return ResourceManager.GetString("Restart", resourceCulture);
             }
@@ -2267,7 +2267,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在尝试重启 ADB Server.
         /// </summary>
-        internal static string RestartAdb {
+        public static string RestartAdb {
             get {
                 return ResourceManager.GetString("RestartAdb", resourceCulture);
             }
@@ -2276,7 +2276,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重启MFA.
         /// </summary>
-        internal static string RestartMFA {
+        public static string RestartMFA {
             get {
                 return ResourceManager.GetString("RestartMFA", resourceCulture);
             }
@@ -2285,7 +2285,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 重启电脑.
         /// </summary>
-        internal static string RestartPC {
+        public static string RestartPC {
             get {
                 return ResourceManager.GetString("RestartPC", resourceCulture);
             }
@@ -2294,7 +2294,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to ADB 连接失败时尝试启动模拟器.
         /// </summary>
-        internal static string RetryOnDisconnected {
+        public static string RetryOnDisconnected {
             get {
                 return ResourceManager.GetString("RetryOnDisconnected", resourceCulture);
             }
@@ -2303,7 +2303,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 运行设置.
         /// </summary>
-        internal static string RunningSettings {
+        public static string RunningSettings {
             get {
                 return ResourceManager.GetString("RunningSettings", resourceCulture);
             }
@@ -2312,7 +2312,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存任务失败!.
         /// </summary>
-        internal static string SaveFailureMessage {
+        public static string SaveFailureMessage {
             get {
                 return ResourceManager.GetString("SaveFailureMessage", resourceCulture);
             }
@@ -2321,7 +2321,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存成功！.
         /// </summary>
-        internal static string SavePipelineSuccess {
+        public static string SavePipelineSuccess {
             get {
                 return ResourceManager.GetString("SavePipelineSuccess", resourceCulture);
             }
@@ -2330,7 +2330,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务列表中存在相同命名的任务!.
         /// </summary>
-        internal static string SavePipelineWarning {
+        public static string SavePipelineWarning {
             get {
                 return ResourceManager.GetString("SavePipelineWarning", resourceCulture);
             }
@@ -2339,7 +2339,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 保存任务成功!.
         /// </summary>
-        internal static string SaveSuccessMessage {
+        public static string SaveSuccessMessage {
             get {
                 return ResourceManager.GetString("SaveSuccessMessage", resourceCulture);
             }
@@ -2348,7 +2348,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 定时执行.
         /// </summary>
-        internal static string ScheduleSettings {
+        public static string ScheduleSettings {
             get {
                 return ResourceManager.GetString("ScheduleSettings", resourceCulture);
             }
@@ -2357,7 +2357,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 截图耗时: {0}ms({1}).
         /// </summary>
-        internal static string ScreencapCost {
+        public static string ScreencapCost {
             get {
                 return ResourceManager.GetString("ScreencapCost", resourceCulture);
             }
@@ -2366,7 +2366,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 截图用时过长: {0}ms({1}).
         /// </summary>
-        internal static string ScreencapErrorTip {
+        public static string ScreencapErrorTip {
             get {
                 return ResourceManager.GetString("ScreencapErrorTip", resourceCulture);
             }
@@ -2375,7 +2375,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 截图用时较长: {0}ms({1}).
         /// </summary>
-        internal static string ScreencapWarningTip {
+        public static string ScreencapWarningTip {
             get {
                 return ResourceManager.GetString("ScreencapWarningTip", resourceCulture);
             }
@@ -2384,7 +2384,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择.
         /// </summary>
-        internal static string Select {
+        public static string Select {
             get {
                 return ResourceManager.GetString("Select", resourceCulture);
             }
@@ -2393,7 +2393,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 全选.
         /// </summary>
-        internal static string SelectAll {
+        public static string SelectAll {
             get {
                 return ResourceManager.GetString("SelectAll", resourceCulture);
             }
@@ -2402,7 +2402,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择可运行文件.
         /// </summary>
-        internal static string SelectExecutableFile {
+        public static string SelectExecutableFile {
             get {
                 return ResourceManager.GetString("SelectExecutableFile", resourceCulture);
             }
@@ -2411,7 +2411,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 选择一张已有图片.
         /// </summary>
-        internal static string SelectExistingImage {
+        public static string SelectExistingImage {
             get {
                 return ResourceManager.GetString("SelectExistingImage", resourceCulture);
             }
@@ -2420,7 +2420,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 设置.
         /// </summary>
-        internal static string Settings {
+        public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
             }
@@ -2429,7 +2429,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 显示.
         /// </summary>
-        internal static string Show {
+        public static string Show {
             get {
                 return ResourceManager.GetString("Show", resourceCulture);
             }
@@ -2438,7 +2438,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 下次不再提示.
         /// </summary>
-        internal static string ShowDisclaimerNoMore {
+        public static string ShowDisclaimerNoMore {
             get {
                 return ResourceManager.GetString("ShowDisclaimerNoMore", resourceCulture);
             }
@@ -2447,7 +2447,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 显示节点命中弹窗 (用于调试).
         /// </summary>
-        internal static string ShowHitDraw {
+        public static string ShowHitDraw {
             get {
                 return ResourceManager.GetString("ShowHitDraw", resourceCulture);
             }
@@ -2456,7 +2456,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 关机.
         /// </summary>
-        internal static string ShutDown {
+        public static string ShutDown {
             get {
                 return ResourceManager.GetString("ShutDown", resourceCulture);
             }
@@ -2465,7 +2465,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 滑动获取器.
         /// </summary>
-        internal static string SliderControlTitle {
+        public static string SliderControlTitle {
             get {
                 return ResourceManager.GetString("SliderControlTitle", resourceCulture);
             }
@@ -2474,7 +2474,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 软件路径.
         /// </summary>
-        internal static string SoftwarePath {
+        public static string SoftwarePath {
             get {
                 return ResourceManager.GetString("SoftwarePath", resourceCulture);
             }
@@ -2483,7 +2483,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 软件更新.
         /// </summary>
-        internal static string SoftwareUpdate {
+        public static string SoftwareUpdate {
             get {
                 return ResourceManager.GetString("SoftwareUpdate", resourceCulture);
             }
@@ -2492,7 +2492,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 软件版本.
         /// </summary>
-        internal static string SoftwareVersion {
+        public static string SoftwareVersion {
             get {
                 return ResourceManager.GetString("SoftwareVersion", resourceCulture);
             }
@@ -2501,7 +2501,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 开始任务.
         /// </summary>
-        internal static string StartTask {
+        public static string StartTask {
             get {
                 return ResourceManager.GetString("StartTask", resourceCulture);
             }
@@ -2510,7 +2510,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 附加命令.
         /// </summary>
-        internal static string StartupParameter {
+        public static string StartupParameter {
             get {
                 return ResourceManager.GetString("StartupParameter", resourceCulture);
             }
@@ -2519,7 +2519,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动脚本.
         /// </summary>
-        internal static string StartupScript {
+        public static string StartupScript {
             get {
                 return ResourceManager.GetString("StartupScript", resourceCulture);
             }
@@ -2528,7 +2528,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动设置.
         /// </summary>
-        internal static string StartupSettings {
+        public static string StartupSettings {
             get {
                 return ResourceManager.GetString("StartupSettings", resourceCulture);
             }
@@ -2537,7 +2537,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动软件.
         /// </summary>
-        internal static string StartupSoftware {
+        public static string StartupSoftware {
             get {
                 return ResourceManager.GetString("StartupSoftware", resourceCulture);
             }
@@ -2546,7 +2546,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 启动软件并启动脚本.
         /// </summary>
-        internal static string StartupSoftwareAndScript {
+        public static string StartupSoftwareAndScript {
             get {
                 return ResourceManager.GetString("StartupSoftwareAndScript", resourceCulture);
             }
@@ -2555,7 +2555,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在停止.......
         /// </summary>
-        internal static string Stopping {
+        public static string Stopping {
             get {
                 return ResourceManager.GetString("Stopping", resourceCulture);
             }
@@ -2564,7 +2564,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 停止任务失败.
         /// </summary>
-        internal static string StoppingFailed {
+        public static string StoppingFailed {
             get {
                 return ResourceManager.GetString("StoppingFailed", resourceCulture);
             }
@@ -2573,7 +2573,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 停止任务.
         /// </summary>
-        internal static string StopTask {
+        public static string StopTask {
             get {
                 return ResourceManager.GetString("StopTask", resourceCulture);
             }
@@ -2582,7 +2582,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 切换配置.
         /// </summary>
-        internal static string SwitchConfiguration {
+        public static string SwitchConfiguration {
             get {
                 return ResourceManager.GetString("SwitchConfiguration", resourceCulture);
             }
@@ -2591,7 +2591,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 切换语言 🌐.
         /// </summary>
-        internal static string SwitchLanguage {
+        public static string SwitchLanguage {
             get {
                 return ResourceManager.GetString("SwitchLanguage", resourceCulture);
             }
@@ -2600,7 +2600,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 模拟器.
         /// </summary>
-        internal static string TabADB {
+        public static string TabADB {
             get {
                 return ResourceManager.GetString("TabADB", resourceCulture);
             }
@@ -2609,7 +2609,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 桌面应用.
         /// </summary>
-        internal static string TabWin32 {
+        public static string TabWin32 {
             get {
                 return ResourceManager.GetString("TabWin32", resourceCulture);
             }
@@ -2618,7 +2618,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务.
         /// </summary>
-        internal static string Task {
+        public static string Task {
             get {
                 return ResourceManager.GetString("Task", resourceCulture);
             }
@@ -2627,7 +2627,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 已放弃本次任务.
         /// </summary>
-        internal static string TaskAbandoned {
+        public static string TaskAbandoned {
             get {
                 return ResourceManager.GetString("TaskAbandoned", resourceCulture);
             }
@@ -2636,7 +2636,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务已全部完成！.
         /// </summary>
-        internal static string TaskAllCompleted {
+        public static string TaskAllCompleted {
             get {
                 return ResourceManager.GetString("TaskAllCompleted", resourceCulture);
             }
@@ -2645,7 +2645,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务已全部完成！\n(用时 {0}h {1}m {2}s).
         /// </summary>
-        internal static string TaskAllCompletedWithTime {
+        public static string TaskAllCompletedWithTime {
             get {
                 return ResourceManager.GetString("TaskAllCompletedWithTime", resourceCulture);
             }
@@ -2654,7 +2654,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务已完成.
         /// </summary>
-        internal static string TaskCompleted {
+        public static string TaskCompleted {
             get {
                 return ResourceManager.GetString("TaskCompleted", resourceCulture);
             }
@@ -2663,7 +2663,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务说明.
         /// </summary>
-        internal static string TaskDescription {
+        public static string TaskDescription {
             get {
                 return ResourceManager.GetString("TaskDescription", resourceCulture);
             }
@@ -2672,7 +2672,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务列表.
         /// </summary>
-        internal static string TaskList {
+        public static string TaskList {
             get {
                 return ResourceManager.GetString("TaskList", resourceCulture);
             }
@@ -2681,7 +2681,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to Pipeline文件中任务的{0}使用了不存在的任务:&quot;{1}&quot;！.
         /// </summary>
-        internal static string TaskNotFoundError {
+        public static string TaskNotFoundError {
             get {
                 return ResourceManager.GetString("TaskNotFoundError", resourceCulture);
             }
@@ -2690,7 +2690,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务设置.
         /// </summary>
-        internal static string TaskSettings {
+        public static string TaskSettings {
             get {
                 return ResourceManager.GetString("TaskSettings", resourceCulture);
             }
@@ -2699,7 +2699,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 识别{0}时发生错误: {1}.
         /// </summary>
-        internal static string TaskStackError {
+        public static string TaskStackError {
             get {
                 return ResourceManager.GetString("TaskStackError", resourceCulture);
             }
@@ -2708,7 +2708,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 开始任务: {0}.
         /// </summary>
-        internal static string TaskStart {
+        public static string TaskStart {
             get {
                 return ResourceManager.GetString("TaskStart", resourceCulture);
             }
@@ -2717,7 +2717,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务已中止.
         /// </summary>
-        internal static string TaskStopped {
+        public static string TaskStopped {
             get {
                 return ResourceManager.GetString("TaskStopped", resourceCulture);
             }
@@ -2726,7 +2726,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 文字识别器.
         /// </summary>
-        internal static string TextRecognizerTitle {
+        public static string TextRecognizerTitle {
             get {
                 return ResourceManager.GetString("TextRecognizerTitle", resourceCulture);
             }
@@ -2735,7 +2735,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 界面主题.
         /// </summary>
-        internal static string ThemeOption {
+        public static string ThemeOption {
             get {
                 return ResourceManager.GetString("ThemeOption", resourceCulture);
             }
@@ -2744,7 +2744,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 主题设置.
         /// </summary>
-        internal static string ThemeSettings {
+        public static string ThemeSettings {
             get {
                 return ResourceManager.GetString("ThemeSettings", resourceCulture);
             }
@@ -2753,7 +2753,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 定时.
         /// </summary>
-        internal static string Timer {
+        public static string Timer {
             get {
                 return ResourceManager.GetString("Timer", resourceCulture);
             }
@@ -2762,7 +2762,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 自定义配置选择.
         /// </summary>
-        internal static string TimerCustomConfig {
+        public static string TimerCustomConfig {
             get {
                 return ResourceManager.GetString("TimerCustomConfig", resourceCulture);
             }
@@ -2771,7 +2771,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 将提前两分钟重启并切换配置.
         /// </summary>
-        internal static string TimerCustomConfigTip {
+        public static string TimerCustomConfigTip {
             get {
                 return ResourceManager.GetString("TimerCustomConfigTip", resourceCulture);
             }
@@ -2780,7 +2780,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 提示.
         /// </summary>
-        internal static string Tip {
+        public static string Tip {
             get {
                 return ResourceManager.GetString("Tip", resourceCulture);
             }
@@ -2789,7 +2789,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 标签顺序可拖动.
         /// </summary>
-        internal static string TooltipDragLabel {
+        public static string TooltipDragLabel {
             get {
                 return ResourceManager.GetString("TooltipDragLabel", resourceCulture);
             }
@@ -2798,7 +2798,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 刷新.
         /// </summary>
-        internal static string TooltipRefresh {
+        public static string TooltipRefresh {
             get {
                 return ResourceManager.GetString("TooltipRefresh", resourceCulture);
             }
@@ -2807,7 +2807,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在尝试重连.
         /// </summary>
-        internal static string TryToReconnectByAdb {
+        public static string TryToReconnectByAdb {
             get {
                 return ResourceManager.GetString("TryToReconnectByAdb", resourceCulture);
             }
@@ -2816,7 +2816,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 正在尝试启动模拟器.
         /// </summary>
-        internal static string TryToStartEmulator {
+        public static string TryToStartEmulator {
             get {
                 return ResourceManager.GetString("TryToStartEmulator", resourceCulture);
             }
@@ -2825,7 +2825,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 界面设置.
         /// </summary>
-        internal static string UiSettings {
+        public static string UiSettings {
             get {
                 return ResourceManager.GetString("UiSettings", resourceCulture);
             }
@@ -2834,7 +2834,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 未连接.
         /// </summary>
-        internal static string Unconnected {
+        public static string Unconnected {
             get {
                 return ResourceManager.GetString("Unconnected", resourceCulture);
             }
@@ -2843,7 +2843,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 更新.
         /// </summary>
-        internal static string Update {
+        public static string Update {
             get {
                 return ResourceManager.GetString("Update", resourceCulture);
             }
@@ -2852,7 +2852,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 更新完成.
         /// </summary>
-        internal static string UpdateCompleted {
+        public static string UpdateCompleted {
             get {
                 return ResourceManager.GetString("UpdateCompleted", resourceCulture);
             }
@@ -2861,7 +2861,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 框架更新.
         /// </summary>
-        internal static string UpdateMaaFW {
+        public static string UpdateMaaFW {
             get {
                 return ResourceManager.GetString("UpdateMaaFW", resourceCulture);
             }
@@ -2870,7 +2870,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 资源更新.
         /// </summary>
-        internal static string UpdateResource {
+        public static string UpdateResource {
             get {
                 return ResourceManager.GetString("UpdateResource", resourceCulture);
             }
@@ -2879,7 +2879,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 更新设置.
         /// </summary>
-        internal static string UpdateSettings {
+        public static string UpdateSettings {
             get {
                 return ResourceManager.GetString("UpdateSettings", resourceCulture);
             }
@@ -2888,7 +2888,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 使用 GPU 加速推理.
         /// </summary>
-        internal static string UseGpuForInference {
+        public static string UseGpuForInference {
             get {
                 return ResourceManager.GetString("UseGpuForInference", resourceCulture);
             }
@@ -2897,7 +2897,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 等待软件启动时间(秒).
         /// </summary>
-        internal static string WaitSoftware {
+        public static string WaitSoftware {
             get {
                 return ResourceManager.GetString("WaitSoftware", resourceCulture);
             }
@@ -2906,7 +2906,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 等待{0}启动时间(秒): {1}(s).
         /// </summary>
-        internal static string WaitSoftwareTime {
+        public static string WaitSoftwareTime {
             get {
                 return ResourceManager.GetString("WaitSoftwareTime", resourceCulture);
             }
@@ -2915,7 +2915,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 无法连接至{0}.
         /// </summary>
-        internal static string Warning_CannotConnect {
+        public static string Warning_CannotConnect {
             get {
                 return ResourceManager.GetString("Warning_CannotConnect", resourceCulture);
             }
@@ -2924,7 +2924,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 窗口.
         /// </summary>
-        internal static string Window {
+        public static string Window {
             get {
                 return ResourceManager.GetString("Window", resourceCulture);
             }
@@ -2933,7 +2933,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 开始搜索窗口!.
         /// </summary>
-        internal static string WindowDetectionStarted {
+        public static string WindowDetectionStarted {
             get {
                 return ResourceManager.GetString("WindowDetectionStarted", resourceCulture);
             }
@@ -2942,7 +2942,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 已选择窗口:{0}.
         /// </summary>
-        internal static string WindowSelectionMessage {
+        public static string WindowSelectionMessage {
             get {
                 return ResourceManager.GetString("WindowSelectionMessage", resourceCulture);
             }
@@ -2951,7 +2951,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 任务流程图.
         /// </summary>
-        internal static string WorkflowDiagramTitle {
+        public static string WorkflowDiagramTitle {
             get {
                 return ResourceManager.GetString("WorkflowDiagramTitle", resourceCulture);
             }
@@ -2960,7 +2960,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 微信公众号.
         /// </summary>
-        internal static string WxPusher {
+        public static string WxPusher {
             get {
                 return ResourceManager.GetString("WxPusher", resourceCulture);
             }
@@ -2969,7 +2969,7 @@ namespace MFAAvalonia.Assets.Localization {
         /// <summary>
         ///   Looks up a localized string similar to 是.
         /// </summary>
-        internal static string Yes {
+        public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }

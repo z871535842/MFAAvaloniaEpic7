@@ -686,7 +686,7 @@
     <data name="PipelineLoadError" xml:space="preserve">
         <value>載入Pipeline檔案時發生錯誤: {0}</value>
     </data>
-    <data name="Post-script" xml:space="preserve">
+    <data name="Postscript" xml:space="preserve">
         <value>結束後腳本</value>
     </data>
     <data name="Prescript" xml:space="preserve">
@@ -982,5 +982,29 @@
     </data>
     <data name="Yes" xml:space="preserve">
         <value>是</value>
+    </data>
+    <data name="CurrentConfig" xml:space="preserve">
+        <value>當前配置</value>
+    </data>
+    <data name="ViewOrSwitchConfig" xml:space="preserve">
+        <value>查看或切換已存在的配置方案</value>
+    </data>
+    <data name="NewConfigName" xml:space="preserve">
+        <value>新增配置名稱</value>
+    </data>
+    <data name="SetUniqueIdentifier" xml:space="preserve">
+        <value>為自定義配置設定唯一標識</value>
+    </data>
+    <data name="CreateNewConfig" xml:space="preserve">
+        <value>新增配置</value>
+    </data>
+    <data name="CreateFromCurrent" xml:space="preserve">
+        <value>基於當前配置創建新模板</value>
+    </data>
+    <data name="TriggerTime" xml:space="preserve">
+        <value>	觸發時間</value>
+    </data>
+    <data name="SelectedConfig" xml:space="preserve">
+        <value>	選用配置</value>
     </data>
 </root>

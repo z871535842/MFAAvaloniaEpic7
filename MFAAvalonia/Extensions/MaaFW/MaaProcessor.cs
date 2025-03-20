@@ -7,11 +7,10 @@ public class MaaProcessor
     public static MaaProcessor Instance { get; } = new();
     public static MaaToolkit Toolkit { get; } = new();
 
+    public static MaaInterface Interface { get; } = new();
     public static MaaFWConfiguration Config { get; } = new();
-    
     public MaaTasker? MaaTasker { get; set; }
-
-
+    
     public void SetTasker(MaaTasker? maaTasker = null)
     {
         MaaTasker = maaTasker;

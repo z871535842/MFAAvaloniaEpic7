@@ -10,6 +10,7 @@ namespace MFAAvalonia.Helper;
 public class ViewsHelper
 {
     private readonly Dictionary<Type, Type> _vmToViewMap = [];
+    private readonly Dictionary<Type, Type> _viewToVMMap = [];
 
     public ViewsHelper AddView<
         [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
@@ -24,9 +25,25 @@ public class ViewsHelper
 
         _vmToViewMap.Add(viewModelType, viewType);
 
-        services.AddSingleton<TView>();
         services.AddSingleton<TViewModel>();
+        services.AddSingleton<TView>();
 
+        return this;
+    }
+
+    public ViewsHelper AddOnlyView<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        TView,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        TViewModel>(ServiceCollection services)
+        where TView : ContentControl
+        where TViewModel : ObservableObject
+    {
+        var viewType = typeof(TView);
+        var viewModelType = typeof(TViewModel);
+        
+        services.AddSingleton<TView>();
+        _viewToVMMap.Add(viewType, viewModelType);
         return this;
     }
 

@@ -27,7 +27,6 @@ public partial class RootView : SukiWindow
     public RootView()
     {
         InitializeComponent();
-        LanguageHelper.ChangeLanguage(LanguageHelper.SupportedLanguages[ConfigurationManager.Current.GetValue(ConfigurationKeys.LangIndex, 0)]);
     }
 
 

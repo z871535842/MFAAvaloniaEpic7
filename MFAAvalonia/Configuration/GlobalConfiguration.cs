@@ -15,13 +15,19 @@ public static class GlobalConfiguration
 
     private static IConfigurationRoot LoadConfiguration()
     {
+        if (!File.Exists(_configPath))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(_configPath));
+            File.WriteAllText(_configPath, "{}");
+        }
+
         var builder = new ConfigurationBuilder()
             .SetBasePath(Path.GetDirectoryName(_configPath))
-            .AddJsonFile(_configPath, optional: true, reloadOnChange: false);
-        
+            .AddJsonFile(_configPath, optional: false, reloadOnChange: false);
+    
         return builder.Build();
     }
-
+    
     public static void SetValue(string key, string value)
     {
         lock (_fileLock)
@@ -54,25 +60,14 @@ public static class GlobalConfiguration
         SetValue($"Timer.Timer{i + 1}", value);
     }
 
-    public static string GetTimerHour(int i, string defaultValue)
+    public static string GetTimerTime(int i, string defaultValue)
     {
-
-        return GetValue($"Timer.Timer{i + 1}Hour", defaultValue);
+        return GetValue($"Timer.Timer{i + 1}Time", defaultValue);
     }
-
-    public static void SetTimerHour(int i, string value)
+    
+    public static void SetTimerTime(int i, string value)
     {
-        SetValue($"Timer.Timer{i + 1}Hour", value);
-    }
-
-    public static string GetTimerMin(int i, string defaultValue)
-    {
-        return GetValue($"Timer.Timer{i + 1}Min", defaultValue);
-    }
-
-    public static void SetTimerMin(int i, string value)
-    {
-        SetValue($"Timer.Timer{i + 1}Min", value);
+        SetValue($"Timer.Timer{i + 1}Time", value);
     }
 
     public static string GetTimerConfig(int i, string defaultValue)

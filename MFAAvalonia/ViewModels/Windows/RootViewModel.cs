@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Controls.Notifications;
+using CommunityToolkit.Mvvm.ComponentModel;
+using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Helper;
 using SukiUI.Dialogs;
@@ -30,12 +32,18 @@ public partial class RootViewModel : ViewModelBase
 
     [ObservableProperty] private bool _isCustomTitleVisible;
 
+    [ObservableProperty] private bool _isDebugMode = ConfigurationManager.Maa.GetValue(ConfigurationKeys.Recording, false)
+        || ConfigurationManager.Maa.GetValue(ConfigurationKeys.SaveDraw, false)
+        || ConfigurationManager.Maa.GetValue(ConfigurationKeys.ShowHitDraw, false);
+    private bool _shouldTip = true;
 
-    [ObservableProperty] private string _title = "AppTitle".ToLocalization();
-
-    public RootViewModel()
+    partial void OnIsDebugModeChanged(bool value)
     {
-        LanguageHelper.LanguageChanged += (sender, args) => Title = "AppTitle".ToLocalization();
+        if (value && _shouldTip)
+        {
+            Instances.DialogManager.CreateDialog().OfType(NotificationType.Warning).WithContent("DebugModeWarning".ToLocalization()).WithActionButton("Ok".ToLocalization(), dialog => { }, true).TryShow();
+            _shouldTip = false;
+        }
     }
 
     public void ShowResourceName(string name)

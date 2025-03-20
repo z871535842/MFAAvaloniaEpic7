@@ -2,7 +2,7 @@
     Height="480"
     MinHeight="200"
     MinWidth="400"
-    Title="{I18N {x:Static helper:LangKeys.Error}}"
+    Title="{markup:I18n {x:Static helper:LangKeys.Error}}"
     Width="600"
     WindowStartupLocation="CenterScreen"
     d:DesignHeight="450"
@@ -39,7 +39,7 @@
             <suki:GlassCard Grid.Row="0">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
-                        <TextBlock FontWeight="Bold" Text="{I18N {x:Static helper:LangKeys.ErrorProlog}}" />
+                        <TextBlock FontWeight="Bold" Text="{markup:I18n {x:Static helper:LangKeys.ErrorProlog}}" />
 
                     </suki:GroupBox.Header>
                     <ScrollViewer
@@ -57,7 +57,7 @@
             <suki:GlassCard Grid.Row="1">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
-                        <TextBlock FontWeight="Bold" Text="{I18N {x:Static helper:LangKeys.ErrorDetails}}" />
+                        <TextBlock FontWeight="Bold" Text="{markup:I18n {x:Static helper:LangKeys.ErrorDetails}}" />
 
                     </suki:GroupBox.Header>
                     <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
@@ -82,14 +82,14 @@
                     <Button
                         Classes="Basic"
                         Click="CopyErrorMessage_Click"
-                        Content="{I18N {x:Static helper:LangKeys.CopyErrorMessage}}"
-                        ToolTip.Tip="{I18N {x:Static helper:LangKeys.CopiedToClipboard}}" />
+                        Content="{markup:I18n {x:Static helper:LangKeys.CopyErrorMessage}}"
+                        ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.CopiedToClipboard}}" />
 
                     <!--  反馈链接  -->
                     <Button
                         Classes="Basic"
                         Click="OpenFeedbackLink"
-                        Content="{I18N {x:Static helper:LangKeys.ErrorFeedbackLinkText}}"
+                        Content="{markup:I18n {x:Static helper:LangKeys.ErrorFeedbackLinkText}}"
                         Margin="12,0,0,0" />
                 </StackPanel>
             </Grid>

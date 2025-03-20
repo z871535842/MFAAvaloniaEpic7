@@ -1,4 +1,5 @@
-﻿using MFAAvalonia.Helper;
+﻿using Avalonia.Collections;
+using MFAAvalonia.Helper;
 using MFAWPF.Helper;
 using System;
 using System.Collections.Generic;
@@ -16,13 +17,13 @@ public static class ConfigurationManager
         "config");
     public static readonly MFAConfiguration Maa = new("Maa", "maa_option", new Dictionary<string, object>());
     public static MFAConfiguration Current = new("Default", "config", new Dictionary<string, object>());
-    
 
-    public static ObservableCollection<MFAConfiguration> Configs { get; } = LoadConfigurations();
+
+    public static AvaloniaList<MFAConfiguration> Configs { get; } = LoadConfigurations();
 
     public static int ConfigIndex { get; set; } = 0;
 
-    public static string ConfigName { get; set; } = "Default";
+    public static string ConfigName { get; set; } = GetDefaultConfig();
 
     public static string GetCurrentConfiguration() => ConfigName;
 
@@ -38,10 +39,22 @@ public static class ConfigurationManager
         LoggerHelper.Info("Current Configuration: " + GetCurrentConfiguration());
     }
 
-    private static ObservableCollection<MFAConfiguration> LoadConfigurations()
+    public static void SetDefaultConfig(string? name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return;
+        GlobalConfiguration.SetValue(ConfigurationKeys.DefaultConfig, name);
+    }
+    
+    public static string GetDefaultConfig()
+    {
+        return GlobalConfiguration.GetValue(ConfigurationKeys.DefaultConfig, "Default");
+    }
+
+    private static AvaloniaList<MFAConfiguration> LoadConfigurations()
     {
         LoggerHelper.Info("Loading Configurations...");
-        var collection = new ObservableCollection<MFAConfiguration>();
+        var collection = new AvaloniaList<MFAConfiguration>();
 
         var defaultConfigPath = Path.Combine(_configDir, "config.json");
         if (!Directory.Exists(_configDir))
@@ -60,7 +73,7 @@ public static class ConfigurationManager
 
             collection.Add(config);
         }
-        
+
         Maa.SetConfig(JsonHelper.LoadConfig("maa_option", new Dictionary<string, object>()));
         Current = collection.FirstOrDefault(c
                 => !string.IsNullOrWhiteSpace(c.Name)
@@ -77,5 +90,14 @@ public static class ConfigurationManager
         {
             JsonHelper.SaveConfig(config.FileName, config.Config);
         }
+    }
+
+    public static MFAConfiguration Add(string name)
+    {
+        var configPath = Path.Combine(AppContext.BaseDirectory, "config");
+        var newConfigPath = Path.Combine(configPath, $"{name}.json");
+        var newConfig = new MFAConfiguration(name.Equals("config", StringComparison.OrdinalIgnoreCase) ? "Default" : name, name, new Dictionary<string, object>());
+        Configs.Add(newConfig);
+        return newConfig;
     }
 }

@@ -1,0 +1,290 @@
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using MFAAvalonia.Configuration;
+using MFAAvalonia.Extensions;
+using MFAAvalonia.Helper;
+using MFAAvalonia.ViewModels.Other;
+using MFAWPF.Helper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MFAAvalonia.ViewModels.UsersControls.Settings;
+
+public partial class ExternalNotificationSettingsUserControlModel : ViewModelBase
+{
+    #region 初始
+
+    protected override void Initialize()
+    {
+        UpdateExternalNotificationProvider();
+    }
+
+    public static readonly List<LocalizationViewModel> ExternalNotificationProviders = ExternalNotificationHelper.Key.AllKeys.Select(k => new LocalizationViewModel(k)).ToList();
+
+    public void UpdateExternalNotificationProvider()
+    {
+        DingTalkEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.DingTalkKey);
+        EmailEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.EmailKey);
+        LarkEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.LarkKey);
+        QmsgEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.QmsgKey);
+        WxPusherEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.WxPusherKey);
+        SmtpEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.SmtpKey);
+        TelegramEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.TelegramKey);
+        DiscordEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.DiscordKey);
+    }
+
+
+    public static readonly List<string> EnabledExternalNotificationProviderList = ExternalNotificationProviders
+        .Where(s => ConfigurationManager.Current.GetValue(ConfigurationKeys.ExternalNotificationEnabled, string.Empty).Split(',').Contains(s.ResourceKey))
+        .Distinct().Select(t => t.ResourceKey)
+        .ToList();
+
+    public void UpdateEnabledExternalNotificationProviderList(string key, bool value)
+    {
+        var exists = EnabledExternalNotificationProviderList.Contains(key);
+
+        if (value && !exists)
+        {
+            EnabledExternalNotificationProviderList.Add(key);
+        }
+        else if (!value && exists)
+        {
+            EnabledExternalNotificationProviderList.RemoveAll(s => s == key);
+        }
+
+        try
+        {
+            var config = string.Join(",", EnabledExternalNotificationProviderList.Distinct());
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationEnabled, config);
+            EnabledExternalNotificationProviderCount = EnabledExternalNotificationProviderList.Count;
+        }
+        catch (Exception e)
+        {
+            LoggerHelper.Error(e);
+        }
+    }
+
+    [ObservableProperty] private int _enabledExternalNotificationProviderCount = EnabledExternalNotificationProviderList.Count;
+
+    #pragma warning disable CS4014 // 由于等待不会停止
+    [RelayCommand]
+    private void ExternalNotificationSendTest()
+        => ExternalNotificationHelper.ExternalNotificationAsync();
+
+    #endregion
+
+    #region 钉钉
+
+    [ObservableProperty] private bool _dingTalkEnabled;
+    partial void OnDingTalkEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.DingTalkKey, value);
+
+    [ObservableProperty] private string _dingTalkToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDingTalkToken, string.Empty);
+
+    private static bool TryExtractDingTalkToken(string url, out string token)
+    {
+        token = string.Empty;
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(url) && !url.Contains("access_token=", StringComparison.OrdinalIgnoreCase))
+            {
+                return false;
+            }
+
+            var blocks = url.Split("access_token=");
+            if (blocks.Length < 2)
+            {
+                return false;
+            }
+
+            token = blocks[1];
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
+    partial void OnDingTalkTokenChanged(string value)
+    {
+        if (TryExtractDingTalkToken(value, out var token))
+            DingTalkToken = token;
+        else
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationDingTalkToken, SimpleEncryptionHelper.Encrypt(value));
+    }
+
+    [ObservableProperty] private string _dingTalkSecret = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDingTalkSecret, string.Empty);
+    partial void OnDingTalkSecretChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDingTalkSecret, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+    #region 邮箱
+
+    [ObservableProperty] private bool _emailEnabled;
+    partial void OnEmailEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.EmailKey, value);
+
+    [ObservableProperty] private string _emailAccount = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationEmailAccount, string.Empty);
+    partial void OnEmailAccountChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationEmailAccount, SimpleEncryptionHelper.Encrypt(value));
+
+    [ObservableProperty] private string _emailSecret = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationEmailSecret, string.Empty);
+    partial void OnEmailSecretChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationEmailSecret, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region 飞书
+
+    [ObservableProperty] private bool _larkEnabled;
+
+    partial void OnLarkEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.LarkKey, value);
+
+
+    [ObservableProperty] private string _larkId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationLarkID, string.Empty);
+
+    partial void OnLarkIdChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationLarkID, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _larkToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationLarkToken, string.Empty);
+    partial void OnLarkTokenChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationLarkToken, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region 微信公众号
+
+    [ObservableProperty] private bool _wxPusherEnabled;
+
+    partial void OnWxPusherEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.WxPusherKey, value);
+
+    [ObservableProperty] private string _wxPusherToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationWxPusherToken, string.Empty);
+
+    partial void OnWxPusherTokenChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationWxPusherToken, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _wxPusherUid = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationWxPusherUID, string.Empty);
+    partial void OnWxPusherUidChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationWxPusherUID, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region Telegram
+
+    [ObservableProperty] private bool _telegramEnabled;
+
+    partial void OnTelegramEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.TelegramKey, value);
+
+    [ObservableProperty] private string _telegramBotToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationTelegramBotToken, string.Empty);
+
+    partial void OnTelegramBotTokenChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationTelegramBotToken, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _telegramChatId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationTelegramChatId, string.Empty);
+    partial void OnTelegramChatIdChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationTelegramChatId, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region Discord
+
+    [ObservableProperty] private bool _discordEnabled;
+
+    partial void OnDiscordEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.DiscordKey, value);
+
+    [ObservableProperty] private string _discordBotToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordBotToken, string.Empty);
+    partial void OnDiscordBotTokenChanged(string value)
+        => ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationDiscordBotToken, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _discordUserId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordUserId, string.Empty);
+    partial void OnDiscordUserIdChanged(string value)
+        =>
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationDiscordUserId, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region SMTP
+
+    [ObservableProperty] private bool _smtpEnabled;
+    partial void OnSmtpEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.SmtpKey, value);
+
+    [ObservableProperty] private string _smtpServer = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpServer, string.Empty);
+
+    partial void OnSmtpServerChanged(string value)
+    {
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationSmtpServer, SimpleEncryptionHelper.Encrypt(value));
+    }
+
+
+    [ObservableProperty] private string _smtpPort = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpPort, string.Empty);
+
+    partial void OnSmtpPortChanged(string value) =>
+        ConfigurationManager.Current.SetEncrypted(ConfigurationKeys.ExternalNotificationSmtpPort, value);
+
+    [ObservableProperty] private string _smtpUser = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpUser, string.Empty);
+
+    partial void OnSmtpUserChanged(string value) =>
+        ConfigurationManager.Current.SetEncrypted(ConfigurationKeys.ExternalNotificationSmtpUser, value);
+
+    [ObservableProperty] private string _smtpPassword = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpPassword, string.Empty);
+
+    partial void OnSmtpPasswordChanged(string value) =>
+        ConfigurationManager.Current.SetEncrypted(ConfigurationKeys.ExternalNotificationSmtpPassword, value);
+
+    [ObservableProperty] private string _smtpFrom = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpFrom, string.Empty);
+
+    partial void OnSmtpFromChanged(string value) =>
+        ConfigurationManager.Current.SetEncrypted(ConfigurationKeys.ExternalNotificationSmtpFrom, value);
+
+    [ObservableProperty] private string _smtpTo = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationSmtpTo, string.Empty);
+
+    partial void OnSmtpToChanged(string value) =>
+        ConfigurationManager.Current.SetEncrypted(ConfigurationKeys.ExternalNotificationSmtpTo, value);
+
+    [ObservableProperty] private bool _smtpUseSsl = ConfigurationManager.Current.GetValue(ConfigurationKeys.ExternalNotificationSmtpUseSsl, false);
+
+    partial void OnSmtpUseSslChanged(bool value) =>
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationSmtpUseSsl, value.ToString());
+
+    [ObservableProperty] private bool _smtpRequireAuthentication = ConfigurationManager.Current.GetValue(ConfigurationKeys.ExternalNotificationSmtpRequiresAuthentication, false);
+
+    partial void OnSmtpRequireAuthenticationChanged(bool value) =>
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationSmtpRequiresAuthentication, value.ToString());
+
+    #endregion
+
+    #region QMsg
+
+    [ObservableProperty] private bool _qmsgEnabled;
+    partial void OnQmsgEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.QmsgKey, value);
+
+    [ObservableProperty] private string _qmsgServer = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationQmsgServer, string.Empty);
+
+    partial void OnQmsgServerChanged(string value)
+        =>
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationQmsgServer, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _qmsgKey = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationQmsgKey, string.Empty);
+
+    partial void OnQmsgKeyChanged(string value)
+        =>
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationQmsgKey, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _qmsgUser = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationQmsgUser, string.Empty);
+    partial void OnQmsgUserChanged(string value)
+        =>
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationQmsgUser, SimpleEncryptionHelper.Encrypt(value));
+
+
+    [ObservableProperty] private string _qmsgBot = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationQmsgBot, string.Empty);
+    partial void OnQmsgBotChanged(string value)
+        =>
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.ExternalNotificationQmsgBot, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+}

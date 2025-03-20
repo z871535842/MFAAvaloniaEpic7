@@ -98,6 +98,7 @@ public static class ExternalNotificationHelper
         public const string WxPusherKey = "WxPusher"; // 微信公众号
         public const string TelegramKey = "Telegram"; // 电报
         public const string DiscordKey = "Discord"; // Discord
+        public const string OneBotKey = "OneBot"; // OneBot
         public const string QmsgKey = "Qmsg"; // QMsg酱
         public const string SmtpKey = "SMTP"; // SMTP协议
 
@@ -505,6 +506,62 @@ public static class ExternalNotificationHelper
             catch (Exception ex)
             {
                 LoggerHelper.Error($"Discord通信异常: {ex.Message}");
+                return false;
+            }
+        }
+    }
+
+    #endregion
+
+    #region OneBot通知
+
+    public static class OneBot
+    {
+        public async static Task<bool> SendAsync(
+            string serverUrl,
+            string apiKey,
+            string userQq,
+            CancellationToken cancellationToken = default)
+        {
+            var apiEndpoint = $"{serverUrl}/send_msg";
+
+            try
+            {
+
+                var content = new Dictionary<string, string>
+                {
+                    ["message"] = "TaskAllCompleted".ToLocalization(),
+                    ["user_id"] = userQq
+                };
+
+                var request = new HttpRequestMessage(HttpMethod.Post, apiEndpoint)
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")
+                };
+
+                request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+                using var client = new HttpClient();
+                var response = await client.SendAsync(request, cancellationToken);
+                var responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode && responseBody.Contains("\"status\":ok"))
+                {
+                    LoggerHelper.Info("OneBot消息发送成功");
+                    return true;
+                }
+
+                LoggerHelper.Error($"OneBot发送失败: {responseBody}");
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                LoggerHelper.Warning("OneBot消息发送已取消");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.Error($"OneBot通信异常: {ex.Message}");
                 return false;
             }
         }

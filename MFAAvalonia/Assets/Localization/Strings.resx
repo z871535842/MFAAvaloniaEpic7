@@ -1014,4 +1014,13 @@
     <data name="SelectedConfig" xml:space="preserve">
         <value>选用配置</value>
     </data>
+    <data name="ExternalNotificationOneBotKey" xml:space="preserve">
+        <value>Key</value>
+    </data>
+    <data name="ExternalNotificationOneBotServer" xml:space="preserve">
+        <value>Server</value>
+    </data>
+    <data name="ExternalNotificationOneBotUser" xml:space="preserve">
+        <value>用户 QQ</value>
+    </data>
 </root>

@@ -63,6 +63,7 @@
                             Classes="Switch"
                             DockPanel.Dock="Right"
                             IsChecked="{Binding RememberAdb}"
+                            IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                             VerticalAlignment="Top" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
@@ -77,6 +78,7 @@
                             Classes="Switch"
                             DockPanel.Dock="Right"
                             IsChecked="{Binding RetryOnDisconnected}"
+                            IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                             VerticalAlignment="Top" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
@@ -91,6 +93,7 @@
                             Classes="Switch"
                             DockPanel.Dock="Right"
                             IsChecked="{Binding AllowAdbRestart}"
+                            IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                             VerticalAlignment="Top" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
@@ -105,6 +108,7 @@
                             Classes="Switch"
                             DockPanel.Dock="Right"
                             IsChecked="{Binding AllowAdbHardRestart}"
+                            IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                             VerticalAlignment="Top" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock

@@ -103,6 +103,26 @@
         <suki:GlassCard Margin="0,25,0,0" Padding="25">
             <StackPanel Spacing="20">
                 <DockPanel>
+                    <Button
+                        Command="{Binding CreateCustomThemeCommand}"
+                        Content="{markup:I18n {x:Static helper:LangKeys.Custom}}"
+                        DockPanel.Dock="Right"
+                        Height="40"
+                        Margin="0,0,4,0"
+                        Width="205" />
+                    <StackPanel HorizontalAlignment="Left">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="DemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.CreateCustomTheme}}" />
+                        <TextBlock
+                            Foreground="{DynamicResource SukiLowText}"
+                            Margin="0,12,70,0"
+                            Text="{markup:I18n {x:Static helper:LangKeys.ConfigurePrimaryAccent}}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
                     <ComboBox
                         DockPanel.Dock="Right"
                         ItemsSource="{Binding AvailableBackgroundStyles}"

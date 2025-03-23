@@ -1,0 +1,23 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.UserControls.CustomThemeDialogView"
+    x:DataType="userControls:CustomThemeDialogViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:userControls="clr-namespace:MFAAvalonia.Views.UserControls"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <suki:GroupBox Header="{markup:I18n {x:Static helper:LangKeys.CreateCustomTheme}}">
+        <StackPanel Spacing="20">
+            <TextBox Text="{Binding DisplayName}" />
+            <ColorPicker Color="{Binding PrimaryColor}" />
+            <ColorPicker Color="{Binding AccentColor}" />
+            <Button Command="{Binding TryCreateThemeCommand}" Content="{markup:I18n {x:Static helper:LangKeys.ButtonAdd}}" />
+        </StackPanel>
+    </suki:GroupBox>
+</UserControl>

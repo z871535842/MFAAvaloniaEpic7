@@ -45,20 +45,19 @@ public class MaaPropertyGenerator : IIncrementalGenerator
             // 1. 提取 namespace 和 class 名称
             string namespaceName = GetNamespace(classSyntax);
 
-            // 1. 收集源文件中的所有 using 指令
+            // 2. 收集源文件中的所有 using 指令
             var usingDirectives = classSyntax.SyntaxTree
                 .GetRoot()
                 .DescendantNodes()
                 .OfType<UsingDirectiveSyntax>()
-                .Select(u => u.ToFullString().Trim()) // 保留完整格式（含注释）
+                .Select(u => u.ToFullString().Trim())
                 .Distinct()
                 .ToList();
-            // 2. 生成 using 指令块
             var usingBlock = string.Join("\n", usingDirectives);
 
             var className = classSyntax.Identifier.Text;
 
-            // 2. 遍历类的所有字段
+            // 3. 遍历类的所有字段
             foreach (var field in classSyntax.Members.OfType<FieldDeclarationSyntax>())
             {
                 // 筛选以 _ 开头的私有字段
@@ -67,14 +66,27 @@ public class MaaPropertyGenerator : IIncrementalGenerator
                 // 提取字段的属性和类型
                 var attributes = field.AttributeLists
                     .SelectMany(attrList => attrList.Attributes)
-                    .Select(attr => $"[{attr.ToFullString().Trim()}]")
+                    .Select(attr =>
+                    {
+                        // 将 [MaaJsonProperty] 替换为 [JsonProperty]
+                        if (attr.Name.ToString() == "MaaJsonProperty")
+                        {
+                            var argument = attr.ArgumentList?.Arguments.FirstOrDefault();
+                            if (argument != null)
+                            {
+                                return $"[JsonProperty({argument.ToFullString().Trim()})]";
+                            }
+                        }
+                        return $"[{attr.ToFullString().Trim()}]";
+                    })
                     .ToList();
+
                 var fieldType = field.Declaration.Type.ToString();
                 var fieldName = field.Declaration.Variables.First().Identifier.Text;
                 var propertyName = fieldName.TrimStart('_');
                 propertyName = char.ToUpper(propertyName[0]) + propertyName.Substring(1);
 
-                // 3. 生成属性代码
+                // 4. 生成属性代码
                 sourceBuilder.AppendLine($"        {string.Join("\n", attributes)}");
                 sourceBuilder.AppendLine($"        public {fieldType} {propertyName}");
                 sourceBuilder.AppendLine("        {");
@@ -83,7 +95,7 @@ public class MaaPropertyGenerator : IIncrementalGenerator
                 sourceBuilder.AppendLine("        }");
             }
 
-            // 4. 生成完整的类代码
+            // 5. 生成完整的类代码
             var source = $@"
 #pragma warning disable
 #nullable enable
@@ -108,7 +120,7 @@ namespace {namespaceName}
         return field.Modifiers.Any(SyntaxKind.PrivateKeyword)
             && field.Declaration.Variables.Any(v => v.Identifier.Text.StartsWith("_"));
     }
-    
+
     private static string GetNamespace(ClassDeclarationSyntax classSyntax)
         => (classSyntax.Parent as NamespaceDeclarationSyntax)?.Name.ToString()
             ?? "MFAAvalonia.Extensions.MaaFW";
@@ -116,5 +128,3 @@ namespace {namespaceName}
     private static string GetClassModifiers(ClassDeclarationSyntax classSyntax)
         => string.Join(" ", classSyntax.Modifiers.Select(m => m.Text)) + " ";
 }
-
-

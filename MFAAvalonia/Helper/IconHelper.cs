@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -9,10 +10,11 @@ using System.Runtime.InteropServices;
 
 namespace MFAAvalonia.Helper;
 
-public class IconHelper
+public static class IconHelper
 {
     private static readonly Lazy<Bitmap> LazyIcon = new(LoadIconWithFallback);
     public static Bitmap Icon => LazyIcon.Value;
+    public static WindowIcon WindowIcon => new WindowIcon(Icon);
 
     private static Bitmap LoadIconWithFallback()
     {

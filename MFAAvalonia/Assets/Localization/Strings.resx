@@ -385,7 +385,7 @@
         <value>MFA 遇到了问题</value>
     </data>
     <data name="ExeFilter" xml:space="preserve">
-        <value>可运行文件 (*.exe*)|*.exe*</value>
+        <value>可运行文件</value>
     </data>
     <data name="ExternalNotificationBotToken" xml:space="preserve">
         <value>机器人 Token</value>
@@ -1022,5 +1022,14 @@
     </data>
     <data name="ExternalNotificationOneBotUser" xml:space="preserve">
         <value>用户 QQ</value>
+    </data>
+    <data name="CreateCustomTheme" xml:space="preserve">
+        <value>创建自定义主题</value>
+    </data>
+    <data name="ConfigurePrimaryAccent" xml:space="preserve">
+        <value>配置主色调与强调色组合，并应用至应用程序</value>
+    </data>
+    <data name="ColorThemeAlreadyExists" xml:space="preserve">
+        <value>该颜色主题已存在</value>
     </data>
 </root>

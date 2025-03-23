@@ -6,19 +6,24 @@ using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Helper;
+using MFAAvalonia.Helper.ValueType;
 using SukiUI;
 using SukiUI.Enums;
 using SukiUI.Models;
 using System;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
 
 namespace MFAAvalonia.ViewModels.Pages;
 
 public partial class SettingsViewModel : ViewModelBase
 {
-
-
+    protected override void Initialize()
+    {
+        HotKeyShowGui = MFAHotKey.Parse(GlobalConfiguration.GetValue(ConfigurationKeys.ShowGui, ""));
+        HotKeyLinkStart = MFAHotKey.Parse(GlobalConfiguration.GetValue(ConfigurationKeys.LinkStart, ""));
+    }
     #region 配置
 
     public IAvaloniaReadOnlyList<MFAConfiguration> ConfigurationList { get; set; } = ConfigurationManager.Configs;
@@ -64,4 +69,37 @@ public partial class SettingsViewModel : ViewModelBase
     }
 
     #endregion 配置
+
+    #region HotKey
+
+    private MFAHotKey _hotKeyShowGui = MFAHotKey.NOTSET;
+
+    public MFAHotKey HotKeyShowGui
+    {
+        get => _hotKeyShowGui;
+        set => SetHotKey(ref _hotKeyShowGui, value, ConfigurationKeys.ShowGui, Instances.RootViewModel.ToggleVisibleCommand);
+    }
+
+    private MFAHotKey _hotKeyLinkStart = MFAHotKey.NOTSET;
+
+    public MFAHotKey HotKeyLinkStart
+    {
+        get => _hotKeyLinkStart;
+        set => SetHotKey(ref _hotKeyLinkStart, value, ConfigurationKeys.LinkStart, Instances.TaskQueueViewModel.ToggleCommand);
+    }
+
+    public void SetHotKey(ref MFAHotKey value, MFAHotKey? newValue, string type, ICommand command)
+    {
+        if (newValue != null)
+        {
+            if (!GlobalHotkeyService.Register(newValue.Gesture, command))
+            {
+                newValue = MFAHotKey.ERROR;
+            }
+            GlobalConfiguration.SetValue(type, newValue.ToString());
+            SetProperty(ref value, newValue);
+        }
+    }
+
+    #endregion HotKey
 }

@@ -35,4 +35,6 @@ public static class LoggerHelper
         Logger.Warning(message.ToString() ?? string.Empty);
         Console.WriteLine("[WARN]" + message);
     }
+    
+    
 }

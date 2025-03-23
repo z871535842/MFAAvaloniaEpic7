@@ -7,6 +7,7 @@
     x:DataType="usersControls:AdbEditorDialogViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
     xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:markup="https://codewf.com"
@@ -20,13 +21,14 @@
             FontWeight="DemiBold"
             Text="{markup:I18n {x:Static helper:LangKeys.AdbEditor}}" />
 
-
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"
             Margin="8,27,0,0"
             Text="{markup:I18n {x:Static helper:LangKeys.AdbName}}" />
+
         <TextBox Text="{Binding AdbName}" />
+
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"
@@ -38,11 +40,9 @@
                 <ColumnDefinition Width="55" />
             </Grid.ColumnDefinitions>
             <TextBox
-                DragDrop.AllowDrop="True"
-                DragDrop.DragOver="File_DragOver"
-                DragDrop.Drop="File_Drop"
                 Grid.Column="0"
                 Text="{Binding AdbPath}"
+                extensions:FileDragDropExtensions.EnableFileDragDrop="True"
                 suki:TextBoxExtensions.AddDeleteButton="True" />
             <Button
                 Command="{Binding LoadCommand}"

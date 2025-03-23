@@ -6,6 +6,7 @@
     x:DataType="settings:GameSettingsUserControlModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:markup="https://codewf.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,13 +22,12 @@
                 <DockPanel>
                     <TextBox
                         DockPanel.Dock="Right"
-                        DragDrop.DragOver="File_DragOver"
-                        DragDrop.Drop="File_Drop"
                         HorizontalAlignment="Center"
                         IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         Text="{Binding Prescript}"
                         Watermark="e.g. &quot;C:\1.cmd&quot; -minimized"
-                        Width="215" />
+                        Width="215"
+                        extensions:FileDragDropExtensions.EnableFileDragDrop="True" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"
@@ -39,13 +39,12 @@
                 <DockPanel>
                     <TextBox
                         DockPanel.Dock="Right"
-                        DragDrop.DragOver="File_DragOver"
-                        DragDrop.Drop="File_Drop"
                         HorizontalAlignment="Center"
                         IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         Text="{Binding PostScript}"
                         Watermark="e.g. &quot;C:\1.cmd&quot; -minimized"
-                        Width="215" />
+                        Width="215"
+                        extensions:FileDragDropExtensions.EnableFileDragDrop="True" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"
@@ -63,6 +62,7 @@
                         Classes="Switch"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding EnableRecording}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         VerticalAlignment="Top" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
@@ -76,6 +76,7 @@
                         Classes="Switch"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding EnableSaveDraw}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         VerticalAlignment="Top" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
@@ -89,6 +90,7 @@
                         Classes="Switch"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding ShowHitDraw}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         VerticalAlignment="Top" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock

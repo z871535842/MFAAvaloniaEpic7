@@ -33,6 +33,7 @@
                         Classes="Switch"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding ForceScheduledStart}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.ForceScheduledStartTip}}"
                         VerticalAlignment="Top" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -52,6 +53,7 @@
                         Classes="Switch"
                         DockPanel.Dock="Right"
                         IsChecked="{Binding CustomConfig}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                         ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TimerCustomConfigTip}}"
                         VerticalAlignment="Top" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">

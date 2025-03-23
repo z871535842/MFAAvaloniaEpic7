@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls.Notifications;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Helper;
@@ -11,14 +12,15 @@ namespace MFAAvalonia.ViewModels.Windows;
 
 public partial class RootViewModel : ViewModelBase
 {
-#pragma warning disable CA1822 // Mark members as static
-    [ObservableProperty] private string _greeting = "Welcome to Avalonia!";
-#pragma warning restore CA1822 // Mark members as static
-
     [ObservableProperty] private bool _idle = true;
+    [ObservableProperty] private bool _isWindowVisible = true;
 
     [ObservableProperty] private bool _isRunning;
-    [ObservableProperty] private bool _isConnected;
+
+    partial void OnIsRunningChanged(bool value)
+    {
+        Idle = !value;
+    }
     public static string Version =>
         $"v{Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "DEBUG"}";
 
@@ -31,7 +33,9 @@ public partial class RootViewModel : ViewModelBase
     [ObservableProperty] private string? _customTitle;
 
     [ObservableProperty] private bool _isCustomTitleVisible;
-
+    
+    [ObservableProperty] private bool _lockController;
+    
     [ObservableProperty] private bool _isDebugMode = ConfigurationManager.Maa.GetValue(ConfigurationKeys.Recording, false)
         || ConfigurationManager.Maa.GetValue(ConfigurationKeys.SaveDraw, false)
         || ConfigurationManager.Maa.GetValue(ConfigurationKeys.ShowHitDraw, false);
@@ -62,5 +66,10 @@ public partial class RootViewModel : ViewModelBase
         CustomTitle = title;
         IsCustomTitleVisible = true;
         IsResourceNameVisible = false;
+    }
+    [RelayCommand]
+    public void ToggleVisible()
+    {
+        IsWindowVisible = !IsWindowVisible;
     }
 }

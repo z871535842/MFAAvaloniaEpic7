@@ -37,6 +37,7 @@ public partial class App : Application
         ConfigurationManager.Initialize();
         var cracker = new AvaloniaMemoryCracker();
         cracker.Cracker();
+        GlobalHotkeyService.Initialize();
         TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException; //Task线程内未捕获异常处理事件
         AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException; //非UI线程内未捕获异常处理事件
         Dispatcher.UIThread.UnhandledException += OnDispatcherUnhandledException; //UI线程内未捕获异常处理事件
@@ -59,7 +60,11 @@ public partial class App : Application
 
             DataTemplates.Add(new ViewLocator(views));
 
-            desktop.MainWindow = views.CreateView<RootViewModel>(Services) as Window;
+            var window = views.CreateView<RootViewModel>(Services) as Window;
+
+            desktop.MainWindow = window;
+
+            TrayIconManager.InitializeTrayIcon(this, Instances.RootView, Instances.RootViewModel);
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -67,6 +72,7 @@ public partial class App : Application
 
     private static ViewsHelper ConfigureViews(ServiceCollection services)
     {
+
         return new ViewsHelper()
 
             // Add main view
@@ -76,15 +82,23 @@ public partial class App : Application
             .AddView<TaskQueueView, TaskQueueViewModel>(services)
             .AddView<ResourcesView, ResourcesViewModel>(services)
             .AddView<SettingsView, SettingsViewModel>(services)
-            
+
             // Add additional views
+            .AddView<AddTaskDialogView, AddTaskDialogViewModel>(services)
             .AddView<AdbEditorDialogView, AdbEditorDialogViewModel>(services)
+            .AddView<CustomThemeDialogView, CustomThemeDialogViewModel>(services)
+            
             .AddView<ConnectSettingsUserControl, ConnectSettingsUserControlModel>(services)
             .AddView<GameSettingsUserControl, GameSettingsUserControlModel>(services)
             .AddView<GuiSettingsUserControl, GuiSettingsUserControlModel>(services)
+            .AddView<StartSettingsUserControl, StartSettingsUserControlModel>(services)
             .AddView<ExternalNotificationSettingsUserControl, ExternalNotificationSettingsUserControlModel>(services)
             .AddView<TimerSettingsUserControl, TimerSettingsUserControlModel>(services)
             .AddView<PerformanceUserControl, PerformanceUserControlModel>(services)
+            .AddView<VersionUpdateSettingsUserControl, VersionUpdateSettingsUserControlModel>(services)
+            
+            .AddOnlyView<AboutUserControl, SettingsViewModel>(services)
+            .AddOnlyView<HotKeySettingsUserControl, SettingsViewModel>(services)
             .AddOnlyView<ConfigurationMgrUserControl, SettingsViewModel>(services);
     }
 

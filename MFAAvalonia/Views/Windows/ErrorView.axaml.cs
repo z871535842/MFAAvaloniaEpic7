@@ -88,11 +88,11 @@ public partial class ErrorView : SukiWindow
         }
     }
 
-    // 打开反馈链接
-    private void OpenFeedbackLink(object sender, RoutedEventArgs e)
-    {
-        UrlUtilities.OpenUrl(MFAUrls.NewIssueUri);
-    }
+    // // 打开反馈链接
+    // private void OpenFeedbackLink(object sender, RoutedEventArgs e)
+    // {
+    //     UrlUtilities.OpenUrl(MFAUrls.NewIssueUri);
+    // }
 
     // 窗口关闭处理
     protected override void OnClosed(EventArgs e)

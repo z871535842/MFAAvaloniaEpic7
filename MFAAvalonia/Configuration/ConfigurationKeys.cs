@@ -73,6 +73,7 @@ public static class ConfigurationKeys
     public const string ShouldMinimizeToTray = "ShouldMinimizeToTray";
     public const string EnableShowIcon = "EnableShowIcon";
 
+    public const string OtherColorTheme = "OtherColorTheme";
     public const string BackgroundStyle = "BackgroundStyle";
     public const string BaseTheme = "BaseTheme";
     public const string BackgroundAnimations = "BackgroundAnimations";

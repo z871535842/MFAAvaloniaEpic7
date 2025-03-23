@@ -2,8 +2,10 @@
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using AvaloniaExtensions.Axaml.Markup;
 using CommunityToolkit.Mvvm.ComponentModel;
+using MFAAvalonia.Configuration;
 using MFAAvalonia.ViewModels.Other;
 using Newtonsoft.Json;
+using SukiUI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,9 +18,7 @@ namespace MFAAvalonia.Helper;
 
 public static class LanguageHelper
 {
-    public static event EventHandler? LanguageChanged;
-
-
+    public static event EventHandler<LanguageEventArgs>? LanguageChanged;
 
     public static readonly List<SupportedLanguage> SupportedLanguages =
     [
@@ -44,8 +44,8 @@ public static class LanguageHelper
             ? culture
             : Cultures[language.Key] = new CultureInfo(language.Key);
         _currentLanguage = language.Key;
-
-        LanguageChanged?.Invoke(null, EventArgs.Empty);
+        SukiTheme.GetInstance().Locale = I18nManager.Instance.Culture;
+        LanguageChanged?.Invoke(null, new LanguageEventArgs(language));
     }
 
     public static void ChangeLanguage(string language)
@@ -54,13 +54,14 @@ public static class LanguageHelper
             ? culture
             : Cultures[language] = new CultureInfo(language);
         _currentLanguage = language;
-        LanguageChanged?.Invoke(null, EventArgs.Empty);
+        SukiTheme.GetInstance().Locale = I18nManager.Instance.Culture;
+        LanguageChanged?.Invoke(null, new LanguageEventArgs(GetLanguage(language)));
     }
 
     // 存储语言的字典
     private static readonly Dictionary<string, Dictionary<string, string>> Langs = new();
-    private static string _currentLanguage = SupportedLanguages[0].Key;
-
+    private static string _currentLanguage = ConfigurationManager.Current.GetValue(ConfigurationKeys.CurrentLanguage, LanguageHelper.SupportedLanguages[0].Key, ["zh-hans", "zh-hant", "en-us"]);
+    public static string CurrentLanguage => _currentLanguage;
     public static void Initialize()
     {
         Console.WriteLine("Initializing LanguageManager...");
@@ -143,5 +144,10 @@ public static class LanguageHelper
             }
         }
         return false;
+    }
+
+    public class LanguageEventArgs(SupportedLanguage language) : EventArgs
+    {
+        public SupportedLanguage Value { get; set; } = language;
     }
 }

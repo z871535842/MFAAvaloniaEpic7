@@ -378,7 +378,7 @@
         <value>MFA has encountered an error</value>
     </data>
     <data name="ExeFilter" xml:space="preserve">
-        <value>Executable files (*.exe*)|*.exe*</value>
+        <value>Executable files</value>
     </data>
     <data name="ExternalNotificationBotToken" xml:space="preserve">
         <value>Bot Token</value>
@@ -1015,5 +1015,14 @@
     </data>
     <data name="ExternalNotificationOneBotUser" xml:space="preserve">
         <value>User QQ</value>
+    </data>
+    <data name="CreateCustomTheme" xml:space="preserve">
+        <value>Create Custom Theme</value>
+    </data>
+    <data name="ConfigurePrimaryAccent" xml:space="preserve">
+        <value>Configure Primary and Accent Colors and Apply to Application</value>
+    </data>
+    <data name="ColorThemeAlreadyExists" xml:space="preserve">
+        <value>The color theme already exists</value>
     </data>
 </root>

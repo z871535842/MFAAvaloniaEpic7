@@ -6,6 +6,7 @@
     x:DataType="pages:TaskQueueViewModel"
     xmlns="https://github.com/avaloniaui"
     xmlns:System="clr-namespace:System;assembly=System.Runtime"
+    xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
     xmlns:binding="clr-namespace:MaaFramework.Binding;assembly=MaaFramework.Binding"
     xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
     xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
@@ -19,6 +20,7 @@
     xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:type="clr-namespace:MFAAvalonia.Helper.ValueType"
+    xmlns:usersControls="clr-namespace:MFAAvalonia.ViewModels.UsersControls"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Design.DataContext>
         <pages:TaskQueueViewModel />
@@ -39,7 +41,7 @@
                 <RowDefinition Height="Auto" MaxHeight="150" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <suki:GlassCard Grid.Row="0" Margin="15,8,15,5">
+            <suki:GlassCard Grid.Row="0" Margin="15,15,15,5">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -51,7 +53,16 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
+                    <ComboBox
+                        DisplayMemberBinding="{Binding Name}"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                        ItemsSource="{Binding CurrentResources}"
+                        Margin="10,0,10,0"
+                        SelectedValue="{Binding CurrentResource}"
+                        SelectedValueBinding="{Binding Name}"
+                        VerticalAlignment="Center" />
                 </suki:GroupBox>
+
             </suki:GlassCard>
             <Grid Grid.Row="1">
                 <suki:GlassCard Grid.Column="0" Margin="15,5,15,25">
@@ -177,38 +188,33 @@
 
                 </suki:GlassCard>
                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <markup:IfConditionConverter x:Key="StatusConditionConverter">
+                            <markup:IfConditionConverter.True>
+                                <TextBlock Text="{markup:I18n {x:Static helper:LangKeys.StopTask}}" />
+                            </markup:IfConditionConverter.True>
+                            <markup:IfConditionConverter.False>
+                                <TextBlock Text="{markup:I18n {x:Static helper:LangKeys.StartTask}}" />
+                            </markup:IfConditionConverter.False>
+                        </markup:IfConditionConverter>
+                    </StackPanel.Resources>
                     <Button
                         Classes="Flat Rounded"
-                        Command="{Binding StartTaskCommand}"
-                        Content="{markup:I18n {x:Static helper:LangKeys.StartTask}}"
+                        Command="{Binding ToggleCommand}"
+                        Content="{Binding IsRunning, Source={x:Static helper:Instances.RootViewModel}, Converter={StaticResource StatusConditionConverter}}"
                         FontWeight="DemiBold"
                         Height="40"
                         HorizontalAlignment="Center"
-                        IsVisible="{calcBinding:Binding '!IsRunning',
-                                                        Source={x:Static helper:Instances.RootViewModel}}"
                         Margin="0,0,0,7"
                         VerticalAlignment="Bottom"
                         Width="160" />
-                    <Button
-                        Classes="Flat Rounded"
-                        Command="{Binding StopTaskCommand}"
-                        Content="{markup:I18n {x:Static helper:LangKeys.StopTask}}"
-                        FontWeight="DemiBold"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        IsVisible="{calcBinding:Binding 'IsRunning',
-                                                        Source={x:Static helper:Instances.RootViewModel}}"
-                        Margin="0,0,0,7"
-                        VerticalAlignment="Bottom"
-                        Width="160" />
-
                 </StackPanel>
             </Grid>
         </Grid>
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" MaxHeight="150" />
+                <RowDefinition Height="Auto" MaxHeight="200" />
             </Grid.RowDefinitions>
             <suki:GlassCard Grid.Row="0" Margin="5,15,15,5">
                 <suki:GroupBox>
@@ -222,6 +228,12 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.TaskSettings}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
+                    <ScrollViewer
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto">
+                        <Grid x:Name="CommonOptionSettings" />
+                    </ScrollViewer>
                 </suki:GroupBox>
             </suki:GlassCard>
             <suki:GlassCard Grid.Row="1" Margin="5,8,15,25">
@@ -236,7 +248,18 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.TaskDescription}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="Introductions">
+                        <avaloniaEdit:TextEditor
+                            FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
+                            IsReadOnly="True"
+                            x:Name="Introduction">
+                            <!-- <usersControls:RichTextEditor.Styles> -->
+                            <!--     <StyleInclude Source="{StaticResource {x:Type avaloniaEdit:TextEditor}}" /> -->
+                            <!-- </usersControls:RichTextEditor.Styles> -->
+                        </avaloniaEdit:TextEditor>
+                    </ScrollViewer>
                 </suki:GroupBox>
+
             </suki:GlassCard>
         </Grid>
         <Grid Grid.Column="2">
@@ -261,7 +284,31 @@
                                 HorizontalAlignment="Right"
                                 Orientation="Horizontal"
                                 VerticalAlignment="Center">
-
+                                <StackPanel.Resources>
+                                    <markup:IfConditionConverter x:Key="ConnectedConditionConverter">
+                                        <markup:IfConditionConverter.True>
+                                            <Path
+                                                Data="{StaticResource ConnectedGeometry}"
+                                                Fill="LimeGreen"
+                                                Height="11"
+                                                Margin="3,2,4,0"
+                                                Stretch="Uniform"
+                                                ToolTip.Placement="Right"
+                                                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Connected}}" />
+                                        </markup:IfConditionConverter.True>
+                                        <markup:IfConditionConverter.False>
+                                            <Path
+                                                Data="{StaticResource UnconnectedGeometry}"
+                                                Fill="Red"
+                                                Height="16"
+                                                Margin="3,3,4,0"
+                                                Stretch="Uniform"
+                                                ToolTip.Placement="Right"
+                                                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Unconnected}}"
+                                                VerticalAlignment="Center" />
+                                        </markup:IfConditionConverter.False>
+                                    </markup:IfConditionConverter>
+                                </StackPanel.Resources>
                                 <Button
                                     Classes="Basic Round"
                                     Command="{Binding CustomAdbCommand}"
@@ -294,28 +341,8 @@
                                         IconSize="Size16"
                                         IconVariant="Regular" />
                                 </Button>
-                                <Path
-                                    Data="{StaticResource UnconnectedGeometry}"
-                                    Fill="Red"
-                                    Height="16"
-                                    IsVisible="{calcBinding:Binding '!IsConnected',
-                                                                    Source={x:Static helper:Instances.RootViewModel}}"
-                                    Margin="3,3,4,0"
-                                    Stretch="Uniform"
-                                    ToolTip.Placement="Right"
-                                    ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Unconnected}}"
-                                    VerticalAlignment="Center" />
-                                <Path
-                                    Data="{StaticResource ConnectedGeometry}"
-                                    Fill="LimeGreen"
-                                    Height="16"
-                                    IsVisible="{calcBinding:Binding 'IsConnected',
-                                                                    Source={x:Static helper:Instances.RootViewModel}}"
-                                    Margin="2,3,4,0"
-                                    Stretch="Uniform"
-                                    ToolTip.Placement="Right"
-                                    ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Connected}}"
-                                    Width="15" />
+
+                                <ContentControl Content="{Binding IsConnected, Converter={StaticResource ConnectedConditionConverter}, Source={x:Static helper:Instances.TaskQueueViewModel}}" />
                             </StackPanel>
                         </Grid>
                     </suki:GroupBox.Header>
@@ -328,7 +355,8 @@
                                 FontSize="12"
                                 GroupName="Controller"
                                 IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
-                                IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                IsEnabled="{calcBinding:Binding '!LockController and Idle',
+                                                                Source={x:Static helper:Instances.RootViewModel}}"
                                 MinWidth="{Binding Bounds.Width, ElementName=SecondButton}"
                                 x:Name="FirstButton" />
                             <RadioButton
@@ -337,7 +365,8 @@
                                 FontSize="12"
                                 GroupName="Controller"
                                 IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
-                                IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                IsEnabled="{calcBinding:Binding '!LockController and Idle',
+                                                                Source={x:Static helper:Instances.RootViewModel}}"
                                 MinWidth="{Binding Bounds.Width, ElementName=FirstButton}"
                                 x:Name="SecondButton" />
                         </WrapPanel>
@@ -424,7 +453,7 @@
                                         <TextBlock
                                             FontSize="12"
                                             FontWeight="{Binding Weight}"
-                                            Foreground="{Binding Color}"
+                                            Foreground="{Binding Color, Mode=TwoWay}"
                                             Grid.Column="1"
                                             HorizontalAlignment="Left"
                                             Margin="0,5"

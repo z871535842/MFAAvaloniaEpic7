@@ -1,0 +1,82 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.UserControls.AddTaskDialogView"
+    x:DataType="settings:AddTaskDialogViewModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.UsersControls.Settings"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Margin="15,10,15,0" Orientation="Vertical">
+        <StackPanel Height="26" Orientation="Horizontal">
+            <TextBlock
+                FontSize="12"
+                FontWeight="Medium"
+                Margin="0,0,0,0"
+                Text="{markup:I18n {x:Static helper:LangKeys.Task}}"
+                VerticalAlignment="Center" />
+        </StackPanel>
+
+        <TextBox
+            Margin="4"
+            Tag="{Binding ElementName=ListBoxDemo}"
+            TextChanged="SearchBar_OnSearchStarted"
+            Watermark="{markup:I18n {x:Static helper:LangKeys.EnterTaskName}}"
+            x:Name="SearchBar">
+            <TextBox.InnerRightContent>
+                <fluent:FluentIcon
+                    Foreground="{DynamicResource SukiLowText}"
+                    Icon="Search"
+                    IconSize="Size16" />
+            </TextBox.InnerRightContent>
+        </TextBox>
+
+        <ListBox
+            BorderThickness="0"
+            Height="205"
+            ItemsSource="{Binding Items}"
+            Margin="5"
+            Name="ListBoxDemo"
+            SelectedValue="{Binding Output}"
+            SelectionMode="Single">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Margin="6,0,0,0" Text="{Binding Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+
+        <StackPanel
+            HorizontalAlignment="Center"
+            Margin="0,8,0,0"
+            Orientation="Horizontal">
+            <Button
+                BorderThickness="0"
+                Classes="Flat"
+                Command="{Binding AddCommand}"
+                Content="{markup:I18n {x:Static helper:LangKeys.ButtonAdd}}"
+                FontSize="11"
+                Margin="0,0,0,5"
+                VerticalContentAlignment="Center"
+                Width="90" />
+            <Button
+                Command="{Binding CancelCommand}"
+                Content="{markup:I18n {x:Static helper:LangKeys.ButtonCancel}}"
+                FontSize="11"
+                Height="30"
+                Margin="20,0,10,5"
+                VerticalContentAlignment="Center"
+                Width="90"
+                x:Name="CancelButton" />
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

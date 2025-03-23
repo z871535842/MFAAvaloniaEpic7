@@ -1,0 +1,143 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.UserControls.Settings.StartSettingsUserControl"
+    x:DataType="settings:StartSettingsUserControlModel"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions"
+    xmlns:fluent="clr-namespace:FluentIcons.Avalonia.Fluent;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.UsersControls.Settings"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Spacing="25">
+        <suki:GlassCard Padding="25">
+            <StackPanel Spacing="8">
+                <DockPanel>
+                    <ComboBox
+                        DisplayMemberBinding="{Binding Name}"
+                        DockPanel.Dock="Right"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                        ItemsSource="{Binding BeforeTaskList}"
+                        SelectedValue="{Binding BeforeTask}"
+                        SelectedValueBinding="{Binding ResourceKey}"
+                        Width="215" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.AutoStartOption}}" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <ComboBox
+                        DisplayMemberBinding="{Binding Name}"
+                        DockPanel.Dock="Right"
+                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                        ItemsSource="{Binding AfterTaskList}"
+                        SelectedValue="{Binding AfterTask}"
+                        SelectedValueBinding="{Binding ResourceKey}"
+                        Width="215" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.AfterTaskOption}}" />
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </suki:GlassCard>
+        <suki:GlassCard Padding="25">
+            <StackPanel Spacing="8">
+                <DockPanel>
+                    <TextBox
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Center"
+                        Text="{Binding SoftwarePath}"
+                        Width="215"
+                        extensions:FileDragDropExtensions.EnableFileDragDrop="True">
+                        <TextBox.InnerRightContent>
+                            <Button
+                                BorderBrush="Transparent"
+                                BorderThickness="0"
+                                Command="{Binding SelectSoftCommand}"
+                                Height="20"
+                                Padding="-4,0,0,0"
+                                Width="30">
+                                <fluent:FluentIcon Icon="FolderArrowLeft" IconSize="Size16" />
+                            </Button>
+                        </TextBox.InnerRightContent>
+                    </TextBox>
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.SoftwarePath}}" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <TextBox
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Center"
+                        Text="{Binding EmulatorConfig}"
+                        Width="215" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.StartupParameter}}" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <NumericUpDown
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Center"
+                        Margin="-10,0,4,0"
+                        Value="{Binding WaitSoftwareTime}"
+                        Width="205" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.WaitSoftware}}" />
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </suki:GlassCard>
+        <suki:GlassCard Padding="25">
+            <StackPanel Spacing="8">
+
+                <DockPanel>
+                    <ToggleSwitch
+                        Classes="Switch"
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding AutoMinimize}"
+                        VerticalAlignment="Top" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.AutomaticMinimize}}" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <ToggleSwitch
+                        Classes="Switch"
+                        DockPanel.Dock="Right"
+                        IsChecked="{Binding AutoHide}"
+                        VerticalAlignment="Top" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.AutomaticHide}}" />
+                    </StackPanel>
+                </DockPanel>
+            </StackPanel>
+        </suki:GlassCard>
+    </StackPanel>
+</UserControl>

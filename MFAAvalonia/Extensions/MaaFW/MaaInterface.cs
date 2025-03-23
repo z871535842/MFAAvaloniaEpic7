@@ -1,8 +1,10 @@
 ﻿using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
+using MFAWPF.Helper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
@@ -44,8 +46,9 @@ public class MaaInterface
     {
         [JsonProperty("name")]
         public string? Name { get; set; }
+
         [JsonProperty("index")]
-        public int? Index { get; set; }
+        public int? Index  { get; set; }
 
         public override string? ToString()
         {
@@ -162,10 +165,10 @@ public class MaaInterface
 
     [JsonProperty("mirrorchyan_rid")]
     public string? RID { get; set; }
-    
+
     [JsonProperty("mirrorchyan_multiplatform")]
     public bool? Multiplatform { get; set; }
-    
+
     [JsonProperty("name")]
     public string? Name { get; set; }
 
@@ -203,8 +206,6 @@ public class MaaInterface
     [JsonExtensionData]
     public Dictionary<string, object> AdditionalData { get; set; } = new();
 
-    private static MaaInterface? _instance;
-
 
     [JsonIgnore]
     public Dictionary<string, MaaInterfaceResource> Resources { get; } = new();
@@ -216,32 +217,11 @@ public class MaaInterface
     }
 
     // 替换字符串列表中的每个字符串中的 "{PROJECT_DIR}"
-    public static List<string> ReplacePlaceholder(List<string>? inputs, string? replacement)
+    public static List<string> ReplacePlaceholder(IEnumerable<string>? inputs, string? replacement)
     {
         if (inputs == null) return new List<string>();
 
-        return inputs.ConvertAll(input => ReplacePlaceholder(input, replacement));
-    }
-
-    public static MaaInterface? Instance
-    {
-        get => _instance;
-        private set
-        {
-            _instance = value;
-
-            foreach (var customResource in value?.Resource ?? Enumerable.Empty<MaaInterfaceResource>())
-            {
-                var nameKey = customResource.Name?.Trim() ?? string.Empty;
-                var paths = ReplacePlaceholder(customResource.Path ?? new(), AppContext.BaseDirectory);
-
-                value!.Resources[nameKey] = new MaaInterfaceResource
-                {
-                    Name = LanguageHelper.GetLocalizedString(nameKey),
-                    Path = paths
-                };
-            }
-        }
+        return inputs.ToList().ConvertAll(input => ReplacePlaceholder(input, replacement));
     }
 
     public override string? ToString()

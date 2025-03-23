@@ -72,7 +72,7 @@ public partial class DragItemViewModel : ObservableObject
         set
         {
             SetProperty(ref _enableSetting, value);
-            // Instances.TaskOptionSettingsUserControl.SetOption(this, value);
+            Instances.TaskQueueView.SetOption(this, value);
         }
     }
 

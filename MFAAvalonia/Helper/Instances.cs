@@ -113,7 +113,88 @@ public static partial class Instances
             Console.WriteLine($"关机失败: {ex.Message}");
         }
     }
+    /// <summary>
+    /// 跨平台重启操作系统（需要管理员/root权限）
+    /// </summary>
+    public static void RestartSystem()
+    {
+        try
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // Windows重启命令[8,3](@ref)
+                using var process = new Process();
+                process.StartInfo.FileName = "shutdown.exe";
+                process.StartInfo.Arguments = "/r /t 0 /f"; // /f 强制关闭所有程序
+                process.StartInfo.UseShellExecute = true;
+                process.StartInfo.Verb = "runas"; // 请求管理员权限
+                process.Start();
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                // Linux重启命令[7,3](@ref)
+                using var process = new Process();
+                process.StartInfo.FileName = "/bin/bash";
+                process.StartInfo.Arguments = "-c \"sudo shutdown -r now\"";
+                process.StartInfo.RedirectStandardInput = true;
+                process.Start();
+                process.StandardInput.WriteLine("password"); // 需替换实际密码或配置免密sudo
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                // macOS重启命令[3,7](@ref)
+                using var process = new Process();
+                process.StartInfo.FileName = "/usr/bin/sudo";
+                process.StartInfo.Arguments = "shutdown -r now";
+                process.StartInfo.UseShellExecute = true;
+                process.Start();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"重启失败: {ex.Message}");
+            // 备用方案：尝试通用POSIX命令
+            TryFallbackReboot();
+        }
+    }
 
+    /// <summary>
+    /// 备用重启方案（兼容非标准环境）
+    /// </summary>
+    private static void TryFallbackReboot()
+    {
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = GetFallbackCommand(),
+                UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
+                CreateNoWindow = true
+            };
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                psi.Arguments = "/c shutdown /r /t 0";
+            }
+            else
+            {
+                psi.Arguments = "-c \"sudo reboot\"";
+            }
+
+            Process.Start(psi);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"备用重启方案失败: {ex.Message}");
+        }
+    }
+
+    private static string GetFallbackCommand()
+    {
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? "cmd.exe"
+            : "/bin/bash";
+    }
     private static string GetExecutablePath()
     {
         // 兼容.NET 5+环境
@@ -133,7 +214,7 @@ public static partial class Instances
     private static SettingsViewModel _settingsViewModel;
     private static ResourcesView _resourcesView;
     private static ResourcesViewModel _resourcesViewModel;
-    
+
     private static ConnectSettingsUserControl _connectSettingsUserControl;
     private static ConnectSettingsUserControlModel _connectSettingsUserControlModel;
     private static GuiSettingsUserControl _guiSettingsUser;
@@ -147,4 +228,10 @@ public static partial class Instances
     private static PerformanceUserControlModel _performanceUserControlModel;
     private static GameSettingsUserControl _gameSettingsUserControl;
     private static GameSettingsUserControlModel _gameSettingsUserControlModel;
+    private static VersionUpdateSettingsUserControl _versionUpdateSettingsUserControl;
+    private static VersionUpdateSettingsUserControlModel _versionUpdateSettingsUserControlModel;
+    private static StartSettingsUserControl _startSettingsUserControl;
+    private static StartSettingsUserControlModel _startSettingsUserControlModel;
+    private static AboutUserControl _aboutUserControl;
+    private static HotKeySettingsUserControl _hotKeySettingsUserControl;
 }

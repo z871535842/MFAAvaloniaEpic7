@@ -1,0 +1,64 @@
+﻿<UserControl
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="MFAAvalonia.Views.UserControls.Settings.AboutUserControl"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:helper="clr-namespace:MFAAvalonia.Helper"
+    xmlns:markup="https://codewf.com"
+    xmlns:markupExtensions="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:suki="https://github.com/kikipoulet/SukiUI"
+    xmlns:utilities="clr-namespace:MFAAvalonia.Utilities"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <StackPanel Spacing="10">
+        <suki:GlassCard Padding="25,8,25,8">
+
+            <DockPanel>
+                <Button
+                    BorderBrush="Transparent"
+                    BorderThickness="0"
+                    Command="{x:Static utilities:UrlUtilities.OpenLink}"
+                    CommandParameter="{x:Static helper:MFAUrls.GitHub}"
+                    Content="{markupExtensions:FluentIcon Icon=Send,
+                                                          IconSize=Size16}"
+                    DockPanel.Dock="Right"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,4,0" />
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Text="{markup:I18n {x:Static helper:LangKeys.Github}}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+            </DockPanel>
+
+        </suki:GlassCard>
+        <suki:GlassCard Padding="25,8,25,8">
+            <DockPanel>
+                <Button
+                    BorderBrush="Transparent"
+                    BorderThickness="0"
+                    Command="{x:Static utilities:UrlUtilities.OpenLink}"
+                    CommandParameter="{x:Static helper:MFAUrls.GitHubIssues}"
+                    Content="{markupExtensions:FluentIcon Icon=Send,
+                                                          IconSize=Size16}"
+                    DockPanel.Dock="Right"
+                    Height="40"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,4,0" />
+                <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Text="{markup:I18n {x:Static helper:LangKeys.Issue}}"
+                        VerticalAlignment="Center" />
+                </StackPanel>
+            </DockPanel>
+
+        </suki:GlassCard>
+    </StackPanel>
+</UserControl>

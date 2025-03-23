@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -11,6 +12,7 @@ using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.Helper.ValueType;
 using MFAAvalonia.ViewModels.Other;
 using MFAAvalonia.ViewModels.UsersControls;
+using MFAAvalonia.ViewModels.UsersControls.Settings;
 using MFAAvalonia.Views.Windows;
 using MFAWPF.Helper;
 using SukiUI;
@@ -30,47 +32,37 @@ namespace MFAAvalonia.ViewModels.Pages;
 
 public partial class TaskQueueViewModel : ViewModelBase
 {
+    protected override void Initialize()
+    {
+
+    }
+
     #region 任务
 
-    [ObservableProperty] private ObservableCollection<DragItemViewModel> _taskItemViewModels =
-    [
-        new(new MaaInterface.MaaInterfaceTask()
-        {
-            Name = "测试1"
-        }),
-        new(new MaaInterface.MaaInterfaceTask()
-        {
-            Name = "测试2"
-        }),
-        new(new MaaInterface.MaaInterfaceTask()
-        {
-            Name = "测试3"
-        }),
-        new(new MaaInterface.MaaInterfaceTask()
-        {
-            Name = "测试3111111111111111111111111"
-        }),
-    ];
+    [ObservableProperty] private ObservableCollection<DragItemViewModel> _taskItemViewModels = [];
 
-    partial void OnTaskItemViewModelsChanged(ObservableCollection<DragItemViewModel>? oldValue, ObservableCollection<DragItemViewModel> newValue)
+    partial void OnTaskItemViewModelsChanged(ObservableCollection<DragItemViewModel> value)
     {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, newValue.ToList().Select(model => model.InterfaceItem));
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, value.ToList().Select(model => model.InterfaceItem));
     }
 
     [RelayCommand]
+    private void Toggle()
+    {
+        if (Instances.RootViewModel.IsRunning)
+            StopTask();
+        else
+            StartTask();
+    }
+
     public void StartTask()
     {
-        ToastHelper.Success("启动任务", "你的任务正在执行");
-        Instances.RootViewModel.IsRunning = true;
-        Instances.RootViewModel.Idle = false;
+        MaaProcessor.Instance.Start();
     }
 
-    [RelayCommand]
     public void StopTask()
     {
-        ToastHelper.Error("停止任务", "你的任务已被停止");
-        Instances.RootViewModel.IsRunning = false;
-        Instances.RootViewModel.Idle = true;
+        MaaProcessor.Instance.Stop();
     }
 
     [RelayCommand]
@@ -90,7 +82,7 @@ public partial class TaskQueueViewModel : ViewModelBase
     [RelayCommand]
     private void AddTask()
     {
-        AddLog("测试");
+        Instances.DialogManager.CreateDialog().WithTitle("AdbEditor").WithViewModel(dialog => new AddTaskDialogViewModel(dialog, MaaProcessor.Instance.TasksSource)).TryShow();
     }
 
     #endregion
@@ -216,7 +208,7 @@ public partial class TaskQueueViewModel : ViewModelBase
         string weight = "Regular",
         bool showTime = true)
     {
-        brush ??= Brushes.Gray;
+        brush ??= Brushes.Black;
         Task.Run(() =>
         {
             DispatcherHelper.RunOnMainThread(() =>
@@ -233,18 +225,18 @@ public partial class TaskQueueViewModel : ViewModelBase
         string weight = "Regular",
         bool showTime = true)
     {
-        var brush = BrushHelper.ConvertToBrush(color, Brushes.Gray);
+        var brush = BrushHelper.ConvertToBrush(color, Brushes.Black);
         AddLog(content, brush, weight, showTime);
     }
 
     public void AddLogByKey(string key, IBrush? brush = null, bool transformKey = true, params string[] formatArgsKeys)
     {
-        brush ??= Brushes.Gray;
+        brush ??= Brushes.Black;
         Task.Run(() =>
         {
             DispatcherHelper.RunOnMainThread(() =>
             {
-                var log = new LogItemViewModel(key, brush, "Regular", "HH':'mm':'ss", showTime: true);
+                var log = new LogItemViewModel(key, brush, "Regular", true, "HH':'mm':'ss", showTime: true, transformKey: transformKey, formatArgsKeys);
                 LogItemViewModels.Add(log);
                 LoggerHelper.Info(log.Content);
             });
@@ -253,7 +245,7 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     public void AddLogByKey(string key, string color = "", bool transformKey = true, params string[] formatArgsKeys)
     {
-        var brush = BrushHelper.ConvertToBrush(color, Brushes.Gray);
+        var brush = BrushHelper.ConvertToBrush(color, Brushes.Black);
         AddLogByKey(key, brush, transformKey, formatArgsKeys);
     }
 
@@ -399,7 +391,7 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     private int CalculateWindowIndex(List<DesktopWindowInfo> windows)
     {
-        var controller = MaaInterface.Instance?.Controller?
+        var controller = MaaProcessor.Interface?.Controller?
             .FirstOrDefault(c => c.Type?.Equals("win32", StringComparison.OrdinalIgnoreCase) == true);
 
         if (controller?.Win32 == null)
@@ -441,7 +433,7 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     private void HandleControllerSettings(bool isAdb)
     {
-        var controller = MaaInterface.Instance?.Controller?
+        var controller = MaaProcessor.Interface?.Controller?
             .FirstOrDefault(c => c.Type?.Equals(isAdb ? "adb" : "win32", StringComparison.OrdinalIgnoreCase) == true);
 
         if (controller == null) return;
@@ -545,6 +537,16 @@ public partial class TaskQueueViewModel : ViewModelBase
             CurrentDevice = device;
         });
     }
+
+    #endregion
+
+    #region 资源
+
+    [ObservableProperty] private ObservableCollection<MaaInterface.MaaInterfaceResource> _currentResources = [];
+
+    [ObservableProperty] private string _currentResource = ConfigurationManager.Current.GetValue(ConfigurationKeys.Resource, string.Empty);
+
+    partial void OnCurrentResourceChanged(string value) => HandlePropertyChanged(ConfigurationKeys.Resource, value);
 
     #endregion
 }

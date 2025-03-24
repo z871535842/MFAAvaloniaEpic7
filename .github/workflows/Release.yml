@@ -53,6 +53,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
+          config-file: NuGet.config
           dotnet-version: |
             8.0.x
 
@@ -62,7 +63,7 @@ jobs:
           NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
       - name: Build Solution
-        run: dotnet publish -c Release -r ${{ matrix.platform }} --self-contained true
+        run: dotnet publish -c Release -r ${{ matrix.platform }}
 
       - name: Package Artifacts
         shell: bash

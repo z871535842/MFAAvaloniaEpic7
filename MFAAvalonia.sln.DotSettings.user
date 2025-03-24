@@ -165,6 +165,7 @@
 &lt;/AssemblyExplorer&gt;</s:String>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=MFAAvalonia_002FAssets_002FLocalization_002FStrings/@EntryIndexedValue">True</s:Boolean>
 	
+	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Miscellaneous_0020Files_002FJufyzuw/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=Miscellaneous_0020Files_002FJufyzuw/@EntryIndexRemoved">True</s:Boolean>
 	

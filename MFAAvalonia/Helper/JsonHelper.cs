@@ -1,5 +1,5 @@
 ﻿using MFAAvalonia.Extensions;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using Newtonsoft.Json;
 using System;
 using System.IO;

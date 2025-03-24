@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;

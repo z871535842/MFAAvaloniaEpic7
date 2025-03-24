@@ -2,7 +2,7 @@
 using DesktopNotifications.Apple;
 using DesktopNotifications.FreeDesktop;
 using DesktopNotifications.Windows;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using System;
 using System.Collections.Generic;
 using INotificationManager = DesktopNotifications.INotificationManager;

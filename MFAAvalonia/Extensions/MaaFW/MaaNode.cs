@@ -49,7 +49,7 @@ public partial class MaaNode : ViewModelBase
     private List<string>? _focusFailedColor;
     [MaaJsonProperty("expected")] [JsonConverter(typeof(GenericSingleOrListConverter<string>))]
     private List<string>? _expected;
-    [MaaJsonProperty("replace")] [JsonConverter(typeof(GenericSingleOrListConverter<string[]>))]
+    [MaaJsonProperty("replace")] [JsonConverter(typeof(ReplaceConverter))]
     private List<string[]>? _replace;
     [MaaJsonProperty("only_rec")] private bool? _onlyRec;
     [MaaJsonProperty("labels")] private List<string>? _labels;
@@ -85,7 +85,7 @@ public partial class MaaNode : ViewModelBase
     [MaaJsonProperty("green_mask")] private bool? _greenMask;
     [MaaJsonProperty("detector")] private string? _detector;
     [MaaJsonProperty("ratio")] private double _ratio;
-    [MaaJsonProperty("template")] private List<string>? _template;
+    [MaaJsonProperty("template")]  [JsonConverter(typeof(GenericSingleOrListConverter<string>))] private List<string>? _template;
     [MaaJsonProperty("roi")] [JsonConverter(typeof(SingleOrNestedListConverter))]
     private object? _roi;
     [MaaJsonProperty("roi_offset")] [JsonConverter(typeof(SingleOrNestedListConverter))]

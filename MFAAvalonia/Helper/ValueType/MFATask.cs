@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Views.Windows;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using System;
 using System.Collections.Generic;
 using System.Threading;

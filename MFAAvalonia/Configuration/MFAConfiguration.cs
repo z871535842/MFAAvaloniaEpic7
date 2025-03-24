@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
-using MFAWPF.Helper;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;

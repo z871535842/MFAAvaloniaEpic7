@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -125,6 +124,7 @@ public partial class RootView : SukiWindow
     public static void AddLogByKey(string key, IBrush? brush = null, bool transformKey = true, params string[] formatArgsKeys)
         => Instances.TaskQueueViewModel.AddLogByKey(key, brush, transformKey, formatArgsKeys);
 
+#pragma warning  disable CS4014 // 由于此调用不会等待，因此在此调用完成之前将会继续执行当前方法。请考虑将 "await" 运算符应用于调用结果。
     public void LoadUI()
     {
         DispatcherHelper.RunOnMainThread(() =>
@@ -146,7 +146,7 @@ public partial class RootView : SukiWindow
                 var isAdb = Instances.TaskQueueViewModel.CurrentController == MaaControllerTypes.Adb;
 
                 AddLogByKey("ConnectingTo", null, true, isAdb ? "Emulator" : "Window");
-                
+
                 Instances.TaskQueueViewModel.TryReadAdbDeviceFromConfig();
                 MaaProcessor.Instance.TaskQueue.Enqueue(new MFATask
                 {
@@ -161,18 +161,27 @@ public partial class RootView : SukiWindow
 
             Instances.RootViewModel.LockController = (MaaProcessor.Interface?.Controller?.Count ?? 0) < 2;
             ConfigurationManager.Current.SetValue(ConfigurationKeys.EnableEdit, ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableEdit, false));
+            foreach (var task in Instances.TaskQueueViewModel.TaskItemViewModels)
+            {
+                if (task.InterfaceItem?.Option is { Count: > 0 })
+                {
+                    task.EnableSetting = true;
+                    break;
+                }
+            }
             if (!string.IsNullOrWhiteSpace(MaaProcessor.Interface?.Message))
             {
                 ToastHelper.Info(MaaProcessor.Interface.Message);
             }
+
         });
-        
+
         TaskManager.RunTaskAsync(async () =>
         {
             await Task.Delay(1000);
             DispatcherHelper.RunOnMainThread(() =>
             {
-                // Instances.AnnouncementViewModel.CheckAnnouncement();
+                Instances.AnnouncementViewModel.CheckAnnouncement();
                 if (ConfigurationManager.Current.GetValue(ConfigurationKeys.AutoMinimize, false))
                 {
                     WindowState = WindowState.Minimized;
@@ -182,6 +191,15 @@ public partial class RootView : SukiWindow
                     Hide();
                 }
             });
+        });
+    }
+
+    public void ClearTasks(Action? action = null)
+    {
+        DispatcherHelper.RunOnMainThread(() =>
+        {
+            Instances.TaskQueueViewModel.TaskItemViewModels = new();
+            action?.Invoke();
         });
     }
 }

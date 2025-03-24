@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using MFAAvalonia.Views.Windows;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using System;
 
 namespace MFAAvalonia;

@@ -28,7 +28,7 @@
             Text="{markup:I18n {x:Static helper:LangKeys.AdbName}}" />
 
         <TextBox Text="{Binding AdbName}" />
-
+ 
         <TextBlock
             FontSize="12"
             FontWeight="DemiBold"

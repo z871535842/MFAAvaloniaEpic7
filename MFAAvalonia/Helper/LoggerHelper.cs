@@ -2,7 +2,7 @@
 using Serilog;
 using System;
 
-namespace MFAWPF.Helper;
+namespace MFAAvalonia.Helper;
 
 public static class LoggerHelper
 {

@@ -25,7 +25,6 @@ using MFAAvalonia.Helper.ValueType;
 using MFAAvalonia.ViewModels.Pages;
 using MFAAvalonia.ViewModels.UsersControls;
 using MFAAvalonia.Views.UserControls;
-using MFAWPF.Helper;
 using SukiUI;
 using System;
 using System.Collections;
@@ -53,7 +52,7 @@ public partial class TaskQueueView : UserControl
         DataContext = Instances.TaskQueueViewModel;
         InitializeComponent();
         MaaProcessor.Instance.InitializeData();
-        Introduction.TextArea.TextView.LineTransformers.Add(new RichTextLineTransformer());
+        // Introduction.TextArea.TextView.LineTransformers.Add(new RichTextLineTransformer());
     }
 
     private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -258,8 +257,12 @@ public partial class TaskQueueView : UserControl
     #region 任务选项
 
     private static readonly ConcurrentDictionary<string, StackPanel> CommonPanelCache = new();
-    private static readonly ConcurrentDictionary<string, (TextDocument, List<TextStyleMetadata>)> IntroductionsCache = new();
-    private static TextDocument EmptyDocument = new(string.Empty);
+    private static readonly ConcurrentDictionary<string, string> IntroductionsCache = new();
+    private void SetMarkDown(string markDown)
+    {
+        Introduction.Markdown = markDown;
+    }
+
     public void SetOption(DragItemViewModel dragItem, bool value)
     {
         var cacheKey = $"{dragItem.Name}_{dragItem.InterfaceItem.GetHashCode()}";
@@ -278,7 +281,7 @@ public partial class TaskQueueView : UserControl
             return p;
         });
 
-        var (newIntroduction, styles) = IntroductionsCache.GetOrAdd(cacheKey, key =>
+        var newIntroduction = IntroductionsCache.GetOrAdd(cacheKey, key =>
         {
             var input = string.Empty;
 
@@ -288,17 +291,10 @@ public partial class TaskQueueView : UserControl
                 input = Regex.Unescape(string.Join("\\n", dragItem.InterfaceItem.Document));
             }
             input = LanguageHelper.GetLocalizedString(input);
-
-            // 预处理：移除标记并记录样式
-            var (cleanText, styles) = ProcessRichTextTags(input);
-
-            var document = new TextDocument(cleanText);
-            return (document, styles);
+            return ConvertCustomMarkup(input);
         });
 
-// 使用处理后的纯文本
-        Introduction.Document = newIntroduction;
-        _currentStyles = styles;
+        SetMarkDown(newIntroduction);
         if (newPanel.Children.Count == 0)
             CommonPanelCache.Remove(cacheKey, out _);
         newPanel.IsVisible = true;
@@ -324,8 +320,8 @@ public partial class TaskQueueView : UserControl
         {
             oldPanel.IsVisible = false;
         }
-        
-        Introduction.Document = EmptyDocument;
+
+        // Introduction.Markdown = EmptyDocument;
     }
 
     private void HideAllPanels()
@@ -335,7 +331,7 @@ public partial class TaskQueueView : UserControl
             panel.IsVisible = false;
         }
 
-        Introduction.Document = EmptyDocument;
+        // Introduction.Markdown = EmptyDocument;
     }
 
 
@@ -413,8 +409,8 @@ public partial class TaskQueueView : UserControl
             {
                 "Switch"
             },
-            Height = 20,
-            Width = 40,
+            MaxHeight = 60,
+            MaxWidth = 100,
             HorizontalAlignment = HorizontalAlignment.Right,
             Tag = option.Name,
             VerticalAlignment = VerticalAlignment.Center
@@ -446,7 +442,7 @@ public partial class TaskQueueView : UserControl
         var textBlock = new TextBlock
         {
             Text = LanguageHelper.GetLocalizedString(option.Name),
-            Margin = new Thickness(0, 0, 5, 0),
+            Margin = new Thickness(8, 0, 5, 0),
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center
         };
@@ -468,7 +464,7 @@ public partial class TaskQueueView : UserControl
                     Width = GridLength.Auto
                 }
             },
-            Margin = new Thickness(12, 5, 0, 5)
+            Margin = new Thickness(0, 0, 0, 5)
         };
 
         Grid.SetColumn(textBlock, 0);
@@ -499,7 +495,7 @@ public partial class TaskQueueView : UserControl
                     MinWidth = 150
                 },
             },
-            Margin = new Thickness(12, 5, 0, 5)
+            Margin = new Thickness(8, 0, 0, 5)
         };
 
         var combo = new ComboBox
@@ -554,150 +550,287 @@ public partial class TaskQueueView : UserControl
         ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems,
             Instances.TaskQueueViewModel.TaskItemViewModels.Select(m => m.InterfaceItem));
     }
-    
-    private static List<TextStyleMetadata> _currentStyles = new();
-
-    private class RichTextLineTransformer : DocumentColorizingTransformer
+    public static string ConvertCustomMarkup(string input, string outputFormat = "markdown")
     {
-        protected override void ColorizeLine(DocumentLine line)
+        // 预处理换行符
+        input = input.Replace(@"\n", "\n");
+
+        // 定义替换规则字典
+        // 定义替换规则字典
+        var replacementRules = new Dictionary<string, Dictionary<string, string>>
         {
-            _currentStyles = _currentStyles.OrderByDescending(s => s.EndOffset).ToList();
-            int lineStart = line.Offset;
-            int lineEnd = line.Offset + line.Length;
-
-            foreach (var style in _currentStyles)
+            // 颜色标记 [color:red]
             {
-                if (style.EndOffset <= lineStart || style.StartOffset >= lineEnd)
-                    continue;
-
-                int start = Math.Max(style.StartOffset, lineStart);
-                int end = Math.Min(style.EndOffset, lineEnd);
-                ApplyStyle(start, end, style.Tag, style.Value);
-            }
-        }
-
-
-        /// <summary>
-        /// 应用样式到指定范围的文本
-        /// </summary>
-        /// <param name="startOffset">起始偏移量</param>
-        /// <param name="endOffset">结束偏移量</param>
-        /// <param name="tag">标记名称</param>
-        /// <param name="value">标记值</param>
-        private void ApplyStyle(int startOffset, int endOffset, string tag, string value)
-        {
-            switch (tag)
-            {
-                case "color":
-                    ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetForegroundBrush(new SolidColorBrush(Color.Parse(value))));
-                    break;
-                case "size":
-                    if (double.TryParse(value, out var size))
-                    {
-                        ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetFontRenderingEmSize(size));
-                    }
-                    break;
-                case "b":
-                    ChangeLinePart(startOffset, endOffset, element =>
-                    {
-                        var typeface = new Typeface(
-                            element.TextRunProperties.Typeface.FontFamily,
-                            element.TextRunProperties.Typeface.Style, FontWeight.Bold, // 设置粗体
-                            element.TextRunProperties.Typeface.Stretch
-                        );
-                        element.TextRunProperties.SetTypeface(typeface);
-                    });
-                    break;
-                case "i":
-                    ChangeLinePart(startOffset, endOffset, element =>
-                    {
-                        var typeface = new Typeface(
-                            element.TextRunProperties.Typeface.FontFamily,
-                            FontStyle.Italic, // 设置斜体
-                            element.TextRunProperties.Typeface.Weight,
-                            element.TextRunProperties.Typeface.Stretch
-                        );
-                        element.TextRunProperties.SetTypeface(typeface);
-                    });
-                    break;
-                case "u":
-                    ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetTextDecorations(TextDecorations.Underline));
-                    break;
-                case "s":
-                    ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetTextDecorations(TextDecorations.Strikethrough));
-                    break;
-            }
-        }
-    }
-
-    public class TextStyleMetadata
-    {
-        public int StartOffset { get; set; }
-        public int EndOffset { get; set; }
-        public string Tag { get; set; }
-        public string Value { get; set; }
-
-        // 新增字段存储标签部分的长度
-        public int OriginalLength { get; set; }
-    }
-
-    private (string CleanText, List<TextStyleMetadata> Styles) ProcessRichTextTags(string input)
-    {
-        var styles = new List<TextStyleMetadata>();
-        var cleanText = new StringBuilder();
-        ProcessNestedContent(input, cleanText, styles, new Stack<(string Tag, string Value, int CleanStart)>());
-        return (cleanText.ToString(), styles);
-    }
-
-    private void ProcessNestedContent(string input, StringBuilder cleanText, List<TextStyleMetadata> styles, Stack<(string Tag, string Value, int CleanStart)> stack)
-    {
-        var matches = Regex.Matches(input, @"\[(?<tag>[^\]]+):?(?<value>[^\]]*)\](?<content>.*?)\[/\k<tag>\]");
-        int lastPos = 0;
-
-        foreach (Match match in matches.Cast<Match>())
-        {
-            // 添加非标签内容
-            if (match.Index > lastPos)
-            {
-                cleanText.Append(input.Substring(lastPos, match.Index - lastPos));
-            }
-
-            string tag = match.Groups["tag"].Value.ToLower();
-            string value = match.Groups["value"].Value;
-            string content = match.Groups["content"].Value;
-
-            // 记录开始位置
-            int contentStart = cleanText.Length;
-            stack.Push((tag, value, contentStart));
-
-            // 递归解析嵌套内容
-            var nestedCleanText = new StringBuilder();
-            ProcessNestedContent(content, nestedCleanText, styles, new Stack<(string Tag, string Value, int CleanStart)>(stack));
-            cleanText.Append(nestedCleanText);
-
-            // 记录样式元数据
-            if (stack.Count > 0 && stack.Peek().Tag == tag)
-            {
-                var (openTag, openValue, cleanStart) = stack.Pop();
-                styles.Add(new TextStyleMetadata
+                @"\[color:(.*?)\]", new Dictionary<string, string>
                 {
-                    StartOffset = cleanStart,
-                    EndOffset = cleanText.Length,
-                    Tag = openTag,
-                    Value = openValue
-                });
+                    {
+                        "markdown", "%{color:$1}"
+                    },
+                    {
+                        "html", "<span style='color: $1;'>"
+                    }
+                }
+            },
+            // 字号标记 [size:20]
+            {
+                @"\[size:(\d+)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", ""
+                    },
+                    {
+                        "html", "<span style='font-size: $1px;'>"
+                    }
+                }
+            },
+            // 对齐标记 [align:center]
+            {
+                @"\[align:(left|center|right)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", "$1" switch { "center" => "p=.", "right" => "p>.", _ => "p<." }
+                    },
+                    {
+                        "html", "<div style='text-align: $1;'>"
+                    }
+                }
+            },
+            {
+                @"\[/(color)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", "%"
+                    },
+                    {
+                        "html", "$1" switch { "align" => "</div>", _ => "</span>" }
+                    }
+                }
+            },
+            {
+                @"\[/(align)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", ""
+                    },
+                    {
+                        "html", "$1" switch { "align" => "</div>", _ => "</span>" }
+                    }
+                }
+            },
+            // 关闭标记 [/color] [/size] [/align]
+            {
+                @"\[/(size)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", ""
+                    },
+                    {
+                        "html", "$1" switch { "align" => "</div>", _ => "</span>" }
+                    }
+                }
+            },
+            // 粗体、斜体等简单标记
+            {
+                @"\[(b|i|u|s)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", "$1" switch
+                        {
+                            "b" => "**", "i" => "*", "u" => "<u>", "s" => "~~", _ => ""
+                        }
+                    },
+                    {
+                        "html", "$1" switch
+                        {
+                            "b" => "<strong>", "i" => "<em>", "u" => "<u>", "s" => "<s>", _ => ""
+                        }
+                    }
+                }
+            },
+            {
+                @"\[/(b|i|u|s)\]", new Dictionary<string, string>
+                {
+                    {
+                        "markdown", "$1" switch
+                        {
+                            "b" => "**", "i" => "*", "u" => "</u>", "s" => "~~", _ => ""
+                        }
+                    },
+                    {
+                        "html", "$1" switch
+                        {
+                            "b" => "</strong>", "i" => "</em>", "u" => "</u>", "s" => "</s>", _ => ""
+                        }
+                    }
+                }
             }
-            lastPos = match.Index + match.Length;
-        }
+        };
 
-        // 添加剩余文本
-        if (lastPos < input.Length)
+        // 执行正则替换
+        foreach (var rule in replacementRules)
         {
-            cleanText.Append(input.Substring(lastPos));
+            input = Regex.Replace(
+                input,
+                rule.Key,
+                m => rule.Value[outputFormat].Replace("$1", m.Groups[1].Value),
+                RegexOptions.IgnoreCase
+            );
         }
-    }
 
-    // 使用 MatchEvaluator 的独立方法
+        // 处理换行符
+        input = outputFormat switch
+        {
+            "markdown" => input.Replace("\n", "  \n"), // Markdown换行需两个空格
+            "html" => input.Replace("\n", "<br/>"), // HTML换行用<br/>
+            _ => input
+        };
+
+        return input;
+    }
+    // private static List<TextStyleMetadata> _currentStyles = new();
+    //
+    // private class RichTextLineTransformer : DocumentColorizingTransformer
+    // {
+    //     protected override void ColorizeLine(DocumentLine line)
+    //     {
+    //         _currentStyles = _currentStyles.OrderByDescending(s => s.EndOffset).ToList();
+    //         int lineStart = line.Offset;
+    //         int lineEnd = line.Offset + line.Length;
+    //
+    //         foreach (var style in _currentStyles)
+    //         {
+    //             if (style.EndOffset <= lineStart || style.StartOffset >= lineEnd)
+    //                 continue;
+    //
+    //             int start = Math.Max(style.StartOffset, lineStart);
+    //             int end = Math.Min(style.EndOffset, lineEnd);
+    //             ApplyStyle(start, end, style.Tag, style.Value);
+    //         }
+    //     }
+    //
+    //
+    //     /// <summary>
+    //     /// 应用样式到指定范围的文本
+    //     /// </summary>
+    //     /// <param name="startOffset">起始偏移量</param>
+    //     /// <param name="endOffset">结束偏移量</param>
+    //     /// <param name="tag">标记名称</param>
+    //     /// <param name="value">标记值</param>
+    //     private void ApplyStyle(int startOffset, int endOffset, string tag, string value)
+    //     {
+    //         switch (tag)
+    //         {
+    //             case "color":
+    //                 ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetForegroundBrush(new SolidColorBrush(Color.Parse(value))));
+    //                 break;
+    //             case "size":
+    //                 if (double.TryParse(value, out var size))
+    //                 {
+    //                     ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetFontRenderingEmSize(size));
+    //                 }
+    //                 break;
+    //             case "b":
+    //                 ChangeLinePart(startOffset, endOffset, element =>
+    //                 {
+    //                     var typeface = new Typeface(
+    //                         element.TextRunProperties.Typeface.FontFamily,
+    //                         element.TextRunProperties.Typeface.Style, FontWeight.Bold, // 设置粗体
+    //                         element.TextRunProperties.Typeface.Stretch
+    //                     );
+    //                     element.TextRunProperties.SetTypeface(typeface);
+    //                 });
+    //                 break;
+    //             case "i":
+    //                 ChangeLinePart(startOffset, endOffset, element =>
+    //                 {
+    //                     var typeface = new Typeface(
+    //                         element.TextRunProperties.Typeface.FontFamily,
+    //                         FontStyle.Italic, // 设置斜体
+    //                         element.TextRunProperties.Typeface.Weight,
+    //                         element.TextRunProperties.Typeface.Stretch
+    //                     );
+    //                     element.TextRunProperties.SetTypeface(typeface);
+    //                 });
+    //                 break;
+    //             case "u":
+    //                 ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetTextDecorations(TextDecorations.Underline));
+    //                 break;
+    //             case "s":
+    //                 ChangeLinePart(startOffset, endOffset, element => element.TextRunProperties.SetTextDecorations(TextDecorations.Strikethrough));
+    //                 break;
+    //         }
+    //     }
+    // }
+    //
+    // public class TextStyleMetadata
+    // {
+    //     public int StartOffset { get; set; }
+    //     public int EndOffset { get; set; }
+    //     public string Tag { get; set; }
+    //     public string Value { get; set; }
+    //
+    //     // 新增字段存储标签部分的长度
+    //     public int OriginalLength { get; set; }
+    // }
+    //
+    // private (string CleanText, List<TextStyleMetadata> Styles) ProcessRichTextTags(string input)
+    // {
+    //     var styles = new List<TextStyleMetadata>();
+    //     var cleanText = new StringBuilder();
+    //     ProcessNestedContent(input, cleanText, styles, new Stack<(string Tag, string Value, int CleanStart)>());
+    //     return (cleanText.ToString(), styles);
+    // }
+    //
+    // private void ProcessNestedContent(string input, StringBuilder cleanText, List<TextStyleMetadata> styles, Stack<(string Tag, string Value, int CleanStart)> stack)
+    // {
+    //     var matches = Regex.Matches(input, @"\[(?<tag>[^\]]+):?(?<value>[^\]]*)\](?<content>.*?)\[/\k<tag>\]");
+    //     int lastPos = 0;
+    //
+    //     foreach (Match match in matches.Cast<Match>())
+    //     {
+    //         // 添加非标签内容
+    //         if (match.Index > lastPos)
+    //         {
+    //             cleanText.Append(input.Substring(lastPos, match.Index - lastPos));
+    //         }
+    //
+    //         string tag = match.Groups["tag"].Value.ToLower();
+    //         string value = match.Groups["value"].Value;
+    //         string content = match.Groups["content"].Value;
+    //
+    //         // 记录开始位置
+    //         int contentStart = cleanText.Length;
+    //         stack.Push((tag, value, contentStart));
+    //
+    //         // 递归解析嵌套内容
+    //         var nestedCleanText = new StringBuilder();
+    //         ProcessNestedContent(content, nestedCleanText, styles, new Stack<(string Tag, string Value, int CleanStart)>(stack));
+    //         cleanText.Append(nestedCleanText);
+    //
+    //         // 记录样式元数据
+    //         if (stack.Count > 0 && stack.Peek().Tag == tag)
+    //         {
+    //             var (openTag, openValue, cleanStart) = stack.Pop();
+    //             styles.Add(new TextStyleMetadata
+    //             {
+    //                 StartOffset = cleanStart,
+    //                 EndOffset = cleanText.Length,
+    //                 Tag = openTag,
+    //                 Value = openValue
+    //             });
+    //         }
+    //         lastPos = match.Index + match.Length;
+    //     }
+    //
+    //     // 添加剩余文本
+    //     if (lastPos < input.Length)
+    //     {
+    //         cleanText.Append(input.Substring(lastPos));
+    //     }
+    // }
+    //
+    // // 使用 MatchEvaluator 的独立方法
+    //
 
     #endregion
 }

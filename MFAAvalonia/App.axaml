@@ -14,6 +14,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://MFAAvalonia/Assets/Style/Geometry.axaml" />
+                <ResourceInclude Source="avares://MFAAvalonia/Assets/Style/MdXaml.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceInclude Source="avares://MFAAvalonia/Assets/Theme/LightTheme.axaml" x:Key="Light" />

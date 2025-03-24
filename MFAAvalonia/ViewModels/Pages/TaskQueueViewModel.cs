@@ -14,7 +14,6 @@ using MFAAvalonia.ViewModels.Other;
 using MFAAvalonia.ViewModels.UsersControls;
 using MFAAvalonia.ViewModels.UsersControls.Settings;
 using MFAAvalonia.Views.Windows;
-using MFAWPF.Helper;
 using SukiUI;
 using SukiUI.Dialogs;
 using SukiUI.Enums;
@@ -36,6 +35,11 @@ public partial class TaskQueueViewModel : ViewModelBase
     {
 
     }
+    #region 介绍
+
+    [ObservableProperty] private string _introduction = "%{color:darkgray}本功能有两种模式，触媒选择仅在非速刷模式生效，开启速刷模式后仅使用术式神灯刷取第一层%  \n                                                                                                        %{color:black}速刷模式%  \n                                                                                                                                 %{color:darkgray}1.使用前请先将`刻画生长-指引之歌`点满%  \n                                                                                                                                                                                          %{color:darkgray}2.请尽量调高难度等级(11难度达到最高效率)，以防止分数不够导致刷取信物失败%  \n                                                                                                                                                                                                                                                                                      %{color:black}非速刷模式%  \n                                                                                                                                                                                                                                                                                                                 %{color:darkgray}1.可在箱子里置顶(标记)四个角色出战%  \n                                                   %{color:darkgray}2.队伍推荐携带奶%  \n                                                                                       %{color:darkgray}3.M9A不能检查是否处于自动战斗状态，请自行进入%  \n                                                                                                                                                        %{color:orange}?更多详细说明请看文档%\n";
+
+    #endregion
 
     #region 任务
 

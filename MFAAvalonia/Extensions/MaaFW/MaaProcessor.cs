@@ -4,7 +4,6 @@ using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.Helper.ValueType;
 using MFAAvalonia.Views.Windows;
-using MFAWPF.Helper;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,13 +16,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace MFAAvalonia.Extensions.MaaFW;
-
+#pragma warning  disable CS4014 // 由于此调用不会等待，因此在此调用完成之前将会继续执行当前方法.
+#pragma warning  disable CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。
 public class MaaProcessor
 {
     #region 属性
 
     private static Random Random = new();
-    public static string Resource => Path.Combine(AppContext.BaseDirectory, "Resources");
+    public static string Resource => Path.Combine(AppContext.BaseDirectory, "Resource");
     public static string ResourceBase => Path.Combine(Resource, "base");
     public static MaaProcessor Instance { get; } = new();
     public static MaaToolkit Toolkit { get; } = new();
@@ -422,6 +422,7 @@ public class MaaProcessor
                         foreach (var file in jsonFiles)
                         {
                             var content = File.ReadAllText(file);
+
                             var taskData = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(content);
                             if (taskData == null || taskData.Count == 0)
                                 break;
@@ -968,10 +969,11 @@ public class MaaProcessor
         {
             tasks ??= new List<DragItemViewModel>();
             var taskAndParams = tasks.Select(CreateNodeAndParam).ToList();
-            await InitializeConnectionTasksAsync(token);
-            await AddCoreTasksAsync(taskAndParams, token);
-            await AddPostTasksAsync(checkUpdate, token);
+            InitializeConnectionTasksAsync(token);
+            AddCoreTasksAsync(taskAndParams, token);
+
         }
+        AddPostTasksAsync(onlyStart, checkUpdate, token);
         await TaskManager.RunTaskAsync(async () =>
         {
             var runSuccess = await ExecuteTasks(token);
@@ -1080,7 +1082,7 @@ public class MaaProcessor
         };
     }
 
-    async private Task InitializeConnectionTasksAsync(CancellationToken token)
+    private void InitializeConnectionTasksAsync(CancellationToken token)
     {
         TaskQueue.Enqueue(CreateMFATask("启动脚本", async () =>
         {
@@ -1101,8 +1103,7 @@ public class MaaProcessor
     public async Task MeasureScreencapPerformanceAsync(CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
-        await MeasureExecutionTimeAsync(async () =>
-            MaaTasker?.Controller.Screencap().Wait());
+        await MeasureExecutionTimeAsync(async () => await TaskManager.RunTaskAsync(() => MaaTasker?.Controller.Screencap().Wait(), token));
     }
 
     async private Task HandleDeviceConnectionAsync(CancellationToken token)
@@ -1121,7 +1122,7 @@ public class MaaProcessor
 
         if (!connected)
         {
-            await HandleConnectionFailureAsync(isAdb, token);
+            HandleConnectionFailureAsync(isAdb, token);
             throw new Exception("Connection failed after all retries");
         }
 
@@ -1170,7 +1171,7 @@ public class MaaProcessor
         return instance is { Initialized: true };
     }
 
-    async private Task HandleConnectionFailureAsync(bool isAdb, CancellationToken token)
+    private void HandleConnectionFailureAsync(bool isAdb, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
         LoggerHelper.Warning("ConnectFailed".ToLocalization());
@@ -1179,8 +1180,7 @@ public class MaaProcessor
         ToastHelper.Warn("Warning_CannotConnect".ToLocalizationFormatted(true, isAdb ? "Emulator" : "Window"));
         Stop();
     }
-
-    async private Task AddCoreTasksAsync(List<NodeAndParam> taskAndParams, CancellationToken token)
+    private void AddCoreTasksAsync(List<NodeAndParam> taskAndParams, CancellationToken token)
     {
         foreach (var task in taskAndParams)
         {
@@ -1287,13 +1287,15 @@ public class MaaProcessor
             return false;
         }
     }
-    async private Task AddPostTasksAsync(bool checkUpdate, CancellationToken token)
+    private void AddPostTasksAsync(bool onlyStart, bool checkUpdate, CancellationToken token)
     {
-        TaskQueue.Enqueue(CreateMFATask("结束脚本", async () =>
+        if (!onlyStart)
         {
-            await TaskManager.RunTaskAsync(() => RunScript("Post-script"), token);
-        }));
-
+            TaskQueue.Enqueue(CreateMFATask("结束脚本", async () =>
+            {
+                await TaskManager.RunTaskAsync(() => RunScript("Post-script"), token);
+            }));
+        }
         if (checkUpdate)
         {
             TaskQueue.Enqueue(CreateMFATask("检查更新", async () =>
@@ -1342,9 +1344,9 @@ public class MaaProcessor
             CancelOperations();
 
             TaskQueue.Clear();
-            
+
             Instances.RootViewModel.IsRunning = false;
-            
+
             ExecuteStopCore(finished, () =>
             {
                 var stopResult = AbortCurrentTasker();

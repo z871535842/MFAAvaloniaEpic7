@@ -696,7 +696,7 @@
         <value>項目連結: </value>
     </data>
     <data name="PurchaseLink" xml:space="preserve">
-        <value>購買鏈接</value>
+        <value>關於Mirror醬</value>
     </data>
     <data name="Quit" xml:space="preserve">
         <value>退出</value>
@@ -1024,5 +1024,14 @@
     </data>
     <data name="ColorThemeAlreadyExists" xml:space="preserve">
         <value>該顏色主題已存在</value>
+    </data>
+    <data name="Later" xml:space="preserve">
+        <value>以後</value>
+    </data>
+    <data name="ErrorWhenCheck" xml:space="preserve">
+        <value>檢查{0}最新版時發生錯誤</value>
+    </data>
+    <data name="Resource" xml:space="preserve">
+        <value>資源</value>
     </data>
 </root>

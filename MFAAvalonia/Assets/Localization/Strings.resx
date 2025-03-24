@@ -703,7 +703,7 @@
         <value>项目链接: </value>
     </data>
     <data name="PurchaseLink" xml:space="preserve">
-        <value>购买链接</value>
+        <value>关于Mirror酱</value>
     </data>
     <data name="Quit" xml:space="preserve">
         <value>退出</value>
@@ -1031,5 +1031,14 @@
     </data>
     <data name="ColorThemeAlreadyExists" xml:space="preserve">
         <value>该颜色主题已存在</value>
+    </data>
+    <data name="Later" xml:space="preserve">
+        <value>以后</value>
+    </data>
+    <data name="ErrorWhenCheck" xml:space="preserve">
+        <value>检查{0}最新版时发生错误</value>
+    </data>
+    <data name="Resource" xml:space="preserve">
+        <value>资源</value>
     </data>
 </root>

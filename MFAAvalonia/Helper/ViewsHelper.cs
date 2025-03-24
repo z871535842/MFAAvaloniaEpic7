@@ -46,7 +46,23 @@ public class ViewsHelper
         _viewToVMMap.Add(viewType, viewModelType);
         return this;
     }
-
+    
+    public ViewsHelper AddOnlyViewModel<
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        TView,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+        TViewModel>(ServiceCollection services)
+        where TView : ContentControl
+        where TViewModel : ObservableObject
+    {
+        var viewType = typeof(TView);
+        var viewModelType = typeof(TViewModel);
+        
+        services.AddSingleton<TViewModel>();
+        _viewToVMMap.Add(viewType, viewModelType);
+        return this;
+    }
+    
     public bool TryCreateView(IServiceProvider provider, Type viewModelType, [NotNullWhen(true)] out Control? view)
     {
         var viewModel = provider.GetRequiredService(viewModelType);

@@ -2,7 +2,7 @@
 using MailKit.Security;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.ViewModels.UsersControls.Settings;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using MimeKit;
 using Newtonsoft.Json;
 using System;

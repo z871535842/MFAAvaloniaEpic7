@@ -5,6 +5,8 @@
       <map>
         <entry key="MFAAvalonia/App.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Style/Geometry.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="MFAAvalonia/Assets/Style/MdXaml.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="MFAAvalonia/Assets/Style/MdXaml.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Theme/DarkTheme.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Theme/LightTheme.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/MainWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -28,6 +30,7 @@
         <entry key="MFAAvalonia/Views/UserControls/Settings/StartSettingsUserControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/UserControls/Settings/TimerSettingsUserControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/UserControls/Settings/VersionUpdateSettingsUserControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="MFAAvalonia/Views/Windows/AnnouncementView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/Windows/ErrorView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/Windows/RootView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
       </map>

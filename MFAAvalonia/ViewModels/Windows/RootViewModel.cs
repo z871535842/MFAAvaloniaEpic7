@@ -40,7 +40,13 @@ public partial class RootViewModel : ViewModelBase
         || ConfigurationManager.Maa.GetValue(ConfigurationKeys.SaveDraw, false)
         || ConfigurationManager.Maa.GetValue(ConfigurationKeys.ShowHitDraw, false);
     private bool _shouldTip = true;
-
+    [ObservableProperty] private bool _isUpdating;
+    
+    public void SetUpdating(bool isUpdating)
+    {
+        IsUpdating = isUpdating;
+    }
+    
     partial void OnIsDebugModeChanged(bool value)
     {
         if (value && _shouldTip)

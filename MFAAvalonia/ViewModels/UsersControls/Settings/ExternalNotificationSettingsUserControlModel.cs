@@ -4,7 +4,6 @@ using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Helper;
 using MFAAvalonia.ViewModels.Other;
-using MFAWPF.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;

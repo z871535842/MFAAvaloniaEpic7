@@ -1,64 +1,100 @@
-name: Release
+name: Cross-Platform Release
 
 on:
   push:
     tags:
-      - 'v*' # 匹配以'v'开头的tag
+      - 'v*'  # 匹配语义化版本标签，如v1.0.0
 
 jobs:
   changelog:
-      name: Generate changelog
-      runs-on: ubuntu-latest
-      outputs:
-        release_body: ${{ steps.git-cliff.outputs.content }}
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
-
-        - name: Generate a changelog
-          uses: orhun/git-cliff-action@v4
-          id: git-cliff
-          with:
-            config: cliff.toml
-            args: -vv --latest --strip header
-          env:
-            OUTPUT: CHANGES.md
-            GITHUB_REPO: ${{ github.repository }}
-            
-  build:
+    name: Generate Changelog
     runs-on: ubuntu-latest
-    name: Upload the release
-    needs: changelog
+    outputs:
+      release_body: ${{ steps.git-cliff.outputs.content }}
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取完整历史记录以访问所有tags  
+          fetch-depth: 0  # 获取完整提交历史
 
-      - name: .NET Core
-        uses: actions/setup-dotnet@v1
+      - name: Generate Changelog
+        uses: orhun/git-cliff-action@v4
+        id: git-cliff
         with:
-          dotnet-version: 8.0.x
-          
-      - name: Install dependencies
+          config: cliff.toml
+          args: -vv --latest --strip header
+        env:
+          OUTPUT: CHANGES.md
+          GITHUB_REPO: ${{ github.repository }}
+
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    needs: changelog
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            platform: linux-x64
+            package_cmd: tar -czvf ../MFAAvalonia-${{ github.ref_name }}-linux-x64.tar.gz *
+          - os: macos-latest
+            platform: osx-arm64
+            package_cmd: tar -czvf ../MFAAvalonia-${{ github.ref_name }}-macos-arm64.tar.gz *
+          - os: windows-latest
+            platform: win-x64
+            package_cmd: 7z a -tzip ../MFAAvalonia-${{ github.ref_name }}-windows-x64.zip *
+      fail-fast: false
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: |
+            8.0.x
+
+      - name: Restore Dependencies
         run: dotnet restore
+        env:
+          NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
-      - name: Build
-        run: dotnet publish -c Release
+      - name: Build Solution
+        run: dotnet publish -c Release -r ${{ matrix.platform }} --self-contained true
 
-      - name: Zip
+      - name: Package Artifacts
+        shell: bash
         run: |
-          cd /home/runner/work/MFAAvalonia/bin/AnyCPU/Release/win-x64/publish/
-          zip -r ../MFAAvalonia-${{ github.ref_name }}.zip *  
+          cd bin/AnyCPU/Release/${{ matrix.platform }}/publish/
+          ${{ matrix.package_cmd }}
 
-      - name: Release
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.platform }}-build
+          path: |
+            bin/AnyCPU/Release/${{ matrix.platform }}/*.tar.gz
+            bin/AnyCPU/Release/${{ matrix.platform }}/*.zip
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    needs: [changelog, build]
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          path: artifacts
+
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.ref_name }}
           files: |
-            /home/runner/work/MFAAvalonia/bin/AnyCPU/Release/win-x64/*.zip
+            artifacts/**/*
           body: ${{ needs.changelog.outputs.release_body }}
           draft: false
           prerelease: false
+          discussion_category_name: Releases

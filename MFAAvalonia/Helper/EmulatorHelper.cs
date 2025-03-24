@@ -1,5 +1,5 @@
 ﻿using MFAAvalonia.Extensions.MaaFW;
-using MFAWPF.Helper;
+using MFAAvalonia.Helper;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

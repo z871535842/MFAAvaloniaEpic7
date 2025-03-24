@@ -1,6 +1,5 @@
 ﻿using Avalonia.Collections;
 using MFAAvalonia.Helper;
-using MFAWPF.Helper;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

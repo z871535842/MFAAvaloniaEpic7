@@ -1,4 +1,4 @@
-﻿using MFAWPF.Helper;
+﻿using MFAAvalonia.Helper;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

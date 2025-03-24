@@ -696,7 +696,7 @@
         <value>Project Link: </value>
     </data>
     <data name="PurchaseLink" xml:space="preserve">
-        <value>Purchase link</value>
+        <value>About Mirror Chyan</value>
     </data>
     <data name="Quit" xml:space="preserve">
         <value>Quit</value>
@@ -1024,5 +1024,14 @@
     </data>
     <data name="ColorThemeAlreadyExists" xml:space="preserve">
         <value>The color theme already exists</value>
+    </data>
+    <data name="Later" xml:space="preserve">
+        <value>Later</value>
+    </data>
+    <data name="ErrorWhenCheck" xml:space="preserve">
+        <value>Failed to check for the latest version of {0}.</value>
+    </data>
+    <data name="Resource" xml:space="preserve">
+        <value>Resource</value>
     </data>
 </root>

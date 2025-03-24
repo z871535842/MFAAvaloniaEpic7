@@ -13,7 +13,6 @@ using MFAAvalonia.Views.Pages;
 using MFAAvalonia.Views.UserControls;
 using MFAAvalonia.Views.UserControls.Settings;
 using MFAAvalonia.Views.Windows;
-using MFAWPF.Helper;
 using Microsoft.Extensions.DependencyInjection;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
@@ -97,6 +96,7 @@ public partial class App : Application
             .AddView<PerformanceUserControl, PerformanceUserControlModel>(services)
             .AddView<VersionUpdateSettingsUserControl, VersionUpdateSettingsUserControlModel>(services)
             
+            .AddOnlyViewModel<AnnouncementView, AnnouncementViewModel>(services)
             .AddOnlyView<AboutUserControl, SettingsViewModel>(services)
             .AddOnlyView<HotKeySettingsUserControl, SettingsViewModel>(services)
             .AddOnlyView<ConfigurationMgrUserControl, SettingsViewModel>(services);

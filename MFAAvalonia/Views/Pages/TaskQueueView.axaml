@@ -21,7 +21,9 @@
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:type="clr-namespace:MFAAvalonia.Helper.ValueType"
     xmlns:usersControls="clr-namespace:MFAAvalonia.ViewModels.UsersControls"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
+    xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia">
     <Design.DataContext>
         <pages:TaskQueueViewModel />
     </Design.DataContext>
@@ -214,9 +216,9 @@
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" MaxHeight="200" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <suki:GlassCard Grid.Row="0" Margin="5,15,15,5">
+            <suki:GlassCard Grid.Row="0" Margin="5,15,15,5" x:Name="Row1">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -236,7 +238,7 @@
                     </ScrollViewer>
                 </suki:GroupBox>
             </suki:GlassCard>
-            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25">
+            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25" MaxHeight="{Binding Bounds.Height, ElementName=Row1}">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -248,15 +250,26 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.TaskDescription}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" x:Name="Introductions">
-                        <avaloniaEdit:TextEditor
-                            FontFamily="Cascadia Code,Consolas,Menlo,Monospace"
-                            IsReadOnly="True"
-                            x:Name="Introduction">
-                            <!-- <usersControls:RichTextEditor.Styles> -->
-                            <!--     <StyleInclude Source="{StaticResource {x:Type avaloniaEdit:TextEditor}}" /> -->
-                            <!-- </usersControls:RichTextEditor.Styles> -->
-                        </avaloniaEdit:TextEditor>
+
+                    <!-- <avaloniaEdit:TextEditor -->
+                    <!--     FontFamily="Cascadia Code,Consolas,Menlo,Monospace" -->
+                    <!--     IsReadOnly="True" VerticalScrollBarVisibility="Auto" -->
+                    <!--     x:Name="Introduction"> -->
+                    <!-- </avaloniaEdit:TextEditor> -->
+                    <ScrollViewer
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+                        <mdxaml:MarkdownScrollViewer
+
+                            Focusable="True" x:Name="Introduction"
+                            Margin="10,0,10,0">
+                            <mdxaml:MarkdownScrollViewer.Styles>
+                                <StaticResource ResourceKey="MdXamlDocStyle" />
+                            </mdxaml:MarkdownScrollViewer.Styles>
+                            <mdxaml:MarkdownScrollViewer.Plugins>
+                                <StaticResource ResourceKey="MdXamlPlugin" />
+                            </mdxaml:MarkdownScrollViewer.Plugins>
+                        </mdxaml:MarkdownScrollViewer>
                     </ScrollViewer>
                 </suki:GroupBox>
 
@@ -342,7 +355,8 @@
                                         IconVariant="Regular" />
                                 </Button>
 
-                                <ContentControl Content="{Binding IsConnected, Converter={StaticResource ConnectedConditionConverter}, Source={x:Static helper:Instances.TaskQueueViewModel}}" />
+                                <ContentControl
+                                    Content="{Binding IsConnected, Converter={StaticResource ConnectedConditionConverter}, Source={x:Static helper:Instances.TaskQueueViewModel}}" />
                             </StackPanel>
                         </Grid>
                     </suki:GroupBox.Header>
@@ -398,7 +412,8 @@
                                 SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.DataTemplates>
                                     <DataTemplate DataType="binding:AdbDeviceInfo">
-                                        <TextBlock HorizontalAlignment="Left" Text="{Binding Converter={converters:DeviceDisplayConverter}}" />
+                                        <TextBlock HorizontalAlignment="Left"
+                                                   Text="{Binding Converter={converters:DeviceDisplayConverter}}" />
                                     </DataTemplate>
 
                                     <DataTemplate DataType="binding:DesktopWindowInfo">

@@ -71,7 +71,7 @@ jobs:
           ${{ matrix.package_cmd }}
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}-build
           path: |

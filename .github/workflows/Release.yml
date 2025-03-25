@@ -134,7 +134,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.platform }}-${{ matrix.arch }}-build
-          path: bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/*.*
+          path: bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/publish/*.*
 
   release:
     name: Create Release

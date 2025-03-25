@@ -113,7 +113,7 @@ jobs:
           NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
       - name: Build Solution
-        run: dotnet publish -c Release -r ${{ matrix.platform }}-${{ matrix.arch }} -p:PublishSingleFile=true
+        run: dotnet publish -c Release -r ${{ matrix.platform }}-${{ matrix.arch }}
 
       - name: Package Artifacts
         shell: bash

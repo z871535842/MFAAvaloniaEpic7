@@ -7,6 +7,7 @@ using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.ViewModels.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Semver;
 using SukiUI.Dialogs;
 using SukiUI.Toasts;
 using System;
@@ -15,6 +16,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -338,31 +340,69 @@ public static class VersionChecker
 
         ZipFile.ExtractToDirectory(tempZipFilePath, tempExtractDir);
         SetProgress(progress, 50);
-        var resourcePath = Path.Combine(AppContext.BaseDirectory, "resource");
-        if (Directory.Exists(resourcePath))
-        {
-            foreach (var rfile in Directory.EnumerateFiles(resourcePath, "*", SearchOption.AllDirectories))
-            {
-                var fileName = Path.GetFileName(rfile);
-                if (fileName.Equals(AnnouncementViewModel.AnnouncementFileName, StringComparison.OrdinalIgnoreCase))
-                    continue;
-
-                try
-                {
-                    File.SetAttributes(rfile, FileAttributes.Normal);
-                    File.Delete(rfile);
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.Warning($"文件删除失败: {rfile} - {ex.Message}");
-                }
-            }
-        }
-
+        var originPath = tempExtractDir;
         var interfacePath = Path.Combine(tempExtractDir, "interface.json");
         var resourceDirPath = Path.Combine(tempExtractDir, "resource");
 
-        string wpfDir = AppContext.BaseDirectory;
+        var wpfDir = AppContext.BaseDirectory;
+        var resourcePath = Path.Combine(wpfDir, "resource");
+        if (!File.Exists(interfacePath))
+        {
+            originPath = Path.Combine(tempExtractDir, "assets");
+            interfacePath = Path.Combine(tempExtractDir, "assets", "interface.json");
+            resourceDirPath = Path.Combine(tempExtractDir, "assets", "resource");
+        }
+
+        if (isGithub)
+        {
+            if (Directory.Exists(resourcePath))
+            {
+                foreach (var rfile in Directory.EnumerateFiles(resourcePath, "*", SearchOption.AllDirectories))
+                {
+                    var fileName = Path.GetFileName(rfile);
+                    if (fileName.Equals(AnnouncementViewModel.AnnouncementFileName, StringComparison.OrdinalIgnoreCase))
+                        continue;
+
+                    try
+                    {
+                        File.SetAttributes(rfile, FileAttributes.Normal);
+                        File.Delete(rfile);
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerHelper.Warning($"文件删除失败: {rfile} - {ex.Message}");
+                    }
+                }
+            }
+        }
+        else
+        {
+            var changesPath = Path.Combine(tempExtractDir, "changes.json");
+            if (File.Exists(changesPath))
+            {
+                var changes = await File.ReadAllTextAsync(changesPath);
+                try
+                {
+                    var changesJson = JsonConvert.DeserializeObject<MirrorChangesJson>(changes);
+                    if (changesJson?.Deleted != null)
+                    {
+                        var delPaths = changesJson.Deleted
+                            .Select(del => Path.Combine(AppContext.BaseDirectory, del))
+                            .Where(File.Exists);
+
+                        foreach (var delPath in delPaths)
+                        {
+                            File.Delete(delPath);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    LoggerHelper.Error(e);
+                }
+            }
+
+        }
         var file = new FileInfo(interfacePath);
         if (file.Exists)
         {
@@ -375,7 +415,7 @@ public static class VersionChecker
         var di = new DirectoryInfo(resourceDirPath);
         if (di.Exists)
         {
-            CopyFolder(resourceDirPath, Path.Combine(wpfDir, "resource"));
+            DirectoryMerge(originPath, Path.Combine(wpfDir, "resource"));
         }
 
         SetProgress(progress, 70);
@@ -442,6 +482,8 @@ public static class VersionChecker
         ProgressBar? progress = null;
         TextBlock? textBlock = null;
         ISukiToast? sukiToast = null;
+
+        // 初始化进度UI
         DispatcherHelper.RunOnMainThread(() =>
         {
             progress = new ProgressBar
@@ -449,157 +491,174 @@ public static class VersionChecker
                 Value = 0,
                 ShowProgressText = true
             };
-            StackPanel stackPanel = new();
-            var textBlock = new TextBlock()
+            textBlock = new TextBlock
             {
-                Text = "GettingLatestSoftware".ToLocalization(),
+                Text = "GettingLatestSoftware".ToLocalization()
             };
+
+            var stackPanel = new StackPanel();
             stackPanel.Children.Add(textBlock);
             stackPanel.Children.Add(progress);
+
             sukiToast = Instances.ToastManager.CreateToast()
                 .WithTitle("SoftwareUpdate".ToLocalization())
-                .WithContent(stackPanel).Queue();
+                .WithContent(stackPanel)
+                .Queue();
         });
 
-
-        SetProgress(progress, 10);
-
-        string downloadUrl = string.Empty, latestVersion = string.Empty;
         try
         {
-            if (isGithub)
-                GetLatestVersionAndDownloadUrlFromGithub(out downloadUrl, out latestVersion);
-            else
-                GetDownloadUrlFromMirror(GetLocalVersion(), "MFAAvalonia", CDK(), out downloadUrl, out latestVersion);
-        }
-        catch (Exception ex)
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}: {ex.Message}");
-            Instances.RootViewModel.SetUpdating(false);
-            LoggerHelper.Error(ex);
-            return;
-        }
+            SetProgress(progress, 10);
 
-        SetProgress(progress, 50);
-
-        if (string.IsNullOrWhiteSpace(latestVersion))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("FailToGetLatestVersionInfo".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        if (!IsNewVersionAvailable(latestVersion, GetLocalVersion()))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Info("MFAIsLatestVersion".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        SetProgress(progress, 100);
-
-        if (string.IsNullOrWhiteSpace(downloadUrl))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("FailToGetDownloadUrl".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        var tempPath = Path.Combine(AppContext.BaseDirectory, "temp_mfa");
-        Directory.CreateDirectory(tempPath);
-
-        var tempZipFilePath = Path.Combine(tempPath, $"mfa_{latestVersion}.zip");
-        SetText(textBlock, "Downloading".ToLocalization());
-        SetProgress(progress, 0);
-
-        if (!await DownloadFileAsync(downloadUrl, tempZipFilePath, progress, "GameResourceUpdated"))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("DownloadFailed");
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        var tempExtractDir = Path.Combine(tempPath, $"mfa_{latestVersion}_extracted");
-        if (Directory.Exists(tempExtractDir)) Directory.Delete(tempExtractDir, true);
-        if (!File.Exists(tempZipFilePath))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("DownloadFailed");
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        ZipFile.ExtractToDirectory(tempZipFilePath, tempExtractDir);
-
-        var currentExeFileName = Process.GetCurrentProcess().MainModule.ModuleName;
-
-        var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
-        var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
-        var extractedPath = $"\"{utf8BaseDirectory}temp_mfa\\mfa_{latestVersion}_extracted\\*.*\"";
-        var extracted = $"{utf8BaseDirectory}temp_mfa\\mfa_{latestVersion}_extracted\\";
-        var scriptFileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "update_mfa.bat" : "update_mfa.sh";
-        var scriptFilePath = Path.Combine(tempPath, scriptFileName);
-
-        await using (var sw = new StreamWriter(scriptFilePath))
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            // 获取版本信息
+            string downloadUrl, latestVersion;
+            try
             {
-                await sw.WriteLineAsync("@echo off");
-                await sw.WriteLineAsync("chcp 65001");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 3 > nul");
-                await sw.WriteLineAsync($"copy /Y \"{extracted}{Assembly.GetEntryAssembly().GetName().Name}.exe\" \"{AppContext.BaseDirectory}{currentExeFileName}\"");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-                await sw.WriteLineAsync($"del \"{extracted}{Assembly.GetEntryAssembly().GetName().Name}.exe\"");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-                await sw.WriteLineAsync($"xcopy /E /Y {extractedPath} {AppContext.BaseDirectory}");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-                await sw.WriteLineAsync($"start /d \"{AppContext.BaseDirectory}\" {currentExeFileName}");
-                await sw.WriteLineAsync($"rd /S /Q \"{tempPath}\"");
+                if (isGithub)
+                    GetLatestVersionAndDownloadUrlFromGithub(out downloadUrl, out latestVersion);
+                else
+                    GetDownloadUrlFromMirror(GetLocalVersion(), "MFAAvalonia", CDK(), out downloadUrl, out latestVersion);
             }
-            else
+            catch (Exception ex)
             {
-                await sw.WriteLineAsync("#!/bin/bash");
-                await sw.WriteLineAsync("sleep 3");
-                await sw.WriteLineAsync($"cp -f \"{extracted}{Assembly.GetEntryAssembly().GetName().Name}.exe\" \"{AppContext.BaseDirectory}{currentExeFileName}\"");
-                await sw.WriteLineAsync("sleep 1");
-                await sw.WriteLineAsync($"rm -f \"{extracted}{Assembly.GetEntryAssembly().GetName().Name}.exe\"");
-                await sw.WriteLineAsync("sleep 1");
-                await sw.WriteLineAsync($"cp -r {extractedPath} {AppContext.BaseDirectory}");
-                await sw.WriteLineAsync("sleep 1");
-                await sw.WriteLineAsync($"\"{AppContext.BaseDirectory}{currentExeFileName}\"");
-                await sw.WriteLineAsync($"rm -rf \"{tempPath}\"");
+                Dismiss(sukiToast);
+                ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}: {ex.Message}");
+                LoggerHelper.Error(ex);
+                return;
+            }
+
+            // 版本验证
+            SetProgress(progress, 50);
+            if (string.IsNullOrWhiteSpace(latestVersion) || !IsNewVersionAvailable(latestVersion, GetLocalVersion()))
+            {
+                Dismiss(sukiToast);
+                ToastHelper.Info("MFAIsLatestVersion".ToLocalization());
+                return;
+            }
+
+            // 准备临时目录
+            var tempPath = Path.Combine(AppContext.BaseDirectory, "temp_mfa");
+            Directory.CreateDirectory(tempPath);
+
+            // 下载更新包
+            SetText(textBlock, "Downloading".ToLocalization());
+            SetProgress(progress, 0);
+            var tempZip = Path.Combine(tempPath, $"mfa_{latestVersion}.zip");
+            if (!await DownloadWithRetry(downloadUrl, tempZip, progress, 3))
+            {
+                Dismiss(sukiToast);
+                ToastHelper.Warn("DownloadFailed");
+                return;
+            }
+
+            // 解压文件
+            SetProgress(progress, 60);
+            var extractDir = Path.Combine(tempPath, $"mfa_{latestVersion}_extracted");
+            if (Directory.Exists(extractDir))
+                Directory.Delete(extractDir, true);
+            ZipFile.ExtractToDirectory(tempZip, extractDir);
+
+            SetText(textBlock, "ApplyingUpdate".ToLocalization());
+            // 执行安全更新
+            SetProgress(progress, 80);
+            await ApplySecureUpdate(extractDir, tempPath);
+
+            SetProgress(progress, 100);
+            Thread.Sleep(500);
+        }
+        finally
+        {
+            Instances.RootViewModel.SetUpdating(false);
+            Dismiss(sukiToast);
+        }
+    }
+
+    #region 增强型更新核心方法
+
+    async private static Task<bool> DownloadWithRetry(string url, string savePath, ProgressBar progress, int retries)
+    {
+        for (int i = 0; i < retries; i++)
+        {
+            try
+            {
+                return await DownloadFileAsync(url, savePath, progress, "GameResourceUpdated");
+            }
+            catch (WebException ex) when (i < retries - 1)
+            {
+                LoggerHelper.Warning($"下载重试 ({i + 1}/{retries}): {ex.Status}");
+                await Task.Delay(2000 * (i + 1));
             }
         }
+        return false;
+    }
 
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            Process.Start("chmod", $"+x \"{scriptFilePath}\"");
-        }
+    async private static Task ApplySecureUpdate(string extractDir, string tempPath)
+    {
+        var backupDir = CreateVersionBackup("MFA_Self");
+        await ReplaceFilesWithRetry(extractDir, backupDir);
 
-        var psi = new ProcessStartInfo(scriptFilePath)
+        // 清理临时文件
+        try { Directory.Delete(tempPath, true); }
+        catch (IOException ex) { LoggerHelper.Warning($"清理失败: {ex.Message}"); }
+
+        // 延迟重启
+        var psi = new ProcessStartInfo
         {
-            CreateNoWindow = true,
-            WindowStyle = ProcessWindowStyle.Hidden
+            FileName = Process.GetCurrentProcess().MainModule.FileName,
+            WorkingDirectory = AppContext.BaseDirectory,
+            UseShellExecute = true
         };
         Process.Start(psi);
-        Thread.Sleep(50);
         Instances.ShutdownApplication();
     }
+
+    private static string CreateVersionBackup(string dir)
+    {
+        var backupPath = Path.Combine(AppContext.BaseDirectory, dir);
+
+        Directory.CreateDirectory(backupPath);
+        return backupPath;
+    }
+
+    async private static Task ReplaceFilesWithRetry(string sourceDir, string backupDir, int maxRetry = 3)
+    {
+        foreach (var file in Directory.EnumerateFiles(sourceDir, "*", SearchOption.AllDirectories))
+        {
+            var relativePath = Path.GetRelativePath(sourceDir, file);
+            var targetPath = Path.Combine(AppContext.BaseDirectory, relativePath);
+            var backupPath = Path.Combine(backupDir, relativePath);
+
+            for (int i = 0; i < maxRetry; i++)
+            {
+                try
+                {
+                    if (File.Exists(targetPath))
+                    {
+                        Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
+                        File.Move(targetPath, backupPath, overwrite: true);
+                    }
+                    File.Move(file, targetPath, overwrite: true);
+                    break;
+                }
+                catch (IOException ex) when (i < maxRetry - 1)
+                {
+                    await Task.Delay(1000 * (i + 1));
+                    LoggerHelper.Warning($"文件替换重试: {ex.Message}");
+                }
+            }
+        }
+    }
+
+    #endregion
+
     public async static Task UpdateMaaFw()
     {
         Instances.RootViewModel.SetUpdating(true);
-
         ProgressBar? progress = null;
         TextBlock? textBlock = null;
         ISukiToast? sukiToast = null;
+
+        // UI初始化（与原有逻辑保持一致）
         DispatcherHelper.RunOnMainThread(() =>
         {
             progress = new ProgressBar
@@ -607,11 +666,11 @@ public static class VersionChecker
                 Value = 0,
                 ShowProgressText = true
             };
-            StackPanel stackPanel = new();
-            var textBlock = new TextBlock()
+            textBlock = new TextBlock
             {
-                Text = "GettingLatestMaaFW".ToLocalization(),
+                Text = "GettingLatestMaaFW".ToLocalization()
             };
+            var stackPanel = new StackPanel();
             stackPanel.Children.Add(textBlock);
             stackPanel.Children.Add(progress);
             sukiToast = Instances.ToastManager.CreateToast()
@@ -619,149 +678,60 @@ public static class VersionChecker
                 .WithContent(stackPanel).Queue();
         });
 
-        SetProgress(progress, 10);
-
-        var resId = "MaaFramework";
-        var currentVersion = MaaProcessor.Utility.Version;
-        Instances.RootViewModel.SetUpdating(true);
-        string downloadUrl = string.Empty, latestVersion = string.Empty;
         try
         {
+            // 版本信息获取（保持原有逻辑）
+            SetProgress(progress, 10);
+            var resId = "MaaFramework";
+            var currentVersion = MaaProcessor.Utility.Version;
+            string downloadUrl = string.Empty, latestVersion = string.Empty;
             GetDownloadUrlFromMirror(currentVersion, resId, CDK(), out downloadUrl, out latestVersion, "MFA", true);
-        }
-        catch (Exception ex)
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}: {ex.Message}");
-            Instances.RootViewModel.SetUpdating(false);
-            LoggerHelper.Error(ex);
-            return;
-        }
 
-        SetProgress(progress, 50);
-
-        if (string.IsNullOrWhiteSpace(latestVersion))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("FailToGetLatestVersionInfo".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-
-        if (string.IsNullOrWhiteSpace(currentVersion))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("FailToGetCurrentVersionInfo".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        LoggerHelper.Info($"latestVersion, localVersion: {latestVersion}, {currentVersion}");
-        if (!IsNewVersionAvailable(latestVersion, currentVersion))
-        {
-            Dismiss(sukiToast);
-
-            ToastHelper.Info("MaaFwIsLatestVersion".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        SetProgress(progress, 100);
-
-        if (string.IsNullOrWhiteSpace(downloadUrl))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("FailToGetDownloadUrl".ToLocalization());
-            Instances.RootViewModel.SetUpdating(false);
-
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        var tempPath = Path.Combine(AppContext.BaseDirectory, "temp_maafw");
-        Directory.CreateDirectory(tempPath);
-
-        var tempZipFilePath = Path.Combine(tempPath, $"maafw_{latestVersion}.zip");
-        SetText(textBlock, "Downloading".ToLocalization());
-        SetProgress(progress, 0);
-
-        if (!await DownloadFileAsync(downloadUrl, tempZipFilePath, progress, "GameResourceUpdated"))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("DownloadFailed");
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        var tempExtractDir = Path.Combine(tempPath, $"maafw_{latestVersion}_extracted");
-        if (Directory.Exists(tempExtractDir)) Directory.Delete(tempExtractDir, true);
-        if (!File.Exists(tempZipFilePath))
-        {
-            Dismiss(sukiToast);
-            ToastHelper.Warn("DownloadFailed");
-            Instances.TaskQueueViewModel.ClearDownloadProgress();
-            return;
-        }
-
-        ZipFile.ExtractToDirectory(tempZipFilePath, tempExtractDir);
-
-        var currentExeFileName = Process.GetCurrentProcess().MainModule.ModuleName;
-
-        var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
-        var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
-        var scriptFileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "update_maafw.bat" : "update_maafw.sh";
-        var scriptFilePath = Path.Combine(utf8BaseDirectory, "temp_maafw", scriptFileName);
-
-        await using (var sw = new StreamWriter(scriptFilePath))
-        {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            // 版本校验（保持原有逻辑）
+            SetProgress(progress, 50);
+            if (!IsNewVersionAvailable(latestVersion, currentVersion))
             {
-                await sw.WriteLineAsync("@echo off");
-                await sw.WriteLineAsync("chcp 65001");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 3 > nul");
-                var extractedPath = $"\"{utf8BaseDirectory}temp_maafw\\maafw_{latestVersion}_extracted\\bin\\*.*\"";
-                var targetPath = $"\"{utf8BaseDirectory}\"";
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-                await sw.WriteLineAsync($"xcopy /E /Y {extractedPath} {targetPath}");
-                await sw.WriteLineAsync("ping 127.0.0.1 -n 1 > nul");
-                await sw.WriteLineAsync($"start /d \"{utf8BaseDirectory}\" {currentExeFileName}");
-                await sw.WriteLineAsync($"rd /S /Q \"{utf8BaseDirectory}temp_maafw\"");
+                Dismiss(sukiToast);
+                ToastHelper.Info("MaaFwIsLatestVersion".ToLocalization());
+                return;
             }
-            else
+
+            // 下载与解压（优化为使用DownloadWithRetry）
+            var tempPath = Path.Combine(AppContext.BaseDirectory, "temp_maafw");
+            Directory.CreateDirectory(tempPath);
+            var tempZip = Path.Combine(tempPath, $"maafw_{latestVersion}.zip");
+            SetText(textBlock, "Downloading".ToLocalization());
+            if (!await DownloadWithRetry(downloadUrl, tempZip, progress, 3))
             {
-                await sw.WriteLineAsync("#!/bin/bash");
-                await sw.WriteLineAsync("sleep 3");
-                var extractedPath = $"\"{utf8BaseDirectory}temp_maafw/maafw_{latestVersion}_extracted/bin/*\"";
-                var targetPath = $"\"{utf8BaseDirectory}\"";
-                await sw.WriteLineAsync("sleep 1");
-                await sw.WriteLineAsync($"cp -r {extractedPath} {targetPath}");
-                await sw.WriteLineAsync("sleep 1");
-                await sw.WriteLineAsync($"\"{utf8BaseDirectory}{currentExeFileName}\"");
-                await sw.WriteLineAsync($"rm -rf \"{utf8BaseDirectory}temp_maafw\"");
+                Dismiss(sukiToast);
+                ToastHelper.Warn("DownloadFailed");
+                return;
             }
-        }
+            SetText(textBlock, "ApplyingUpdate".ToLocalization());
+            // 文件替换（复用ReplaceFilesWithRetry）
+            var extractDir = Path.Combine(tempPath, $"maafw_{latestVersion}_extracted");
+            if (Directory.Exists(extractDir))
+                Directory.Delete(extractDir, true);
+            ZipFile.ExtractToDirectory(tempZip, extractDir);
+            SetProgress(progress, 60);
 
-        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        {
-            Process.Start("chmod", $"+x \"{scriptFilePath}\"");
-        }
+            await ReplaceFilesWithRetry(
+                sourceDir: Path.Combine(extractDir, "bin"), // 指定解压后的bin目录
+                backupDir: CreateVersionBackup("MFA_MaaFW"),
+                maxRetry: 3
+            );
 
-        var psi = new ProcessStartInfo(scriptFilePath)
+            // 清理与重启（复用ApplySecureUpdate）
+            await ApplySecureUpdate(extractDir, tempPath);
+            SetProgress(progress, 100);
+        }
+        finally
         {
-            CreateNoWindow = true,
-            WindowStyle = ProcessWindowStyle.Hidden
-        };
-        Process.Start(psi);
-        Thread.Sleep(50);
-        Instances.ShutdownApplication();
+            Instances.RootViewModel.SetUpdating(false);
+            Dismiss(sukiToast);
+        }
     }
+
     async private static Task ExecuteTasksAsync()
     {
         try
@@ -905,7 +875,14 @@ public static class VersionChecker
         return string.Empty;
     }
 
-    private static void GetDownloadUrlFromMirror(string version, string resId, string cdk, out string url, out string latestVersion, string userAgent = "MFA", bool isUI = false, bool onlyCheck = false)
+    private static void GetDownloadUrlFromMirror(string version,
+        string resId,
+        string cdk,
+        out string url,
+        out string latestVersion,
+        string userAgent = "MFA",
+        bool isUI = false,
+        bool onlyCheck = false)
     {
         var cdkD = onlyCheck ? string.Empty : $"cdk={cdk}&";
         var multiplatform = MaaProcessor.Interface?.Multiplatform == true;
@@ -924,63 +901,114 @@ public static class VersionChecker
         var releaseUrl = isUI
             ? $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}os={os}&arch={arch}"
             : $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}{multiplatformString}user_agent={userAgent}";
+
         using var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
         httpClient.DefaultRequestHeaders.Accept.TryParseAdd("application/json");
+
         try
         {
-            var task = httpClient.GetAsync(releaseUrl);
-            task.Wait();
-            var response = task.Result;
-            string message = string.Empty;
-
-            try
-            {
-                response.EnsureSuccessStatusCode();
-            }
-            catch (HttpRequestException e)
-            {
-                if ((int)response.StatusCode == 403)
-                {
-                    message = e.Message;
-                }
-            }
-
-            var read = response.Content.ReadAsStringAsync();
-            read.Wait();
-            var jsonResponse = read.Result;
+            var response = httpClient.GetAsync(releaseUrl).Result;
+            var jsonResponse = response.Content.ReadAsStringAsync().Result;
             var responseData = JObject.Parse(jsonResponse);
-            if (!string.IsNullOrWhiteSpace(message))
+
+            // 处理 HTTP 状态码
+            if (!response.IsSuccessStatusCode)
             {
-                if (responseData["msg"] != null && responseData["msg"].ToString().ToLower().Contains("reached the most", StringComparison.OrdinalIgnoreCase))
-                {
-                    throw new Exception("MirrorUseLimitReached".ToLocalization());
-                }
-                else
-                {
-                    throw new Exception(message);
-                }
+                HandleHttpError(response.StatusCode, responseData);
             }
-            if ((int)responseData["code"] == 0)
+
+            // 处理业务错误码
+            var responseCode = (int)responseData["code"]!;
+            if (responseCode != 0)
             {
-                var data = responseData["data"];
-                if (!onlyCheck && !isUI)
-                    SaveAnnouncement(data, "release_note");
-                var versionName = data["version_name"]?.ToString();
-                var downloadUrl = data["url"]?.ToString();
-                url = downloadUrl;
-                latestVersion = versionName;
+                HandleBusinessError(responseCode, responseData);
             }
-            else
+
+            // 成功处理
+            var data = responseData["data"]!;
+            if (!onlyCheck && !isUI)
             {
-                throw new Exception($"{"MirrorAutoUpdatePrompt".ToLocalization()}\n msg: {responseData["msg"]}");
+                SaveAnnouncement(data, "release_note");
             }
+
+            url = data["url"]?.ToString() ?? throw new Exception("InvalidResponseData");
+            latestVersion = data["version_name"]?.ToString() ?? throw new Exception("InvalidVersionInfo");
         }
-        catch (Exception e)
+        catch (AggregateException ex) when (ex.InnerException is HttpRequestException httpEx)
         {
-            throw new Exception($"{e.Message}");
+            throw new Exception($"NetworkError: {httpEx.Message}".ToLocalization());
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"RequestFailed: {ex.Message}".ToLocalization());
         }
     }
+
+    #region 错误处理逻辑
+
+    private static void HandleHttpError(HttpStatusCode statusCode, JObject responseData)
+    {
+        var errorMsg = responseData["msg"]?.ToString() ?? "UnknownError".ToLocalization();
+
+        switch (statusCode)
+        {
+            case HttpStatusCode.BadRequest: // 400
+                throw new Exception($"InvalidRequest: {errorMsg}".ToLocalization());
+
+            case HttpStatusCode.Forbidden: // 403
+                throw new Exception($"AccessDenied: {errorMsg}".ToLocalization());
+
+            case HttpStatusCode.NotFound: // 404
+                throw new Exception($"ResourceNotFound: {errorMsg}".ToLocalization());
+
+            default:
+                throw new Exception($"ServerError: [{(int)statusCode}] {errorMsg}".ToLocalization());
+        }
+    }
+
+    private static void HandleBusinessError(int code, JObject responseData)
+    {
+        var errorMsg = responseData["msg"]?.ToString() ?? "UndefinedError".ToLocalization();
+
+        switch (code)
+        {
+            // 参数错误系列 (400)
+            case 1001:
+                throw new Exception($"InvalidParams: {errorMsg}".ToLocalization());
+
+            // CDK 相关错误 (403)
+            case 7001:
+                throw new Exception("MirrorCdkExpired".ToLocalization());
+            case 7002:
+                throw new Exception("MirrorCdkInvalid".ToLocalization());
+            case 7003:
+                throw new Exception("MirrorUseLimitReached".ToLocalization());
+            case 7004:
+                throw new Exception("MirrorCdkMismatch".ToLocalization());
+
+            // 资源相关错误 (404)
+            case 8001:
+                throw new Exception("CurrentResourcesNotSupportMirror".ToLocalization());
+
+            // 参数校验错误 (400)
+            case 8002:
+                throw new Exception($"InvalidOS: {errorMsg}".ToLocalization());
+            case 8003:
+                throw new Exception($"InvalidArch: {errorMsg}".ToLocalization());
+            case 8004:
+                throw new Exception($"InvalidChannel: {errorMsg}".ToLocalization());
+
+            // 未分类错误
+            case 1:
+                throw new Exception($"BusinessError: {errorMsg}".ToLocalization());
+
+            default:
+                throw new Exception($"UnknownErrorCode: [{code}] {errorMsg}".ToLocalization());
+        }
+    }
+
+    #endregion
 
     private static string GetLocalVersion()
     {
@@ -1002,48 +1030,68 @@ public static class VersionChecker
     {
         try
         {
-            string latestVersionNumber = ExtractVersionNumber(latestVersion);
-            string localVersionNumber = ExtractVersionNumber(localVersion);
-
-            Version latest = new Version(latestVersionNumber);
-            Version local = new Version(localVersionNumber);
-
-            return latest.CompareTo(local) > 0;
+            var normalizedLatest = ParseAndNormalizeVersion(latestVersion);
+            var normalizedLocal = ParseAndNormalizeVersion(localVersion);
+            return normalizedLatest.ComparePrecedenceTo(normalizedLocal) > 0;
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             LoggerHelper.Error(ex);
             return false;
         }
     }
 
-    private static string ExtractVersionNumber(string versionString)
+    private static SemVersion ParseAndNormalizeVersion(string version)
     {
-        if (versionString == "Debug")
-            versionString = "0.0.1";
+        // 移除v前缀和前后空格
+        var sanitized = version.Trim().TrimStart('v', 'V');
 
-        if (versionString.StartsWith("v") || versionString.StartsWith("V"))
+        // 分离构建元数据和预发布标签
+        var buildSeparatorIndex = sanitized.IndexOf('+');
+        var prereleaseSeparatorIndex = sanitized.IndexOf('-');
+
+        var versionPart = sanitized;
+        var suffix = "";
+
+        // 提取基础版本部分
+        if (prereleaseSeparatorIndex > 0 || buildSeparatorIndex > 0)
         {
-            versionString = versionString.Substring(1);
+            var firstSpecialIndex = new[]
+                {
+                    prereleaseSeparatorIndex,
+                    buildSeparatorIndex
+                }
+                .Where(i => i > 0)
+                .DefaultIfEmpty(-1)
+                .Min();
+
+            if (firstSpecialIndex > 0)
+            {
+                versionPart = sanitized.Substring(0, firstSpecialIndex);
+                suffix = sanitized.Substring(firstSpecialIndex);
+            }
         }
 
-        var parts = versionString.Split('-');
-        var mainVersionPart = parts[0];
+        // 分割版本号组件
+        var versionComponents = versionPart.Split('.')
+            .Select(s => int.TryParse(s, out var num) ? num : 0)
+            .ToList();
 
-        var versionComponents = mainVersionPart.Split('.');
-        while (versionComponents.Length < 4)
+        // 标准化为三位版本号
+        while (versionComponents.Count < 3)
         {
-            mainVersionPart += ".0";
-            versionComponents = mainVersionPart.Split('.');
+            versionComponents.Add(0);
         }
 
-        if (Version.TryParse(mainVersionPart, out _))
+        if (versionComponents.Count > 3)
         {
-            return mainVersionPart;
+            versionComponents = versionComponents.Take(3).ToList();
         }
 
-        throw new FormatException("无法解析版本号: " + versionString);
+        // 重组标准化版本字符串
+        var normalized = $"{versionComponents[0]}.{versionComponents[1]}.{versionComponents[2]}{suffix}";
+
+        return SemVersion.Parse(normalized, SemVersionStyles.AllowV);
     }
 
     async private static Task<bool> DownloadFileAsync(string url, string filePath, ProgressBar? progressBar, string key)
@@ -1222,7 +1270,39 @@ public static class VersionChecker
             CopyFolder(subDirectory, destinationSubDirectory);
         }
     }
+// 修改 DirectoryMerge 方法中的文件复制逻辑
+    private static void DirectoryMerge(string sourceDirName, string destDirName)
+    {
+        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+        DirectoryInfo[] dirs = dir.GetDirectories();
 
+        if (!dir.Exists)
+        {
+            throw new DirectoryNotFoundException("Source directory does not exist or could not be found: " + sourceDirName);
+        }
+
+        if (!Directory.Exists(destDirName))
+        {
+            Directory.CreateDirectory(destDirName);
+        }
+        foreach (FileInfo file in dir.GetFiles())
+        {
+            string tempPath = Path.Combine(destDirName, file.Name);
+            try
+            {
+
+                file.CopyTo(tempPath, true);
+            }
+            catch (IOException)
+            {
+            }
+        }
+        foreach (DirectoryInfo subDir in dirs)
+        {
+            string tempPath = Path.Combine(destDirName, subDir.Name);
+            DirectoryMerge(subDir.FullName, tempPath);
+        }
+    }
     private static void SaveAnnouncement(JToken? releaseData, string from)
     {
         try

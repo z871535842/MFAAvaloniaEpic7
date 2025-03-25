@@ -1034,4 +1034,13 @@
     <data name="Resource" xml:space="preserve">
         <value>Resource</value>
     </data>
+    <data name="MirrorCdkExpired" xml:space="preserve">
+        <value>CDK has expired, please renew and try again.</value>
+    </data>
+    <data name="MirrorCdkInvalid" xml:space="preserve">
+        <value>CDK is invalid, please check your input.</value>
+    </data>
+    <data name="MirrorCdkMismatch" xml:space="preserve">
+        <value>CDK type does not match the resource.</value>
+    </data>
 </root>

@@ -112,11 +112,27 @@ jobs:
             arch: arm64
             compress_cmd: "7z a -tzip"
             ext: zip
-            
       fail-fast: false
 
     steps:
-      - name: Unified ZIP Packaging  # 全平台ZIP压缩
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+          config-file: NuGet.config
+
+      - name: Restore Dependencies
+        run: dotnet restore
+        env:
+          NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
+      - name: Build Solution
+        run: dotnet publish -c Release -r ${{ matrix.platform }}-${{ matrix.arch }}
+
+      - name: Unified ZIP Packaging 
         shell: bash
         run: |
           BUILD_DIR="bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/publish"
@@ -147,7 +163,7 @@ jobs:
     name: Create Release
     if: ${{ needs.meta.outputs.is_release == 'true' }}
     runs-on: ubuntu-latest
-    needs: [meta, build, changelog]
+    needs: [meta, build]
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4

@@ -31,9 +31,10 @@ public partial class RootViewModel : ViewModelBase
             var major = version.Major;
             var minor = version.Minor >= 0 ? version.Minor : 0;
             var patch = version.Build >= 0 ? version.Build : 0;
-            return SemVersion.Parse($"{major}.{minor}.{patch}").ToString();
+            return $"v{SemVersion.Parse($"{major}.{minor}.{patch}")}";
         }
     }
+    
     [ObservableProperty] private string? _resourceName;
 
     [ObservableProperty] private bool _isResourceNameVisible;

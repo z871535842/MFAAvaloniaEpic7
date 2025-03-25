@@ -5,7 +5,7 @@ public class Program
 {
     static void Main(string[] args)
     {
-        Thread.Sleep(3000);
+        Thread.Sleep(5000);
         // 验证参数数量[2,4](@ref)
         if (args.Length != 2 && args.Length != 4) // 网页[4]参数规范
         {
@@ -29,9 +29,16 @@ public class Program
             if (File.Exists(sourcePath))
             {
                 // 文件复制（覆盖模式）
-                File.Copy(sourcePath, destPath, true);
-                Console.WriteLine($"文件已复制到: {destPath}");
-
+                try
+                {
+                    File.Copy(sourcePath, destPath, true);
+                    Console.WriteLine($"文件已复制到: {destPath}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"文件复制失败: {e}");
+                }
+                
                 // 删除源文件
                 File.Delete(sourcePath);
                 Console.WriteLine("源文件已删除");
@@ -58,7 +65,13 @@ public class Program
                 Directory.Delete(sourcePath, true);
                 Console.WriteLine("源目录已删除");
             }
-            
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"操作失败: {ex.Message}");
+        }
+        try
+        {
             if (args.Length == 4)
             {
                 string oldAppName = args[2];
@@ -66,10 +79,7 @@ public class Program
                 string originalExePath = Path.Combine(AppContext.BaseDirectory, oldAppName);
                 string newExePath = Path.Combine(AppContext.BaseDirectory, newAppName);
 
-                if (File.Exists(newExePath))
-                {
-                    File.Delete(newExePath); // 网页[5]覆盖逻辑
-                }
+
                 File.Move(originalExePath, newExePath); // 网页[1]重命名方案
                 Console.WriteLine($"程序已重命名为: {newAppName}");
 

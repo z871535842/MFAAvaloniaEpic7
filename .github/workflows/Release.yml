@@ -132,31 +132,15 @@ jobs:
       - name: Build Solution
         run: dotnet publish -c Release -r ${{ matrix.platform }}-${{ matrix.arch }}
 
-      - name: Unified ZIP Packaging 
+      - name: Unified ZIP Packaging
         shell: bash
         run: |
-            BUILD_DIR="bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/publish"
-            OUTPUT_FILE="MFAAvalonia-${{ needs.meta.outputs.tag }}-${{ matrix.platform }}-${{ matrix.arch }}.zip"
-            TEMP_DIR="${{ github.workspace }}/temp_pkg"
-
-            # 清理并创建临时目录
-            rm -rf $TEMP_DIR
-            mkdir -p $TEMP_DIR
-
-            # 复制发布文件（排除临时目录）
-            cp -r $BUILD_DIR/* $TEMP_DIR/
-
-            # 执行压缩
-            cd $TEMP_DIR
-            ${{ matrix.compress_cmd }} $OUTPUT_FILE *
-            sha256sum $OUTPUT_FILE > $OUTPUT_FILE.sha256
-
-            # 移动产物到构建目录
-            mv $OUTPUT_FILE $BUILD_DIR/
-            mv $OUTPUT_FILE.sha256 $BUILD_DIR/
-
-            # 清理临时文件
-            rm -rf $TEMP_DIR
+          BUILD_DIR="bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/publish"
+          OUTPUT_FILE="MFAAvalonia-${{ needs.meta.outputs.tag }}-${{ matrix.platform }}-${{ matrix.arch }}.zip"
+          
+          # 直接压缩构建目录
+          cd $BUILD_DIR
+          ${{ matrix.compress_cmd }} ../$OUTPUT_FILE *
 
       - name: Upload ZIP Artifacts
         uses: actions/upload-artifact@v4
@@ -164,7 +148,6 @@ jobs:
           name: ${{ matrix.platform }}-${{ matrix.arch }}
           path: |
             bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/*.zip
-            bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/*.sha256
 
   release:
     name: Create Release
@@ -177,21 +160,13 @@ jobs:
         with:
           path: artifacts
 
-      - name: Create Checksums
-        shell: bash
-        run: |
-          cd artifacts
-          find . -type f -name "*.tar.gz" -o -name "*.zip" | while read file; do
-            sha256sum "$file" > "$file.sha256"
-          done
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.meta.outputs.tag }}
           body: ${{ needs.changelog.outputs.release_body }}
           files: |
-            artifacts/**/*
+            artifacts/**/*.zip
           draft: false
           prerelease: ${{ contains(needs.meta.outputs.tag, '-') }}
           generate_release_notes: true

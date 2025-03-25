@@ -39,7 +39,8 @@
     <suki:SukiWindow.NonClientAreaContent>
         <StackPanel Orientation="Horizontal" Spacing="5">
             <TextBlock VerticalAlignment="Center" IsVisible="{Binding IsDebugMode}"
-                       FontSize="13" Text="{markup:I18n {x:Static helper:LangKeys.DebugMode}}" Foreground="{DynamicResource SukiPrimaryColor}"
+                       FontSize="13" Text="{markup:I18n {x:Static helper:LangKeys.DebugMode}}"
+                       Foreground="{DynamicResource SukiPrimaryColor}"
                        FontWeight="Bold">
             </TextBlock>
             <TextBlock VerticalAlignment="Center"
@@ -63,6 +64,21 @@
             </TextBlock>
         </StackPanel>
     </suki:SukiWindow.NonClientAreaContent>
+    <suki:SukiWindow.Title>
+        <MultiBinding Converter="{converters:TitleConverter}" Mode="OneWay">
+            <Binding Path="CustomTitle" />
+            <Binding Path="IsCustomTitleVisible" />
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.AppTitle" />
+                </x:Arguments>
+            </markup:I18nBinding>
+            <Binding Path="Version" />
+            <Binding Path="ResourceName" />
+            <Binding Path="ResourceVersion" />
+            <Binding Path="IsResourceNameVisible" />
+        </MultiBinding>
+    </suki:SukiWindow.Title>
     <suki:SukiWindow.RightWindowTitleBarControls>
         <ToggleButton
             Classes="SP Basic Round"

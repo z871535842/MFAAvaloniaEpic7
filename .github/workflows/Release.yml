@@ -4,7 +4,15 @@ on:
   push:
     tags:
       - 'v*'  # 匹配语义化版本标签，如v1.0.0
-
+      
+permissions:
+  contents: write
+  discussions: write
+  issues: write
+  pull-requests: write
+  actions: write
+  repository-projects: write
+  
 jobs:
   changelog:
     name: Generate Changelog

@@ -17,6 +17,17 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
   <img alt="platform" src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blueviolet">
   <img alt="commit" src="https://img.shields.io/github/commit-activity/m/SweetSmellFox/MFAAvalonia">
 </div>
+<div align="center">
+
+[English](./README_en.md) | [简体中文](./README.md)
+
+</div>
+
+## 预览图
+
+<p align="center">
+  <img alt="preview" src="https://github.com/SweetSmellFox/MFAAvalonia/blob/master/MFAAvalonia/Img/preview.png" width="512" height="256" />
+</p>
 
 ## 开发环境
 

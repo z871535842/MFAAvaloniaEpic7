@@ -3,16 +3,18 @@ name: Cross-Platform Release
 on:
   push:
     tags:
-      - 'v*'  # 匹配语义化版本标签，如v1.0.0
-      
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
 permissions:
   contents: write
-  discussions: write
-  issues: write
-  pull-requests: write
   actions: write
-  repository-projects: write
-  
+  checks: write
+  deployments: write
+
 jobs:
   changelog:
     name: Generate Changelog
@@ -23,7 +25,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # 获取完整提交历史
+          fetch-depth: 0
+          submodules: true
 
       - name: Generate Changelog
         uses: orhun/git-cliff-action@v4
@@ -33,25 +36,55 @@ jobs:
           args: -vv --latest --strip header
         env:
           OUTPUT: CHANGES.md
-          GITHUB_REPO: ${{ github.repository }}
+
+  meta:
+    name: Determine Release Metadata
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.set_tag.outputs.tag }}
+      is_release: ${{ steps.set_tag.outputs.is_release }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: set_tag
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            tag="v$(date +%Y%m%d)-manual"
+            echo "tag=$tag" >> $GITHUB_OUTPUT
+            echo "is_release=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          is_release=${{ startsWith(github.ref, 'refs/tags/v') }}
+          if $is_release; then
+            tag="${GITHUB_REF#refs/tags/}"
+          else
+            latest_tag=$(git describe --tags --match "v*" --abbrev=0 2>/dev/null || echo "v0.0.0")
+            commit_short=$(git rev-parse --short HEAD)
+            tag="${latest_tag}-${commit_short}-$(date +%Y%m%d)"
+          fi
+          
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "is_release=$is_release" >> $GITHUB_OUTPUT
 
   build:
-    name: Build (${{ matrix.os }})
+    name: Build (${{ matrix.platform }}-${{ matrix.arch }})
     runs-on: ${{ matrix.os }}
-    needs: changelog
+    needs: [changelog, meta]
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
         include:
           - os: ubuntu-latest
-            platform: linux-x64
-            package_cmd: tar -czvf ../MFAAvalonia-${{ github.ref_name }}-linux-x64.tar.gz *
+            platform: linux
+            arch: [x64, arm64]
           - os: macos-latest
-            platform: osx-arm64
-            package_cmd: tar -czvf ../MFAAvalonia-${{ github.ref_name }}-macos-arm64.tar.gz *
+            platform: macos
+            arch: [x64, arm64]
           - os: windows-latest
-            platform: win-x64
-            package_cmd: 7z a -tzip ../MFAAvalonia-${{ github.ref_name }}-windows-x64.zip *
+            platform: win
+            arch: [x64, arm64]
       fail-fast: false
 
     steps:
@@ -61,9 +94,8 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
+          dotnet-version: 8.0.x
           config-file: NuGet.config
-          dotnet-version: |
-            8.0.x
 
       - name: Restore Dependencies
         run: dotnet restore
@@ -71,39 +103,68 @@ jobs:
           NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
       - name: Build Solution
-        run: dotnet publish -c Release -r ${{ matrix.platform }}
+        run: dotnet publish -c Release -r ${{ matrix.platform }}-${{ matrix.arch }} -p:PublishSingleFile=true
 
       - name: Package Artifacts
         shell: bash
         run: |
-          cd bin/AnyCPU/Release/${{ matrix.platform }}/publish/
-          ${{ matrix.package_cmd }}
+          cd bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/publish/
+          case "${{ matrix.platform }}" in
+            linux|macos)
+              tar -czvf ../MFAAvalonia-${{ needs.meta.outputs.tag }}-${{ matrix.platform }}-${{ matrix.arch }}.tar.gz *
+              ;;
+            win)
+              7z a -tzip ../MFAAvalonia-${{ needs.meta.outputs.tag }}-${{ matrix.platform }}-${{ matrix.arch }}.zip *
+              ;;
+          esac
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.platform }}-build
-          path: |
-            bin/AnyCPU/Release/${{ matrix.platform }}/*.tar.gz
-            bin/AnyCPU/Release/${{ matrix.platform }}/*.zip
+          name: ${{ matrix.platform }}-${{ matrix.arch }}-build
+          path: bin/AnyCPU/Release/${{ matrix.platform }}-${{ matrix.arch }}/*.*
 
   release:
     name: Create Release
+    if: ${{ needs.meta.outputs.is_release == 'true' }}
     runs-on: ubuntu-latest
-    needs: [changelog, build]
+    needs: [meta, build]
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
+      - name: Create Checksums
+        shell: bash
+        run: |
+          cd artifacts
+          find . -type f -name "*.tar.gz" -o -name "*.zip" | while read file; do
+            sha256sum "$file" > "$file.sha256"
+          done
+
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}
+          tag_name: ${{ needs.meta.outputs.tag }}
+          body: ${{ needs.changelog.outputs.release_body }}
           files: |
             artifacts/**/*
-          body: ${{ needs.changelog.outputs.release_body }}
           draft: false
-          prerelease: false
-          discussion_category_name: Releases
+          prerelease: ${{ contains(needs.meta.outputs.tag, '-') }}
+          generate_release_notes: true
+          replace_existing: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Trigger CDN Sync
+        if: success()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'cdn-sync.yml',
+              ref: 'main'
+            })

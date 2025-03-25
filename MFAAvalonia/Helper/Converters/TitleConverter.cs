@@ -21,8 +21,6 @@ public class TitleConverter : MarkupExtension, IMultiValueConverter
         var resourceName = SafeGetValue<string>(values, 4);
         var resourceVersion = SafeGetValue<string>(values, 5);
         var isResourceVisible = SafeGetValue<bool>(values, 6);
-        var debuggerPrefix = SafeGetValue<string>(values, 7);
-        var isDebugger = SafeGetValue<bool>(values, 8);
 
         var result = $"{appName} {appVersion}";
         // 主逻辑
@@ -31,8 +29,6 @@ public class TitleConverter : MarkupExtension, IMultiValueConverter
 
         if (isResourceVisible && !string.IsNullOrEmpty(resourceName))
             result = $"{appName} {appVersion} | {resourceName} {resourceVersion}";
-        if (isDebugger)
-            result = $"{debuggerPrefix} {result}";
         return result;
     }
 

@@ -37,31 +37,31 @@
         </Style>
     </suki:SukiWindow.Styles>
     <suki:SukiWindow.NonClientAreaContent>
-        <TextBlock VerticalAlignment="Center"
-                   FontSize="13"
-                   FontWeight="Bold">
-            <TextBlock.Text>
-                <MultiBinding Converter="{converters:TitleConverter}" Mode="OneWay">
-                    <Binding Path="CustomTitle" />
-                    <Binding Path="IsCustomTitleVisible" />
-                    <markup:I18nBinding>
-                        <x:Arguments>
-                            <x:Static Member="helper:LangKeys.AppTitle" />
-                        </x:Arguments>
-                    </markup:I18nBinding>
-                    <Binding Path="Version" />
-                    <Binding Path="ResourceName" />
-                    <Binding Path="ResourceVersion" />
-                    <Binding Path="IsResourceNameVisible" />
-                    <markup:I18nBinding>
-                        <x:Arguments>
-                            <x:Static Member="helper:LangKeys.DebugMode" />
-                        </x:Arguments>
-                    </markup:I18nBinding>
-                    <Binding Path="IsDebugMode" />
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
+        <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock VerticalAlignment="Center" IsVisible="{Binding IsDebugMode}"
+                       FontSize="13" Text="{markup:I18n {x:Static helper:LangKeys.DebugMode}}" Foreground="{DynamicResource SukiPrimaryColor}"
+                       FontWeight="Bold">
+            </TextBlock>
+            <TextBlock VerticalAlignment="Center"
+                       FontSize="13"
+                       FontWeight="Bold">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{converters:TitleConverter}" Mode="OneWay">
+                        <Binding Path="CustomTitle" />
+                        <Binding Path="IsCustomTitleVisible" />
+                        <markup:I18nBinding>
+                            <x:Arguments>
+                                <x:Static Member="helper:LangKeys.AppTitle" />
+                            </x:Arguments>
+                        </markup:I18nBinding>
+                        <Binding Path="Version" />
+                        <Binding Path="ResourceName" />
+                        <Binding Path="ResourceVersion" />
+                        <Binding Path="IsResourceNameVisible" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </StackPanel>
     </suki:SukiWindow.NonClientAreaContent>
     <suki:SukiWindow.RightWindowTitleBarControls>
         <ToggleButton

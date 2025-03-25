@@ -321,7 +321,7 @@ public partial class TaskQueueView : UserControl
             oldPanel.IsVisible = false;
         }
 
-        // Introduction.Markdown = EmptyDocument;
+        Introduction.Markdown = "";
     }
 
     private void HideAllPanels()
@@ -331,7 +331,7 @@ public partial class TaskQueueView : UserControl
             panel.IsVisible = false;
         }
 
-        // Introduction.Markdown = EmptyDocument;
+        Introduction.Markdown = "";
     }
 
 

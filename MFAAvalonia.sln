@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFAAvalonia", "MFAAvalonia\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyStaticGenerator", "LazyStaticGenerator\LazyStaticGenerator.csproj", "{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFAUpdater", "MFAUpdater\MFAUpdater.csproj", "{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C05457BE-61C5-4732-B3F6-3BC1C1C390AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

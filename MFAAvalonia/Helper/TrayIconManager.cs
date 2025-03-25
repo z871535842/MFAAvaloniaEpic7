@@ -20,7 +20,6 @@ public class TrayIconManager
 
     public static void InitializeTrayIcon(Application application, RootView mainWindow, RootViewModel viewModel)
     {
-        var i18nExtension = new I18nExtension(LangKeys.AppTitle);
         // 创建 TrayIcon 实例
         _trayIcon = new TrayIcon
         {

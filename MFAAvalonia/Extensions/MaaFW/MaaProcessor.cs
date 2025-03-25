@@ -1181,11 +1181,6 @@ public class MaaProcessor
 
     public void Start(bool onlyStart = false, bool checkUpdate = false)
     {
-        if (onlyStart && Instances.TaskQueueViewModel.CurrentDevice == null)
-        {
-            ToastHelper.Warn("CannotStart".ToLocalization());
-            return;
-        }
         if (InitializeData())
         {
             var tasks = Instances.TaskQueueViewModel.TaskItemViewModels.ToList().FindAll(task => task.IsChecked);

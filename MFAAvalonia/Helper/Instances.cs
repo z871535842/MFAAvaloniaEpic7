@@ -58,7 +58,7 @@ public static partial class Instances
     /// </summary>
     public static void ShutdownApplication()
     {
-        ApplicationLifetime.MainWindow?.Close();
+        DispatcherHelper.RunOnMainThread(() => ApplicationLifetime.MainWindow?.Close());
     }
 
     /// <summary>
@@ -214,9 +214,9 @@ public static partial class Instances
     private static SettingsViewModel _settingsViewModel;
     private static ResourcesView _resourcesView;
     private static ResourcesViewModel _resourcesViewModel;
-    
+
     private static AnnouncementViewModel _announcementViewModel;
-    
+
     private static ConnectSettingsUserControl _connectSettingsUserControl;
     private static ConnectSettingsUserControlModel _connectSettingsUserControlModel;
     private static GuiSettingsUserControl _guiSettingsUser;

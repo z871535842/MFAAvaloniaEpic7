@@ -19,6 +19,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -188,7 +189,7 @@ public static class VersionChecker
                 DispatcherHelper.RunOnMainThread(() =>
                 {
                     Instances.ToastManager.CreateToast().WithTitle("SoftwareUpdate".ToLocalization())
-                        .WithTitle("MFA" + "NewVersionAvailableLatestVersion".ToLocalization() + latestVersion).Dismiss().After(TimeSpan.FromSeconds(6))
+                        .WithContent("MFA" + "NewVersionAvailableLatestVersion".ToLocalization() + latestVersion).Dismiss().After(TimeSpan.FromSeconds(6))
                         .WithActionButtonNormal("Later".ToLocalization(), _ => { }, true)
                         .WithActionButton("Update".ToLocalization(), _ => UpdateMFAAsync(), true).Queue();
                 });
@@ -561,7 +562,11 @@ public static class VersionChecker
             SetText(textBlock, "ApplyingUpdate".ToLocalization());
             // 执行安全更新
             SetProgress(progress, 80);
-            await ApplySecureUpdate(extractDir, tempPath);
+            var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
+            var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
+            var sourceBytes = Encoding.UTF8.GetBytes(extractDir);
+            var sourceDirectory = Encoding.UTF8.GetString(sourceBytes);
+            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
 
             SetProgress(progress, 100);
             Thread.Sleep(500);
@@ -592,24 +597,49 @@ public static class VersionChecker
         return false;
     }
 
-    async private static Task ApplySecureUpdate(string extractDir, string tempPath)
+    async private static Task ApplySecureUpdate(string source, string target, string oldName = "", string newName = "")
     {
-        var backupDir = CreateVersionBackup("MFA_Self");
-        await ReplaceFilesWithRetry(extractDir, backupDir);
+        string updaterName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+            ? "MFAUpdater.exe"
+            : "MFAUpdater";
 
-        // 清理临时文件
-        try { Directory.Delete(tempPath, true); }
-        catch (IOException ex) { LoggerHelper.Warning($"清理失败: {ex.Message}"); }
+        string updaterPath = Path.Combine(AppContext.BaseDirectory, updaterName);
 
-        // 延迟重启
+        if (!File.Exists(updaterPath))
+        {
+            LoggerHelper.Error($"更新器缺失: {updaterPath}");
+            throw new FileNotFoundException("关键组件缺失，无法完成更新");
+        }
+
         var psi = new ProcessStartInfo
         {
-            FileName = Process.GetCurrentProcess().MainModule.FileName,
+            FileName = updaterName,
             WorkingDirectory = AppContext.BaseDirectory,
-            UseShellExecute = true
+            UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
+            Arguments = (string.IsNullOrWhiteSpace(oldName) || string.IsNullOrWhiteSpace(newName)) ? $"{source} {target}" : $"{source} {target} {oldName} {newName}",
+            CreateNoWindow = true,
+            WindowStyle = ProcessWindowStyle.Hidden
         };
-        Process.Start(psi);
-        Instances.ShutdownApplication();
+        
+        LoggerHelper.Info($"{AppContext.BaseDirectory}{updaterName} {source} {target} {oldName} {newName}");
+        
+        try
+        {
+            using var updaterProcess = Process.Start(psi);
+            if (updaterProcess?.HasExited == false)
+            {
+                LoggerHelper.Info($"更新器已启动(PID:{updaterProcess.Id})");
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"启动失败: {ex.Message}");
+            throw;
+        }
+        finally
+        {
+            Environment.Exit(0);
+        }
     }
 
     private static string CreateVersionBackup(string dir)
@@ -715,14 +745,12 @@ public static class VersionChecker
             ZipFile.ExtractToDirectory(tempZip, extractDir);
             SetProgress(progress, 60);
 
-            await ReplaceFilesWithRetry(
-                sourceDir: Path.Combine(extractDir, "bin"), // 指定解压后的bin目录
-                backupDir: CreateVersionBackup("MFA_MaaFW"),
-                maxRetry: 3
-            );
-
+            var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
+            var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
+            var sourceBytes = Encoding.UTF8.GetBytes(Path.Combine(extractDir, "bin"));
+            var sourceDirectory = Encoding.UTF8.GetString(utf8Bytes);
             // 清理与重启（复用ApplySecureUpdate）
-            await ApplySecureUpdate(extractDir, tempPath);
+            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory);
             SetProgress(progress, 100);
         }
         finally
@@ -819,41 +847,35 @@ public static class VersionChecker
 
     private static string GetDownloadUrlFromGitHubRelease(string version, string owner, string repo)
     {
+        // 获取当前运行环境信息
+        var osPlatform = GetNormalizedOSPlatform();
+        var cpuArch = GetNormalizedArchitecture();
+
         var releaseUrl = $"https://api.github.com/repos/{owner}/{repo}/releases/tags/{version}";
         using var httpClient = new HttpClient();
-        httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
-        httpClient.DefaultRequestHeaders.Accept.TryParseAdd("application/json");
+        httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("MFAComponentUpdater/1.0");
+        httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+
         try
         {
             var response = httpClient.GetAsync(releaseUrl).Result;
             if (response.IsSuccessStatusCode)
             {
-                var read = response.Content.ReadAsStringAsync();
-                read.Wait();
-                var jsonResponse = read.Result;
-
+                var jsonResponse = response.Content.ReadAsStringAsync().Result;
                 var releaseData = JObject.Parse(jsonResponse);
 
-                if (releaseData["assets"] is JArray assets && assets.Count > 0)
+                if (releaseData["assets"] is JArray { Count: > 0 } assets)
                 {
-                    var targetUrl = "";
-                    foreach (var asset in assets)
-                    {
-                        var browserDownloadUrl = asset["browser_download_url"]?.ToString();
-                        if (!string.IsNullOrEmpty(browserDownloadUrl))
+                    var orderedAssets = assets
+                        .Select(asset => new
                         {
-                            if (browserDownloadUrl.EndsWith(".zip") || browserDownloadUrl.EndsWith(".7z") || browserDownloadUrl.EndsWith(".rar"))
-                            {
-                                targetUrl = browserDownloadUrl;
-                                break;
-                            }
-                        }
-                    }
-                    if (string.IsNullOrEmpty(targetUrl))
-                    {
-                        targetUrl = assets[0]["browser_downloadUrl"]?.ToString();
-                    }
-                    return targetUrl;
+                            Url = asset["browser_download_url"]?.ToString(),
+                            Name = asset["name"]?.ToString().ToLower()
+                        })
+                        .OrderByDescending(a => GetAssetPriority(a.Name, osPlatform, cpuArch))
+                        .ToList();
+
+                    return orderedAssets.FirstOrDefault()?.Url ?? string.Empty;
                 }
             }
             else if (response.StatusCode == HttpStatusCode.Forbidden && response.ReasonPhrase.Contains("403"))
@@ -873,6 +895,62 @@ public static class VersionChecker
             throw new Exception($"{e.Message}");
         }
         return string.Empty;
+    }
+
+// 标准化操作系统标识
+    private static string GetNormalizedOSPlatform()
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return "win";
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            return "macos";
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            return "linux";
+        return "unknown";
+    }
+
+// 标准化硬件架构标识
+    private static string GetNormalizedArchitecture()
+    {
+        var arch = RuntimeInformation.ProcessArchitecture.ToString().ToLower();
+        return arch switch
+        {
+            "x64" => "x86_64", // 统一x64和amd64标识
+            "arm64" => "arm64",
+            _ => "unknown"
+        };
+    }
+
+// 资源优先级评分算法
+    private static int GetAssetPriority(string fileName, string targetOS, string targetArch)
+    {
+        if (string.IsNullOrEmpty(fileName)) return 0;
+
+        var patterns = new Dictionary<string, int>
+        {
+            // 完全匹配最高优先级（如：win-x86_64）
+            {
+                $"{targetOS}-{targetArch}", 100
+            },
+
+            // 次优匹配（如：win-amd64或win-x64）
+            {
+                $"{targetOS}-(amd64|x64)", 80
+            },
+            {
+                $"{targetOS}", 60
+            }, // 仅匹配操作系统
+            {
+                $"{targetArch}", 40
+            } // 仅匹配架构
+        };
+
+        foreach (var pattern in patterns)
+        {
+            if (Regex.IsMatch(fileName, pattern.Key, RegexOptions.IgnoreCase))
+                return pattern.Value;
+        }
+        return 0;
     }
 
     private static void GetDownloadUrlFromMirror(string version,
@@ -1159,12 +1237,12 @@ public static class VersionChecker
                 SetProgress(progressBar, progressPercentage);
                 if (stopwatch.ElapsedMilliseconds >= 100)
                 {
-                    DispatcherHelper.RunOnMainThread(() =>
-                        Instances.TaskQueueViewModel.OutputDownloadProgress(
-                            totalBytesRead,
-                            totalBytes ?? 0,
-                            (int)bytesPerSecond,
-                            (currentTime - startTime).TotalSeconds));
+                    // DispatcherHelper.RunOnMainThread(() =>
+                    //     Instances.TaskQueueViewModel.OutputDownloadProgress(
+                    //         totalBytesRead,
+                    //         totalBytes ?? 0,
+                    //         (int)bytesPerSecond,
+                    //         (currentTime - startTime).TotalSeconds));
                     stopwatch.Restart();
                 }
             }

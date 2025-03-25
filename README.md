@@ -29,16 +29,12 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
   <img alt="preview" src="https://github.com/SweetSmellFox/MFAAvalonia/blob/master/MFAAvalonia/Img/preview.png" width="512" height="256" />
 </p>
 
-## 开发环境
+## 使用需求
 
 - .NET 8.0
+- 一个基于`MaaFramework`的资源项目
 
 ## 说明
-
-### 使用需求
-
-- .NET 8 运行库
-- 一个基于`MaaFramework`的资源项目
 
 ### 如何使用
 

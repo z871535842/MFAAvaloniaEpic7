@@ -144,8 +144,8 @@ Use controller[0] to control the default controller.
 
 - Some areas are not fully developed yet, and contributions are welcome.
 - Placing `logo.ico` in the same directory as the exe file will replace the window icon.
-- `MFAWPF` adds multi-language support for interfaces. After creating `zh-cn.json`,`zh-tw.json` and `en-us.json` in the same directory as `interface.json`, the names of docs and tasks and the names of options can be represented by keys. MFAWPF will automatically read the values corresponding to the keys in the files according to the language. If not, it defaults to the key.
-- `MFAWPF` reads the `Announcement.md` file in the `Resource` folder as the announcement, and automatically downloads a Changelog to serve as the announcement when updating resources.
+- `MFAAvalonia` adds multi-language support for interfaces. After creating `zh-cn.json`,`zh-tw.json` and `en-us.json` in the same directory as `interface.json`, the names of docs and tasks and the names of options can be represented by keys. MFAAvalonia will automatically read the values corresponding to the keys in the files according to the language. If not, it defaults to the key.
+- `MFAAvalonia` reads the `Announcement.md` file in the `Resource` folder as the announcement, and automatically downloads a Changelog to serve as the announcement when updating resources.
 
 **Extended Task Properties in Pipeline**
 

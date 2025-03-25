@@ -71,12 +71,12 @@ public class Program
                     File.Delete(newExePath); // 网页[5]覆盖逻辑
                 }
                 File.Move(originalExePath, newExePath); // 网页[1]重命名方案
-                Console.WriteLine($"程序已重命名为: {newAppName}.exe");
+                Console.WriteLine($"程序已重命名为: {newAppName}");
 
                 // 启动新程序
                 var psi = new ProcessStartInfo
                 {
-                    FileName = newExePath,
+                    FileName = newAppName,
                     WorkingDirectory = AppContext.BaseDirectory,
                     UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows), // 网页[6][7]跨平台启动
                 };

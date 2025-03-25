@@ -35,7 +35,8 @@ jobs:
           config: cliff.toml
           args: -vv --latest --strip header
         env:
-          OUTPUT: CHANGES.md
+            OUTPUT: CHANGES.md
+            GITHUB_REPO: ${{ github.repository }}
 
   meta:
     name: Determine Release Metadata
@@ -139,7 +140,7 @@ jobs:
     name: Create Release
     if: ${{ needs.meta.outputs.is_release == 'true' }}
     runs-on: ubuntu-latest
-    needs: [meta, build]
+    needs: [meta, build, changelog]
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v4

@@ -8,9 +8,13 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+using System.Text;
 using System.Management;
 using System.Threading;
 using System.Threading.Tasks;
@@ -889,46 +893,284 @@ public class MaaProcessor
     public async Task HardRestartAdb()
     {
         var adbPath = Config.AdbDevice.AdbPath;
-        if (string.IsNullOrEmpty(adbPath))
-        {
-            return;
-        }
+        if (string.IsNullOrEmpty(adbPath)) return;
 
-        // This allows for SQL injection, but since it is not on a real database nothing horrible would happen.
-        // The following query string does what I want, but WMI does not accept it.
-        // var wmiQueryString = string.Format("SELECT ProcessId, CommandLine FROM Win32_Process WHERE ExecutablePath='{0}'", adbPath);
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            WindowsKillAdbProcesses(adbPath);
+        }
+        else
+        {
+            UnixKillAdbProcesses(adbPath);
+        }
+    }
+
+    [SupportedOSPlatform("windows")]
+    private void WindowsKillAdbProcesses(string adbPath)
+    {
         const string WmiQueryString = "SELECT ProcessId, ExecutablePath, CommandLine FROM Win32_Process";
         using var searcher = new ManagementObjectSearcher(WmiQueryString);
         using var results = searcher.Get();
+
         var query = from p in Process.GetProcesses()
                     join mo in results.Cast<ManagementObject>()
                         on p.Id equals (int)(uint)mo["ProcessId"]
-                    select new
-                    {
-                        Process = p,
-                        Path = (string)mo["ExecutablePath"],
-                    };
-        foreach (var item in query)
-        {
-            if (item.Path != adbPath)
-            {
-                continue;
-            }
+                    where ((string)mo["ExecutablePath"])?.Equals(adbPath, StringComparison.OrdinalIgnoreCase) == true
+                    select p;
 
-            // Some emulators start their ADB with administrator privilege.
-            // Not sure if this is necessary
+        KillProcesses(query);
+    }
+
+    private static void UnixKillAdbProcesses(string adbPath)
+    {
+        var processes = Process.GetProcessesByName("adb")
+            .Where(p =>
+            {
+                try
+                {
+                    return GetUnixProcessPath(p.Id)?.Equals(adbPath, StringComparison.Ordinal) == true;
+                }
+                catch
+                {
+                    return false;
+                }
+            });
+
+        KillProcesses(processes);
+    }
+
+    private static void KillProcesses(IEnumerable<Process> processes)
+    {
+        foreach (var process in processes)
+        {
             try
             {
-                item.Process.Kill();
-                await item.Process.WaitForExitAsync();
+                process.Kill();
+                process.WaitForExit();
             }
             catch
             {
-                // ignored
+                // 记录日志或忽略异常
             }
         }
-
     }
+
+    private static string GetUnixProcessPath(int pid)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var exePath = $"/proc/{pid}/exe";
+            return File.Exists(exePath) ? new FileInfo(exePath).LinkTarget : null;
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+        {
+            var output = ExecuteShellCommand($"ps -p {pid} -o comm=");
+            return string.IsNullOrWhiteSpace(output) ? null : output.Trim();
+        }
+        return null;
+    }
+
+
+    /// <summary>
+    /// 跨平台终止指定进程
+    /// </summary>
+    /// <param name="processName">进程名称（不带后缀）</param>
+    /// <param name="commandLineKeyword">命令行关键词（可选）</param>
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    public static void CloseProcessesByName(string processName, string? commandLineKeyword = null)
+    {
+        var processes = Process.GetProcesses()
+            .Where(p => IsTargetProcess(p, processName, commandLineKeyword))
+            .ToList();
+
+        foreach (var process in processes)
+        {
+            SafeTerminateProcess(process);
+        }
+    }
+
+    #region 跨平台核心逻辑
+
+    private static bool IsTargetProcess(Process process, string processName, string? keyword)
+    {
+        try
+        {
+            // 验证进程名称
+            if (!IsProcessNameMatch(process, processName))
+                return false;
+
+            // 验证命令行关键词
+            return string.IsNullOrWhiteSpace(keyword) || GetCommandLine(process).Contains(keyword, StringComparison.OrdinalIgnoreCase);
+        }
+        catch
+        {
+            return false; // 忽略无法访问的进程
+        }
+    }
+
+    private static bool IsProcessNameMatch(Process process, string targetName)
+    {
+        var actualName = Path.GetFileNameWithoutExtension(process.ProcessName);
+        return actualName.Equals(targetName, StringComparison.OrdinalIgnoreCase);
+    }
+
+    #endregion
+
+    #region 命令行获取（平台相关）
+
+    private static string GetCommandLine(Process process)
+    {
+        return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? GetWindowsCommandLine(process) : GetUnixCommandLine(process.Id);
+    }
+
+    [SupportedOSPlatform("windows")]
+    private static string GetWindowsCommandLine(Process process)
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(
+                $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {process.Id}");
+            return searcher.Get()
+                    .Cast<ManagementObject>()
+                    .FirstOrDefault()?["CommandLine"]?.ToString()
+                ?? string.Empty;
+        }
+        catch
+        {
+            return string.Empty;
+        }
+    }
+
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static string GetUnixCommandLine(int pid)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            try
+            {
+                var cmdlinePath = $"/proc/{pid}/cmdline";
+                return File.Exists(cmdlinePath) ? File.ReadAllText(cmdlinePath, Encoding.UTF8).Replace('\0', ' ') : string.Empty;
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+        else // macOS
+        {
+            var output = ExecuteShellCommand($"ps -p {pid} -o command=");
+            return output?.Trim() ?? string.Empty;
+        }
+    }
+
+    #endregion
+
+    #region 进程终止（带权限处理）
+
+    private static void SafeTerminateProcess(Process process)
+    {
+        try
+        {
+            if (process.HasExited) return;
+
+            if (NeedElevation(process))
+            {
+                ElevateKill(process.Id);
+            }
+            else
+            {
+                process.Kill();
+                process.WaitForExit(5000);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"[Error] 终止进程失败: {process.ProcessName} ({process.Id}) - {ex.Message}");
+        }
+        finally
+        {
+            process.Dispose();
+        }
+    }
+
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static bool NeedElevation(Process process)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            return false;
+
+        try
+        {
+            var uid = GetUnixUserId();
+            var processUid = GetProcessUid(process.Id);
+            return uid != processUid;
+        }
+        catch
+        {
+            return true; // 无法获取时默认需要提权
+        }
+    }
+
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static void ElevateKill(int pid)
+    {
+        ExecuteShellCommand($"sudo kill -9 {pid}");
+    }
+
+    #endregion
+
+    #region Unix辅助方法
+
+    [DllImport("libc", EntryPoint = "getuid")]
+    private static extern uint GetUid();
+
+    private static uint GetUnixUserId() => GetUid();
+
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
+    private static uint GetProcessUid(int pid)
+    {
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            var statusPath = $"/proc/{pid}/status";
+            var uidLine = File.ReadLines(statusPath)
+                .FirstOrDefault(l => l.StartsWith("Uid:"));
+            return uint.Parse(uidLine?.Split('\t')[1] ?? "0");
+        }
+        else // macOS
+        {
+            var output = ExecuteShellCommand($"ps -p {pid} -o uid=");
+            return uint.TryParse(output?.Trim(), out var uid) ? uid : 0;
+        }
+    }
+
+    private static string? ExecuteShellCommand(string command)
+    {
+        try
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = "/bin/bash",
+                Arguments = $"-c \"{command}\"",
+                RedirectStandardOutput = true,
+                UseShellExecute = false
+            };
+
+            using var process = Process.Start(psi);
+            return process?.StandardOutput.ReadToEnd();
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    #endregion
     public async Task TestConnecting()
     {
         await GetTaskerAsync();
@@ -1490,26 +1732,7 @@ public class MaaProcessor
     {
         CloseSoftware(Instances.ShutdownApplication);
     }
-    private static void CloseProcessesByName(string processName, string emulatorConfig)
-    {
-        var processes = Process.GetProcesses().Where(p => p.ProcessName.StartsWith(processName));
-        foreach (var process in processes)
-        {
-            try
-            {
-                var commandLine = GetCommandLine(process);
-                if (string.IsNullOrEmpty(emulatorConfig) || commandLine.ToLower().Contains(emulatorConfig.ToLower()))
-                {
-                    process.Kill();
-                    break;
-                }
-            }
-            catch (Exception ex)
-            {
-                LoggerHelper.Error($"Error closing process: {ex.Message}");
-            }
-        }
-    }
+
     private void HandleStopException(Exception ex)
     {
         LoggerHelper.Error($"Stop operation failed: {ex.Message}");
@@ -1594,27 +1817,6 @@ public class MaaProcessor
             await Task.Delay(1000, token);
         }
 
-    }
-
-    private static string GetCommandLine(Process process)
-    {
-        return GetCommandLine(process.Id);
-    }
-
-    private static string GetCommandLine(int processId)
-    {
-        var commandLine = string.Empty;
-
-        // 使用 WMI 查询命令行参数
-        var query = $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {processId}";
-        using var searcher = new ManagementObjectSearcher(query);
-
-        foreach (var obj in searcher.Get())
-        {
-            commandLine = obj["CommandLine"]?.ToString() ?? string.Empty;
-        }
-
-        return commandLine;
     }
 
     #endregion

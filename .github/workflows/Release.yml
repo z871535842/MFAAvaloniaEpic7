@@ -166,16 +166,5 @@ jobs:
           generate_release_notes: true
           replace_existing: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.MFA_TOKEN }}
 
-      - name: Trigger CDN Sync
-        if: success()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'cdn-sync.yml',
-              ref: 'main'
-            })

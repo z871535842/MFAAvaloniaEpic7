@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyStaticGenerator", "Lazy
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MFAUpdater", "MFAUpdater\MFAUpdater.csproj", "{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SukiUI", "SukiUI\SukiUI.csproj", "{07048BB2-1A22-48C9-87F9-34D4664DC2A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B13E6AA2-CFE7-41F5-91EF-7F1C53566680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07048BB2-1A22-48C9-87F9-34D4664DC2A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07048BB2-1A22-48C9-87F9-34D4664DC2A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07048BB2-1A22-48C9-87F9-34D4664DC2A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07048BB2-1A22-48C9-87F9-34D4664DC2A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

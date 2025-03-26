@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 namespace MFAAvalonia.Extensions.MaaFW;
 #pragma warning  disable CS4014 // 由于此调用不会等待，因此在此调用完成之前将会继续执行当前方法.
 #pragma warning  disable CS1998 // 此异步方法缺少 "await" 运算符，将以同步方式运行。
+#pragma warning disable CA1416 //  可在 'linux', 'macOS/OSX', 'windows' 上访问此调用站点。
 public class MaaProcessor
 {
     #region 属性

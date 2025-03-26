@@ -349,7 +349,7 @@ public partial class TaskQueueView : UserControl
                 new ColumnDefinition
                 {
                     Width = new GridLength(4, GridUnitType.Star),
-                    MinWidth = 140
+                    MinWidth = 146
                 },
             },
             Margin = new Thickness(8, 0, 5, 5)
@@ -368,10 +368,14 @@ public partial class TaskQueueView : UserControl
         var numericUpDown = new NumericUpDown
         {
             Value = source.InterfaceItem.RepeatCount ?? 1,
-            Margin = new Thickness(5),
+            Margin = new Thickness(13, 5, 5, 5),
             Increment = 1,
             Minimum = -1,
         };
+        numericUpDown.Bind(IsEnabledProperty, new Binding("Idle")
+        {
+            Source = Instances.RootViewModel
+        });
         numericUpDown.ValueChanged += (_, _) =>
         {
             source.InterfaceItem.RepeatCount = Convert.ToInt32(numericUpDown.Value);

@@ -180,7 +180,7 @@ public partial class RootView : SukiWindow
             ConfigurationManager.Current.SetValue(ConfigurationKeys.EnableEdit, ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableEdit, false));
             foreach (var task in Instances.TaskQueueViewModel.TaskItemViewModels)
             {
-                if (task.InterfaceItem?.Option is { Count: > 0 })
+                if (task.InterfaceItem?.Option is { Count: > 0 } || task.InterfaceItem?.Document != null || task.InterfaceItem?.Repeatable == true)
                 {
                     task.EnableSetting = true;
                     break;

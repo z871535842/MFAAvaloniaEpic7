@@ -349,10 +349,10 @@ public partial class TaskQueueView : UserControl
                 new ColumnDefinition
                 {
                     Width = new GridLength(4, GridUnitType.Star),
-                    MinWidth = 150
+                    MinWidth = 140
                 },
             },
-            Margin = new Thickness(12, 5, 0, 5)
+            Margin = new Thickness(8, 0, 5, 5)
         };
 
         var textBlock = new TextBlock

@@ -865,7 +865,7 @@ public class MaaProcessor
         var adbPath = Config.AdbDevice.AdbPath;
         var address = Config.AdbDevice.AdbSerial;
 
-        if (string.IsNullOrEmpty(adbPath))
+        if (string.IsNullOrEmpty(adbPath) || adbPath == "adb")
         {
             return;
         }
@@ -1349,7 +1349,8 @@ public class MaaProcessor
         var isAdb = controllerType == MaaControllerTypes.Adb;
 
         RootView.AddLogByKey("ConnectingTo", null, true, isAdb ? "Emulator" : "Window");
-
+        if (Instances.TaskQueueViewModel.CurrentDevice == null)
+            Instances.TaskQueueViewModel.TryReadAdbDeviceFromConfig(false, true);
         var connected = await TryConnectAsync(token);
 
         if (!connected && isAdb)
@@ -1371,7 +1372,7 @@ public class MaaProcessor
         bool connected = false;
         var retrySteps = new List<Func<CancellationToken, Task<bool>>>
         {
-            async t => await RetryConnectionAsync(t, StartSoftware, "TryToStartEmulator", Instances.ConnectSettingsUserControlModel.RetryOnDisconnected),
+            async t => await RetryConnectionAsync(t, StartSoftware, "TryToStartEmulator", Instances.ConnectSettingsUserControlModel.RetryOnDisconnected, () => Instances.TaskQueueViewModel.TryReadAdbDeviceFromConfig(false, true)),
             async t => await RetryConnectionAsync(t, ReconnectByAdb, "TryToReconnectByAdb"),
             async t => await RetryConnectionAsync(t, RestartAdb, "RestartAdb", Instances.ConnectSettingsUserControlModel.AllowAdbRestart),
             async t => await RetryConnectionAsync(t, HardRestartAdb, "HardRestartAdb", Instances.ConnectSettingsUserControlModel.AllowAdbHardRestart)
@@ -1387,7 +1388,7 @@ public class MaaProcessor
         return connected;
     }
 
-    async private Task<bool> RetryConnectionAsync(CancellationToken token, Func<Task> action, string logKey, bool enable = true)
+    async private Task<bool> RetryConnectionAsync(CancellationToken token, Func<Task> action, string logKey, bool enable = true, Action? other = null)
     {
         if (!enable) return false;
         token.ThrowIfCancellationRequested();
@@ -1398,9 +1399,10 @@ public class MaaProcessor
             Stop();
             return false;
         }
-
+        other?.Invoke();
         return await TryConnectAsync(token);
     }
+
     async private Task<bool> TryConnectAsync(CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
@@ -1808,6 +1810,16 @@ public class MaaProcessor
                     remainingTime.ToString()
                 );
             }
+            else if (remainingTime == waitTimeInSeconds)
+            {
+                RootView.AddLogByKey("WaitSoftwareTime", null, true,
+                    Instances.TaskQueueViewModel.CurrentController == MaaControllerTypes.Adb
+                        ? "Emulator"
+                        : "Window",
+                    remainingTime.ToString()
+                );
+            }
+
 
             await Task.Delay(1000, token);
         }

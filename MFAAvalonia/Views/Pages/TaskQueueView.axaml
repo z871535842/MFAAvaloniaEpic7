@@ -134,7 +134,7 @@
                         <Grid>
                             <AdornerLayer>
                                 <ListBox
-                                    DragDrop.AllowDrop="True"
+                                    DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                     DragDrop.DragLeave="OnDragLeave"
                                     DragDrop.DragOver="OnDragOver"
                                     DragDrop.Drop="OnDrop"
@@ -156,6 +156,7 @@
                                                     Content="{Binding Name}"
                                                     Grid.Column="0"
                                                     HorizontalAlignment="Left"
+                                                    IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                                     IsChecked="{Binding IsCheckedWithNull}"
                                                     ToolTip.Placement="Right"
                                                     ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}">

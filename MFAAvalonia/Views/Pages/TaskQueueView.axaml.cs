@@ -389,12 +389,9 @@ public partial class TaskQueueView : UserControl
     private void AddOption(Panel panel, MaaInterface.MaaInterfaceSelectOption option, DragItemViewModel source)
     {
         if (MaaProcessor.Interface?.Option?.TryGetValue(option.Name ?? string.Empty, out var interfaceOption) != true) return;
-
-        var converter = new CustomIsEnabledConverter();
-
         Control control = interfaceOption.Cases.ShouldSwitchButton(out var yes, out var no)
-            ? CreateToggleControl(option, yes, no, source, converter)
-            : CreateComboControl(option, interfaceOption, source, converter);
+            ? CreateToggleControl(option, yes, no, source)
+            : CreateComboControl(option, interfaceOption, source);
 
         panel.Children.Add(control);
     }
@@ -403,8 +400,8 @@ public partial class TaskQueueView : UserControl
         MaaInterface.MaaInterfaceSelectOption option,
         int yesValue,
         int noValue,
-        DragItemViewModel source,
-        IMultiValueConverter? customConverter)
+        DragItemViewModel source
+    )
     {
         var button = new ToggleSwitch
         {
@@ -420,20 +417,10 @@ public partial class TaskQueueView : UserControl
             VerticalAlignment = VerticalAlignment.Center
         };
 
-        var multiBinding = new MultiBinding
-        {
-            Converter = customConverter,
-            Mode = BindingMode.OneWay
-        };
-        multiBinding.Bindings.Add(new Binding("IsCheckedWithNull")
-        {
-            Source = source
-        });
-        multiBinding.Bindings.Add(new Binding("Idle")
+        button.Bind(IsEnabledProperty, new Binding("Idle")
         {
             Source = Instances.RootViewModel
         });
-        button.Bind(IsEnabledProperty, multiBinding);
 
 
         button.IsCheckedChanged += (_, _) =>
@@ -482,8 +469,7 @@ public partial class TaskQueueView : UserControl
     private Grid CreateComboControl(
         MaaInterface.MaaInterfaceSelectOption option,
         MaaInterface.MaaInterfaceOption interfaceOption,
-        DragItemViewModel source,
-        IMultiValueConverter? customConverter)
+        DragItemViewModel source)
     {
         var grid = new Grid
         {
@@ -513,20 +499,11 @@ public partial class TaskQueueView : UserControl
             SelectedIndex = option.Index ?? 0,
         };
 
-        var multiBinding = new MultiBinding
-        {
-            Converter = customConverter,
-            Mode = BindingMode.OneWay
-        };
-        multiBinding.Bindings.Add(new Binding("IsCheckedWithNull")
-        {
-            Source = source
-        });
-        multiBinding.Bindings.Add(new Binding("Idle")
+        
+        combo.Bind(IsEnabledProperty, new Binding("Idle")
         {
             Source = Instances.RootViewModel
         });
-        combo.Bind(IsEnabledProperty, multiBinding);
 
         combo.SelectionChanged += (_, _) =>
         {

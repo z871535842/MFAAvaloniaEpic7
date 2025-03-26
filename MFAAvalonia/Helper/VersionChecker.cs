@@ -1368,7 +1368,6 @@ public static class VersionChecker
             string tempPath = Path.Combine(destDirName, file.Name);
             try
             {
-
                 file.CopyTo(tempPath, true);
             }
             catch (IOException)

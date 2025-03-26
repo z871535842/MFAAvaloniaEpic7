@@ -381,9 +381,9 @@ public class MaaProcessor
     public bool InitializeData(Collection<DragItemViewModel>? dragItem = null)
     {
         var (name, version, customTitle) = ReadInterface();
-        if (!string.IsNullOrWhiteSpace(name))
+        if (!string.IsNullOrWhiteSpace(name) && !name.Equals("debug", StringComparison.OrdinalIgnoreCase))
             Instances.RootViewModel.ShowResourceName(name);
-        if (!string.IsNullOrWhiteSpace(version))
+        if (!string.IsNullOrWhiteSpace(version) && !version.Equals("debug", StringComparison.OrdinalIgnoreCase))
         {
             Instances.RootViewModel.ShowResourceVersion(version);
             Instances.VersionUpdateSettingsUserControlModel.ResourceVersion = version;

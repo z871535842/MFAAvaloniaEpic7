@@ -84,6 +84,7 @@ public partial class RootViewModel : ViewModelBase
         IsCustomTitleVisible = true;
         IsResourceNameVisible = false;
     }
+    
     [RelayCommand]
     public void ToggleVisible()
     {

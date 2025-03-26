@@ -1745,7 +1745,7 @@ public class MaaProcessor
             await StartSoftware();
         }
 
-        Instances.TaskQueueViewModel.TryReadAdbDeviceFromConfig();
+        Instances.TaskQueueViewModel.TryReadAdbDeviceFromConfig(false);
     }
 
     private CancellationTokenSource? _emulatorCancellationTokenSource;

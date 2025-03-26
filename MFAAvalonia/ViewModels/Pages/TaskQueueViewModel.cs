@@ -523,7 +523,7 @@ public partial class TaskQueueViewModel : ViewModelBase
         LoggerHelper.Error(ex);
     }
 
-    public void TryReadAdbDeviceFromConfig()
+    public void TryReadAdbDeviceFromConfig(bool InTask = true)
     {
         if (CurrentController != MaaControllerTypes.Adb
             || !ConfigurationManager.Current.GetValue(ConfigurationKeys.RememberAdb, true)
@@ -531,7 +531,12 @@ public partial class TaskQueueViewModel : ViewModelBase
             || !ConfigurationManager.Current.TryGetValue(ConfigurationKeys.AdbDevice, out AdbDeviceInfo device,
                 new UniversalEnumConverter<AdbInputMethods>(), new UniversalEnumConverter<AdbScreencapMethods>()))
         {
-            Refresh();
+            _refreshCancellationTokenSource?.Cancel();
+            _refreshCancellationTokenSource = new CancellationTokenSource();
+            if (InTask)
+                TaskManager.RunTask(() => AutoDetectDevice(_refreshCancellationTokenSource.Token));
+            else
+                AutoDetectDevice(_refreshCancellationTokenSource.Token)
             return;
         }
 

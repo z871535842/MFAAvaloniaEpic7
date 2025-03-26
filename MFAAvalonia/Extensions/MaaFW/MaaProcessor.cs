@@ -1019,7 +1019,9 @@ public class MaaProcessor
     #endregion
 
     #region 命令行获取（平台相关）
-
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
     private static string GetCommandLine(Process process)
     {
         return RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? GetWindowsCommandLine(process) : GetUnixCommandLine(process.Id);
@@ -1069,7 +1071,9 @@ public class MaaProcessor
     #endregion
 
     #region 进程终止（带权限处理）
-
+    [SupportedOSPlatform("windows")]
+    [SupportedOSPlatform("linux")]
+    [SupportedOSPlatform("macos")]
     private static void SafeTerminateProcess(Process process)
     {
         try

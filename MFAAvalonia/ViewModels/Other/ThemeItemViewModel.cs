@@ -1,7 +1,9 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿
+using CommunityToolkit.Mvvm.ComponentModel;
 using MFAAvalonia.Helper;
 using MFAAvalonia.ViewModels.UsersControls.Settings;
 using SukiUI.Models;
+using TextMateSharp.Themes;
 
 namespace MFAAvalonia.ViewModels.Other;
 

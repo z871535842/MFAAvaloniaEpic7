@@ -517,7 +517,7 @@ public static class VersionChecker
                 if (isGithub)
                     GetLatestVersionAndDownloadUrlFromGithub(out downloadUrl, out latestVersion);
                 else
-                    GetDownloadUrlFromMirror(GetLocalVersion(), "MFAAvalonia", CDK(), out downloadUrl, out latestVersion);
+                    GetDownloadUrlFromMirror(GetLocalVersion(), "MFAAvalonia", CDK(), out downloadUrl, out latestVersion, isUI: true);
             }
             catch (Exception ex)
             {
@@ -609,13 +609,13 @@ public static class VersionChecker
             LoggerHelper.Error($"更新器缺失: {updaterPath}");
             throw new FileNotFoundException("关键组件缺失，无法完成更新");
         }
-        
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
             await chmodProcess?.WaitForExitAsync();
         }
-        
+
         var psi = new ProcessStartInfo
         {
             FileName = updaterName,
@@ -967,6 +967,7 @@ public static class VersionChecker
         bool isUI = false,
         bool onlyCheck = false)
     {
+
         if (string.IsNullOrWhiteSpace(resId))
         {
             throw new Exception("CurrentResourcesNotSupportMirror".ToLocalization());
@@ -992,7 +993,6 @@ public static class VersionChecker
         var releaseUrl = isUI
             ? $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}os={os}&arch={arch}"
             : $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}{multiplatformString}user_agent={userAgent}";
-
         using var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
         httpClient.DefaultRequestHeaders.Accept.TryParseAdd("application/json");

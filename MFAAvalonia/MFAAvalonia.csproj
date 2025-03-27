@@ -197,7 +197,7 @@
 			DestinationFolder="$(MainPublishDir)"
 			OverwriteReadOnlyFiles="true" />
 	  <Copy SourceFiles="@(WinUpdaterFiles);$(UpdaterOutputDir)MFAUpdater.dll"
-			DestinationFolder="$(MainPublishDir)"  Condition="'$(RuntimeIdentifier)' == 'win-x64' OR '$(RuntimeIdentifier)' == 'osx-arm64'"
+			DestinationFolder="$(MainPublishDir)"  Condition="'$(RuntimeIdentifier)' == 'win-x64' OR '$(RuntimeIdentifier)' == 'osx-x64' OR '$(RuntimeIdentifier)' == 'win-arm64' OR '$(RuntimeIdentifier)' == 'osx-arm64'"
 			OverwriteReadOnlyFiles="true" />
 
 	  <Exec Condition="'$(OS)' != 'Windows_NT' AND '$(RuntimeIdentifier)' != 'win-x64'"

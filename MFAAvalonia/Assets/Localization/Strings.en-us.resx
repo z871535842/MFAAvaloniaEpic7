@@ -1043,4 +1043,7 @@
     <data name="MirrorCdkMismatch" xml:space="preserve">
         <value>CDK type does not match the resource.</value>
     </data>
+    <data name="StartingAgent" xml:space="preserve">
+        <value>Starting Agent (may take a while)</value>
+    </data>
 </root>

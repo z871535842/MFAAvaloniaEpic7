@@ -104,7 +104,7 @@
                         ReferenceOutputAssembly="false"
                         SkipGetTargetFrameworkProperties="true" />
 
-	    <ProjectReference Include="../SukiUI/SukiUI.csproj" />
+	    <ProjectReference Include="../SukiUI/SukiUI.csproj"  />
 	</ItemGroup>
 	<PropertyGroup>
 		<LazyStaticGeneratedDir>$(BaseIntermediateOutputPath)\LazyStaticGenerated</LazyStaticGeneratedDir>
@@ -185,7 +185,7 @@
 	  <ItemGroup>
 		<!-- Windows 匹配 .exe -->
 		<WinUpdaterFiles Include="$(UpdaterOutputDir)MFAUpdater.exe" 
-					   Condition="'$(RuntimeIdentifier)' == 'win-x64' OR '$(RuntimeIdentifier)' == 'osx-arm64'" />
+					   Condition="'$(RuntimeIdentifier)' == 'win-x64' OR '$(RuntimeIdentifier)' == 'win-arm64'" />
 		
 		<!-- Linux/macOS 匹配无扩展名文件 -->
 		<UnixUpdaterFiles Include="$(UpdaterOutputDir)MFAUpdater" 

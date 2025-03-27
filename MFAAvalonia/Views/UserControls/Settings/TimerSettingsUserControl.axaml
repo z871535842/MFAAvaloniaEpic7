@@ -88,14 +88,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[0].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[0].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[0].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -144,14 +144,12 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[1].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[1].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+                                    SelectedTime="{Binding TimerModels.Timers[1].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -200,14 +198,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[2].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[2].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[2].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -256,14 +254,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[3].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[3].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[3].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -312,14 +310,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[4].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[4].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[4].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -368,14 +366,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[5].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[5].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[5].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -424,14 +422,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[6].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[6].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[6].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"
@@ -480,14 +478,14 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding TimerModels.Timers[7].IsOn}" Spacing="12">
                     <DockPanel>
-                        <TimePicker
-                            DockPanel.Dock="Right"
-                            Height="35"
-                            Margin="-8,0,5,0"
-                            Padding="5,5,0,0"
-                            SelectedTime="{Binding TimerModels.Timers[7].Time}"
-                            VerticalAlignment="Center"
-                            Width="205" />
+                        <TimePicker ClockIdentifier="24HourClock"
+                                    DockPanel.Dock="Right"
+                                    Height="35"
+
+
+                                    SelectedTime="{Binding TimerModels.Timers[7].Time}"
+                                    VerticalAlignment="Center"
+                                    Width="205" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="15"

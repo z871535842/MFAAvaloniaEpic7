@@ -7,7 +7,7 @@
     <converters:PlatformKeyGestureConverter x:Key="KeyGestureConverter" />
 
     <ControlTheme x:Key="SukiMenuItemStyle" TargetType="MenuItem">
-      
+
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="BorderThickness" Value="1.5" />
         <Setter Property="FontSize" Value="14" />
@@ -33,16 +33,27 @@
                                        Margin="5,-2"
                                        DockPanel.Dock="Left"
                                        Fill="{DynamicResource SukiLightBorderBrush}" />
-                            <PathIcon Name="PART_RightArrow"
-                                      Classes="Flippable"
-                                      Width="8"
-                                      Height="8"
-                                      Margin="5,0,10,0"
-                                      HorizontalAlignment="Right"
-                                      VerticalAlignment="Center"
-                                      Data="{x:Static content:Icons.ChevronRight}"
-                                      DockPanel.Dock="Right"
-                                      Foreground="{DynamicResource SukiText}" />
+                            <Border Width="24"
+                                    DockPanel.Dock="Right">
+                                <PathIcon Name="PART_RightArrow"
+                                          Classes="Flippable"
+                                          Width="8"
+                                          Height="8"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Data="{x:Static content:Icons.ChevronRight}"
+                                          Foreground="{DynamicResource SukiText}" />
+                            </Border>
+
+
+                            <TextBlock Name="PART_InputGestureText"
+                                       VerticalAlignment="Center"
+                                       Margin="20,0,0,0"
+                                       Foreground="{DynamicResource SukiMuteText}"
+                                       IsVisible="{Binding InputGesture, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                       Text="{TemplateBinding InputGesture,
+                                                          Converter={StaticResource KeyGestureConverter}}"
+                                       DockPanel.Dock="Right" />
                             <ContentPresenter Name="PART_HeaderPresenter"
                                               Margin="5,0"
                                               HorizontalAlignment="Left"
@@ -56,10 +67,6 @@
                             </ContentPresenter>
                         </DockPanel>
 
-                        <TextBlock Name="PART_InputGestureText"
-                                   VerticalAlignment="Center"
-                                   Text="{TemplateBinding InputGesture,
-                                                          Converter={StaticResource KeyGestureConverter}}" />
                         <Popup Name="PART_Popup"
                                ClipToBounds="True"
                                HorizontalOffset="-25"
@@ -86,7 +93,8 @@
                                             CornerRadius="5">
                                         <Panel Background="{DynamicResource PopupGradientBrush}">
                                             <ScrollViewer>
-                                                <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+                                                <ItemsPresenter Name="PART_ItemsPresenter"
+                                                                ItemsPanel="{TemplateBinding ItemsPanel}" />
                                             </ScrollViewer>
                                         </Panel>
                                     </Border>
@@ -146,13 +154,13 @@
         <Style Selector="^:separator">
             <Setter Property="Template">
                 <ControlTemplate>
-                    <Separator Margin="0"/>
+                    <Separator Margin="0" />
                 </ControlTemplate>
             </Setter>
         </Style>
 
         <Style Selector="^[FlowDirection=RightToLeft] /template/ Popup#PART_Popup">
-            <Setter Property="HorizontalOffset" Value="25"/>
+            <Setter Property="HorizontalOffset" Value="25" />
         </Style>
     </ControlTheme>
     <ControlTheme x:Key="{x:Type MenuItem}"

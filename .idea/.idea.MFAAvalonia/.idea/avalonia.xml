@@ -33,7 +33,24 @@
         <entry key="MFAAvalonia/Views/Windows/AnnouncementView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/Windows/ErrorView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Views/Windows/RootView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/ColorTheme/Dark.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/ColorTheme/Light.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/Experimental/DesktopEnvironment/InternalWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/InfoBar.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/SukiDialog.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/SukiWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Locale/en-us.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Locale/zh-cn.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Locale/zh-hans.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Locale/zh-hant.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/Button.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ManagedFileChooser.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/MenuItem.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TimePickerStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ToggleButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ToggleSwitchStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ToolTipStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TreeViewStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
       </map>
     </option>
   </component>

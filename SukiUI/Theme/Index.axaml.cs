@@ -268,13 +268,20 @@ public partial class SukiTheme : Styles
 
     // Localization
 
-    private static readonly Dictionary<CultureInfo, ResourceDictionary> LocaleToResource = new()
+    private static readonly Dictionary<string, ResourceDictionary> LocaleToResource = new()
     {
-        { new CultureInfo("en-US"), new en_US() },
-        { new CultureInfo("zh-CN"), new zh_CN() }
+        {
+            "en-US", new en_us()
+        },
+        {
+            "zh-Hant", new zh_hant()
+        },
+        {
+            "zh-Hans", new zh_hans()
+        }
     };
 
-    private static readonly ResourceDictionary DefaultResource = new en_US();
+    private static readonly ResourceDictionary DefaultResource = new en_us();
 
     private CultureInfo? _locale;
 
@@ -292,6 +299,8 @@ public partial class SukiTheme : Styles
                 }
                 else
                 {
+                    Console.WriteLine("Locale not found, setting to default.");
+
                     _locale = new CultureInfo("en-US");
                     foreach (var keyValue in DefaultResource) Resources[keyValue.Key] = keyValue.Value;
                 }
@@ -303,21 +312,21 @@ public partial class SukiTheme : Styles
         }
     }
 
-    private static bool TryGetLocaleResource(CultureInfo? locale, out ResourceDictionary? resourceDictionary)
+    private static bool TryGetLocaleResource(CultureInfo? info, out ResourceDictionary? resourceDictionary)
     {
-        if (Equals(locale, CultureInfo.InvariantCulture))
+        if (Equals(info, CultureInfo.InvariantCulture))
         {
             resourceDictionary = DefaultResource;
             return true;
         }
 
-        if (locale is null)
+        if (info?.Name is null)
         {
             resourceDictionary = DefaultResource;
             return false;
         }
 
-        if (LocaleToResource.TryGetValue(locale, out var resource))
+        if (LocaleToResource.TryGetValue(info.Name, out var resource))
         {
             resourceDictionary = resource;
             return true;
@@ -330,7 +339,7 @@ public partial class SukiTheme : Styles
     public static void OverrideLocaleResources(Application application, CultureInfo? culture)
     {
         if (culture is null) return;
-        if (!LocaleToResource.TryGetValue(culture, out var resources)) return;
+        if (!LocaleToResource.TryGetValue(culture.Name, out var resources)) return;
         foreach (var keyValue in resources)
         {
             application.Resources[keyValue.Key] = keyValue.Value;
@@ -340,7 +349,7 @@ public partial class SukiTheme : Styles
     public static void OverrideLocaleResources(StyledElement element, CultureInfo? culture)
     {
         if (culture is null) return;
-        if (!LocaleToResource.TryGetValue(culture, out var resources)) return;
+        if (!LocaleToResource.TryGetValue(culture.Name, out var resources)) return;
         foreach (var keyValue in resources)
         {
             element.Resources[keyValue.Key] = keyValue.Value;

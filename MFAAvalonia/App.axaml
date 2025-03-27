@@ -25,7 +25,7 @@
     </Application.Resources>
     <Application.Styles>
         <FluentTheme />
-        <sukiUi:SukiTheme Locale="zh-CN" ThemeColor="Blue" />
+        <sukiUi:SukiTheme  ThemeColor="Blue" />
         <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
         <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
         <StyleInclude Source="avares://MFAAvalonia/Views/UserControls/PasswordBox.axaml" />

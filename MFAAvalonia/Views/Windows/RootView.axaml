@@ -29,10 +29,7 @@
     xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <suki:SukiWindow.Styles>
-        <Style Selector="ToggleButton.SP:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor75}" />
-        </Style>
-        <Style Selector="ToggleButton.SP:checked">
+        <Style Selector="ToggleButton.SP:checked > PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
         </Style>
     </suki:SukiWindow.Styles>
@@ -82,14 +79,13 @@
     <suki:SukiWindow.RightWindowTitleBarControls>
         <ToggleButton
             Classes="SP Basic Round"
-            IsCheckedChanged="ToggleWindowTopMost"
-            Margin="0,-3,0,-3"
+            IsChecked="{Binding Topmost,RelativeSource={RelativeSource AncestorType={x:Type suki:SukiWindow}}, Mode=TwoWay}"
             x:Name="btnPin">
             <ToggleButton.RenderTransform>
-                <TranslateTransform X="-8" />
+                <TranslateTransform X="-5" />
             </ToggleButton.RenderTransform>
-
-            <fluent:FluentIcon Icon="Pin" IconSize="Size16" />
+            <PathIcon Data="{x:Static suki:Icons.Pin}" Width="16" Height="16"></PathIcon>
+            <!-- <fluent:FluentIcon Icon="Pin" IconSize="Size16"></fluent:FluentIcon> -->
         </ToggleButton>
     </suki:SukiWindow.RightWindowTitleBarControls>
     <suki:SukiWindow.LogoContent>

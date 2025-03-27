@@ -20,6 +20,7 @@
 
     <Color x:Key="SukiText">#222222</Color>
     <Color x:Key="SukiLowText">#555555</Color>
+    <Color x:Key="SukiMuteText">#7f7f7f</Color>
     <Color x:Key="SukiDisabledText">#ABABAB</Color>
 
     <BoxShadows x:Key="SukiLowShadow">0 0 3 0 #eaeaea</BoxShadows>

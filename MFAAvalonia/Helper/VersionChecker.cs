@@ -609,7 +609,13 @@ public static class VersionChecker
             LoggerHelper.Error($"更新器缺失: {updaterPath}");
             throw new FileNotFoundException("关键组件缺失，无法完成更新");
         }
-
+        
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
+            await chmodProcess?.WaitForExitAsync();
+        }
+        
         var psi = new ProcessStartInfo
         {
             FileName = updaterName,
@@ -982,7 +988,7 @@ public static class VersionChecker
             Architecture.Arm64 => "arm64",
             _ => "unknown"
         };
-        
+
         var multiplatformString = multiplatform ? $"os={os}&arch={arch}&" : "";
         var releaseUrl = isUI
             ? $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}os={os}&arch={arch}"
@@ -994,7 +1000,7 @@ public static class VersionChecker
 
         try
         {
- 
+
             var response = httpClient.GetAsync(releaseUrl).Result;
             var jsonResponse = response.Content.ReadAsStringAsync().Result;
             var responseData = JObject.Parse(jsonResponse);

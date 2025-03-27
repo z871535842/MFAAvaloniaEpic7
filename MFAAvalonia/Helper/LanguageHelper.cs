@@ -27,10 +27,7 @@ public static class LanguageHelper
         new("en-us", "English"),
     ];
 
-    public static Dictionary<string, CultureInfo> Cultures { get; } = new()
-    {
-        ["zh-hans"] = Thread.CurrentThread.CurrentCulture,
-    };
+    public static Dictionary<string, CultureInfo> Cultures { get; } = new() {};
 
     public static SupportedLanguage GetLanguage(string key)
     {

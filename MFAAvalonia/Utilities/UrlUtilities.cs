@@ -23,6 +23,7 @@ public static class UrlUtilities
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             Process.Start("open", url);
     }
+    
     public static OpenLinkCommand OpenLink = new();
 
     public class OpenLinkCommand : ICommand

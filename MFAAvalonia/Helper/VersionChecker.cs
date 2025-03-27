@@ -416,7 +416,7 @@ public static class VersionChecker
         var di = new DirectoryInfo(resourceDirPath);
         if (di.Exists)
         {
-            DirectoryMerge(originPath, Path.Combine(wpfDir, "resource"));
+            DirectoryMerge(originPath, wpfDir));
         }
 
         SetProgress(progress, 70);

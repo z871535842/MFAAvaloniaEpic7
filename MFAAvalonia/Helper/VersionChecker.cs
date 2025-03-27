@@ -274,10 +274,9 @@ public static class VersionChecker
         catch (Exception ex)
         {
             Dismiss(sukiToast);
-            ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}: {ex.Message}");
+            ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}", ex.Message);
             Instances.RootViewModel.SetUpdating(false);
             LoggerHelper.Error(ex);
-
             return;
         }
 
@@ -523,7 +522,7 @@ public static class VersionChecker
             catch (Exception ex)
             {
                 Dismiss(sukiToast);
-                ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}: {ex.Message}");
+                ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}", ex.Message);
                 LoggerHelper.Error(ex);
                 return;
             }
@@ -620,9 +619,9 @@ public static class VersionChecker
             CreateNoWindow = true,
             WindowStyle = ProcessWindowStyle.Hidden
         };
-        
+
         LoggerHelper.Info($"{AppContext.BaseDirectory}{updaterName} {source} {target} {oldName} {newName}");
-        
+
         try
         {
             using var updaterProcess = Process.Start(psi);
@@ -962,6 +961,15 @@ public static class VersionChecker
         bool isUI = false,
         bool onlyCheck = false)
     {
+        Console.WriteLine($"资源ID:\"{resId}\"");
+        if (string.IsNullOrWhiteSpace(resId))
+        {
+            throw new Exception("CurrentResourcesNotSupportMirror".ToLocalization());
+        }
+        if (string.IsNullOrWhiteSpace(cdk) && !onlyCheck)
+        {
+            throw new Exception("MirrorCdkInvalid".ToLocalization());
+        }
         var cdkD = onlyCheck ? string.Empty : $"cdk={cdk}&";
         var multiplatform = MaaProcessor.Interface?.Multiplatform == true;
         var os = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "win" :
@@ -974,7 +982,7 @@ public static class VersionChecker
             Architecture.Arm64 => "arm64",
             _ => "unknown"
         };
-
+        
         var multiplatformString = multiplatform ? $"os={os}&arch={arch}&" : "";
         var releaseUrl = isUI
             ? $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}os={os}&arch={arch}"
@@ -986,14 +994,15 @@ public static class VersionChecker
 
         try
         {
+ 
             var response = httpClient.GetAsync(releaseUrl).Result;
             var jsonResponse = response.Content.ReadAsStringAsync().Result;
             var responseData = JObject.Parse(jsonResponse);
-
+            Exception? exception = null;
             // 处理 HTTP 状态码
             if (!response.IsSuccessStatusCode)
             {
-                HandleHttpError(response.StatusCode, responseData);
+                exception = HandleHttpError(response.StatusCode, responseData);
             }
 
             // 处理业务错误码
@@ -1005,13 +1014,15 @@ public static class VersionChecker
 
             // 成功处理
             var data = responseData["data"]!;
-            if (!onlyCheck && !isUI)
+            if (!onlyCheck && !isUI && data != null)
             {
                 SaveAnnouncement(data, "release_note");
             }
 
-            url = data["url"]?.ToString() ?? throw new Exception("InvalidResponseData");
-            latestVersion = data["version_name"]?.ToString() ?? throw new Exception("InvalidVersionInfo");
+            url = data["url"]?.ToString() ?? string.Empty;
+            latestVersion = data["version_name"]?.ToString() ?? string.Empty;
+            if (exception != null)
+                throw exception;
         }
         catch (AggregateException ex) when (ex.InnerException is HttpRequestException httpEx)
         {
@@ -1019,29 +1030,29 @@ public static class VersionChecker
         }
         catch (Exception ex)
         {
-            throw new Exception($"RequestFailed: {ex.Message}".ToLocalization());
+            throw new Exception(ex.Message);
         }
     }
 
     #region 错误处理逻辑
 
-    private static void HandleHttpError(HttpStatusCode statusCode, JObject responseData)
+    private static Exception HandleHttpError(HttpStatusCode statusCode, JObject responseData)
     {
         var errorMsg = responseData["msg"]?.ToString() ?? "UnknownError".ToLocalization();
 
         switch (statusCode)
         {
             case HttpStatusCode.BadRequest: // 400
-                throw new Exception($"InvalidRequest: {errorMsg}".ToLocalization());
+                return new Exception($"InvalidRequest: {errorMsg}".ToLocalization());
 
             case HttpStatusCode.Forbidden: // 403
-                throw new Exception($"AccessDenied: {errorMsg}".ToLocalization());
+                return new Exception($"AccessDenied: {errorMsg}".ToLocalization());
 
             case HttpStatusCode.NotFound: // 404
-                throw new Exception($"ResourceNotFound: {errorMsg}".ToLocalization());
+                return new Exception($"ResourceNotFound: {errorMsg}".ToLocalization());
 
             default:
-                throw new Exception($"ServerError: [{(int)statusCode}] {errorMsg}".ToLocalization());
+                return new Exception($"ServerError: [{(int)statusCode}] {errorMsg}".ToLocalization());
         }
     }
 

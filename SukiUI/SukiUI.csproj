@@ -15,8 +15,8 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>6.0.0-beta8</PackageVersion>
+	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <PackageVersion>6.0.1</PackageVersion>
     <PackageDescription></PackageDescription>
     <PackageTags>avalonia;avaloniaui;ui;theme;sukiui</PackageTags>
     <PackageProjectUrl>https://github.com/kikipoulet/SukiUI</PackageProjectUrl>

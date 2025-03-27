@@ -13,7 +13,8 @@
                               Stretch="Uniform">
                             <Path.Transitions>
                                 <Transitions>
-                                    <BrushTransition Property="Fill" Duration="{DynamicResource ShortAnimationDuration}" />
+                                    <BrushTransition Property="Fill"
+                                                     Duration="{DynamicResource ShortAnimationDuration}" />
                                 </Transitions>
                             </Path.Transitions>
                         </Path>

@@ -1,15 +1,23 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using AvaloniaExtensions.Axaml.Markup;
+using FluentAvalonia.UI.Controls;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.ViewModels.Windows;
 using MFAAvalonia.Views.Windows;
+using SukiUI.Content;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Bitmap = Avalonia.Media.Imaging.Bitmap;
+using Color = System.Drawing.Color;
 
 namespace MFAAvalonia.Helper;
 
@@ -34,6 +42,7 @@ public class TrayIconManager
         {
             Source = IconHelper.WindowIcon
         });
+
         var menuItem1 = new NativeMenuItem();
         menuItem1.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.StartTask));
         menuItem1.Bind(NativeMenuItem.IsVisibleProperty, new Binding("!IsRunning")
@@ -48,7 +57,11 @@ public class TrayIconManager
             Source = viewModel,
         });
         menuItem2.Click += StopTask;
-        var menuItem3 = new NativeMenuItem();
+
+        var menuItem3 = new NativeMenuItem()
+        {
+        };
+
         menuItem3.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.SwitchLanguage));
         menuItem3.Menu = new NativeMenu();
 

@@ -11,26 +11,14 @@
             <StackPanel>
                 <TextBox Width="200"
                          Margin="5"
-                         Classes="Prefix"
-                         Text="avaloniaui.net"
-                         Watermark="https://" />
+                         Text="test"
+                         Watermark="Elem" />
+
                 <TextBox Width="200"
                          Margin="5"
-                         Classes="Suffix"
-                         Text="avaloniaui"
-                         Watermark="@gmail.com" />
-                <TextBox Width="200"
-                         Margin="5"
-                         Classes="BottomBar"
-                         Text="Elem" />
-                <TextBox Width="200"
-                         Margin="5"
-                         Text="Elem" />
-                <TextBox Width="200"
-                         Margin="5"
-                         IsEnabled="False"
-                         Text="Elem" />
-                <TextBox Classes="NoShadow" Text="Elem" />
+                         Text="test"
+                         UseFloatingWatermark="True"
+                         Watermark="Elem" />
 
                 <Panel>
                     <Border Margin="0,0,0,25" Classes="Card">

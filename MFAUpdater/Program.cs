@@ -1,103 +1,152 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Threading;
 
 public class Program
 {
+    private const int InitDelay = 5000;
     static void Main(string[] args)
     {
-        Thread.Sleep(5000);
-        // 验证参数数量[2,4](@ref)
-        if (args.Length != 2 && args.Length != 4) // 网页[4]参数规范
+        Thread.Sleep(InitDelay); // 网页[6]启动延迟优化
+
+        ValidateArguments(args); // 参数验证模块化
+        HandleFileOperations(args); // 主操作封装
+    }
+
+    private static void ValidateArguments(string[] args)
+    {
+        if (args.Length is not (2 or 4)) // C# 9模式匹配
         {
-            Console.WriteLine("用法: MFAUpdater [源路径] [目标路径] [原程序] [新程序名称] 或者 MFAUpdater [源路径] [目标路径]");
-            return;
+            Console.WriteLine("""
+                              用法: 
+                              MFAUpdater [源路径] [目标路径] [原程序] [新程序名称] 
+                              或 
+                              MFAUpdater [源路径] [目标路径]
+                              """);
+            Environment.Exit(1); // 标准化退出码
         }
+    }
 
-
-        string sourcePath = args[0];
-        string destPath = args[1];
-
+    private static void HandleFileOperations(string[] args)
+    {
         try
         {
-            if (!File.Exists(sourcePath) && !Directory.Exists(sourcePath))
-            {
-                Console.WriteLine($"错误：源路径 '{sourcePath}' 不存在");
-                return;
-            }
+            var (source, dest) = (args[0], args[1]);
 
-            // 复制操作
-            if (File.Exists(sourcePath))
-            {
-                // 文件复制（覆盖模式）
-                try
-                {
-                    File.Copy(sourcePath, destPath, true);
-                    Console.WriteLine($"文件已复制到: {destPath}");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"文件复制失败: {e}");
-                }
-                
-                // 删除源文件
-                File.Delete(sourcePath);
-                Console.WriteLine("源文件已删除");
-            }
-            else if (Directory.Exists(sourcePath))
-            {
-                // 目录复制（递归复制）
-                Directory.CreateDirectory(destPath);
-                foreach (string file in Directory.GetFiles(sourcePath))
-                {
-                    string fileName = Path.GetFileName(file);
-                    File.Copy(file, Path.Combine(destPath, fileName), true);
-                }
-                // 递归处理子目录
-                foreach (string dir in Directory.GetDirectories(sourcePath))
-                {
-                    string dirName = Path.GetFileName(dir);
-                    Directory.CreateDirectory(Path.Combine(destPath, dirName));
-                    // 这里可优化为递归调用
-                }
-                Console.WriteLine($"目录已复制到: {destPath}");
+            if (File.Exists(source))
+                HandleFileTransfer(source, dest);
+            else if (Directory.Exists(source))
+                HandleDirectoryTransfer(source, dest);
+            else
+                throw new FileNotFoundException($"路径不存在: {source}");
 
-                // 删除源目录（递归删除）
-                Directory.Delete(sourcePath, true);
-                Console.WriteLine("源目录已删除");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"操作失败: {ex.Message}");
-        }
-        try
-        {
             if (args.Length == 4)
-            {
-                string oldAppName = args[2];
-                string newAppName = args[3];
-                string originalExePath = Path.Combine(AppContext.BaseDirectory, oldAppName);
-                string newExePath = Path.Combine(AppContext.BaseDirectory, newAppName);
-
-
-                File.Move(originalExePath, newExePath); // 网页[1]重命名方案
-                Console.WriteLine($"程序已重命名为: {newAppName}");
-
-                // 启动新程序
-                var psi = new ProcessStartInfo
-                {
-                    FileName = newAppName,
-                    WorkingDirectory = AppContext.BaseDirectory,
-                    UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows), // 网页[6][7]跨平台启动
-                };
-
-                using var newProcess = Process.Start(psi);
-                Console.WriteLine($"已启动新进程 PID:{newProcess?.Id ?? -1}");
-            }
+                HandleAppRename(args[2], args[3]); // 重命名与启动分离
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"操作失败: {ex.Message}");
+            HandlePlatformSpecificErrors(ex); // 跨平台错误处理
+            Environment.Exit(ex.HResult); // 返回错误码
+        }
+    }
+
+    private static void HandleFileTransfer(string source, string dest)
+    {
+        File.Copy(source, dest, true);
+        File.Delete(source);
+        SetUnixPermissions(dest); // 网页[6][7]权限设置
+        Console.WriteLine($"文件操作完成: {dest}");
+    }
+
+    private static void HandleDirectoryTransfer(string source, string dest)
+    {
+        Directory.CreateDirectory(dest);
+
+        // 递归复制优化（网页[1]目录处理）
+        foreach (var dir in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+            Directory.CreateDirectory(dir.Replace(source, dest));
+
+        foreach (var file in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
+        {
+            var destFile = file.Replace(source, dest);
+            File.Copy(file, destFile, true);
+            SetUnixPermissions(destFile);
+        }
+
+        Directory.Delete(source, true);
+        Console.WriteLine($"目录迁移完成: {dest}");
+    }
+
+    private static void HandleAppRename(string oldName, string newName)
+    {
+        var oldPath = Path.Combine(AppContext.BaseDirectory, oldName);
+        var newPath = Path.Combine(AppContext.BaseDirectory, newName);
+
+        if (File.Exists(newPath)) File.Delete(newPath);
+        File.Move(oldPath, newPath);
+
+        SetUnixPermissions(newPath); // 网页[6]可执行权限
+
+        StartCrossPlatformProcess(newName); // 统一启动入口
+    }
+
+    private static void SetUnixPermissions(string path)
+    {
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) // 网页[1][7]平台检测
+        {
+            try
+            {
+                using var chmod = Process.Start(new ProcessStartInfo
+                {
+                    FileName = "chmod",
+                    Arguments = $"+rwx \"{path}\"",
+                    UseShellExecute = false
+                });
+                chmod?.WaitForExit();
+            }
+            catch
+            {
+                Console.WriteLine($"权限设置失败，请手动执行: sudo chmod 755 \"{path}\"");
+            }
+        }
+    }
+
+    private static void StartCrossPlatformProcess(string appName)
+    {
+        try
+        {
+            var startInfo = new ProcessStartInfo
+            {
+                WorkingDirectory = AppContext.BaseDirectory,
+                UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
+                FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? appName : $"./{appName}"
+            };
+
+            using var process = Process.Start(startInfo);
+            Console.WriteLine($"进程已启动 [PID:{process?.Id}]");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"启动失败: {ex.Message}");
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                Console.WriteLine($"尝试: chmod +x {appName} && ./{appName}");
+        }
+    }
+
+
+    private static void HandlePlatformSpecificErrors(Exception ex)
+    {
+        Console.WriteLine($"错误: {ex.Message}");
+
+        if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows) && ex is UnauthorizedAccessException)
+        {
+            Console.WriteLine("""
+                              Linux/macOS 权限问题解决方案:
+                              1. 使用 sudo 重新运行
+                              2. 检查文件所有权: ls -l
+                              3. 手动设置权限: chmod -R 755 [目标目录]
+                              """);
         }
     }
 }

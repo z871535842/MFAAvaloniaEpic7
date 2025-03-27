@@ -217,7 +217,9 @@
     </Style>
 
     
-
+    <Style Selector="ToggleSwitch:disabled">
+        <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"></Setter>
+    </Style>
  
 
 

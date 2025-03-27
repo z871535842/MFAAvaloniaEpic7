@@ -967,7 +967,6 @@ public static class VersionChecker
         bool isUI = false,
         bool onlyCheck = false)
     {
-        Console.WriteLine($"资源ID:\"{resId}\"");
         if (string.IsNullOrWhiteSpace(resId))
         {
             throw new Exception("CurrentResourcesNotSupportMirror".ToLocalization());

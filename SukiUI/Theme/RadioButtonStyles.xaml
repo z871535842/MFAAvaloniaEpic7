@@ -317,7 +317,9 @@
         <Setter Property="Opacity" Value="0" />
     </Style>
 
-
+    <Style Selector="RadioButton:disabled">
+        <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"></Setter>
+    </Style>
     <Style Selector="RadioButton:pointerover /template/ Ellipse#border">
         <Setter Property="Stroke" Value="{DynamicResource SukiBorderBrush}" />
     </Style>

@@ -18,7 +18,7 @@
                         Background="{TemplateBinding Background}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
-                        
+
                         CornerRadius="{TemplateBinding CornerRadius}"
                         TextElement.Foreground="{TemplateBinding Foreground}">
                     <Border.Transitions>
@@ -29,16 +29,20 @@
                     <Border.Resources>
                         <theme:BoolToWidthProgressConverter x:Key="WidthConverter" />
                     </Border.Resources>
-                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Orientation="Horizontal">
-                        <Viewbox  Margin="0,-5" Width="{TemplateBinding theme:ButtonExtensions.ShowProgress, Converter={StaticResource WidthConverter}}" Height="24">
+                    <StackPanel HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Orientation="Horizontal">
+                        <Viewbox Margin="0,-5"
+                                 Width="{TemplateBinding theme:ButtonExtensions.ShowProgress, Converter={StaticResource WidthConverter}}"
+                                 Height="24">
                             <Viewbox.Transitions>
                                 <Transitions>
                                     <DoubleTransition Property="Width" Duration="0:0:0.3" />
                                 </Transitions>
                             </Viewbox.Transitions>
-                       
-                           <ContentPresenter Content="{TemplateBinding theme:ButtonExtensions.ShowProgress, Converter={x:Static suki:ProgressToContentConverter.Instance}}"/>
-                          
+
+                            <ContentPresenter
+                                Content="{TemplateBinding theme:ButtonExtensions.ShowProgress, Converter={x:Static suki:ProgressToContentConverter.Instance}}" />
+
                         </Viewbox>
                         <ContentPresenter HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
@@ -91,14 +95,14 @@
                 </Transitions>
             </Setter>
         </Style>
-        
+
         <Style Selector="^:disabled /template/ Border#RootBorder">
-            <Setter Property="Opacity" Value="0.5"></Setter>
+            <Setter Property="Opacity" Value="{DynamicResource ThemeDisabledOpacity}"></Setter>
         </Style>
-        
+
         <!--  Events For Basic Button  -->
         <Style Selector="^:pointerover">
-            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
             <Style Selector="^ /template/ TextBlock">
                 <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
             </Style>
@@ -116,7 +120,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
             </Style>
             <Style Selector="^ /template/ Border">
-              <!--  <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" /> -->
+                <!--  <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" /> -->
                 <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
                 <Setter Property="RenderTransform">
                     <Setter.Value>
@@ -124,8 +128,8 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-             <Style Selector="^.Icon /template/ Border">
-              <!--  <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" /> -->
+            <Style Selector="^.Icon /template/ Border">
+                <!--  <Setter Property="Background" Value="{DynamicResource SukiCardBackground}" /> -->
                 <Setter Property="BorderBrush" Value="{DynamicResource SukiPrimaryColor}" />
                 <Setter Property="RenderTransform">
                     <Setter.Value>
@@ -163,7 +167,7 @@
 
         <!--  Classes  -->
         <Style Selector="^.Accent">
-            <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor75}"/>
+            <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor75}" />
             <Style Selector="^:pointerover">
                 <Style Selector="^ /template/ TextBlock">
                     <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor75}" />
@@ -249,7 +253,7 @@
             <Style Selector="^:pressed /template/ Border">
                 <Setter Property="Background" Value="Transparent" />
             </Style>
-          
+
             <!--  Color Variants  -->
             <Style Selector="^.Accent">
                 <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor}" />
@@ -262,7 +266,7 @@
                 <Style Selector="^ /template/ ContentPresenter">
                     <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor}" />
                 </Style>
-               
+
             </Style>
         </Style>
 
@@ -318,7 +322,7 @@
             <Style Selector="^:pressed /template/ Border">
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor75}" />
             </Style>
-          
+
             <!--  Color Variants  -->
             <Style Selector="^.Accent">
                 <Setter Property="Background" Value="{DynamicResource SukiAccentColor75}" />
@@ -328,7 +332,7 @@
                 <Style Selector="^:pressed /template/ Border">
                     <Setter Property="Background" Value="{DynamicResource SukiAccentColor}" />
                 </Style>
-                
+
             </Style>
         </Style>
 
@@ -380,7 +384,7 @@
                 <Setter Property="BorderBrush" Value="Transparent" />
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor}" />
             </Style>
-           
+
             <!--  Color Variants  -->
             <Style Selector="^.Accent">
                 <Setter Property="Foreground" Value="{DynamicResource SukiAccentColor}" />
@@ -407,14 +411,14 @@
                 <Style Selector="^:pressed /template/ Border">
                     <Setter Property="Background" Value="{DynamicResource SukiAccentColor}" />
                 </Style>
-             
+
             </Style>
         </Style>
 
         <Style Selector="^.Success">
             <Setter Property="Background" Value="#cdf2ca" />
             <Setter Property="BorderBrush" Value="#b2e1ae" />
-             <Setter Property="Foreground" Value="#13831c" />
+            <Setter Property="Foreground" Value="#13831c" />
             <Style Selector="^ /template/ TextBlock">
                 <Setter Property="Foreground" Value="#13831c" />
             </Style>
@@ -473,9 +477,9 @@
 
         <Style Selector="^.WindowControlsButton">
             <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="Height" Value="25" />
-            <Setter Property="Width" Value="25" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="30" />
             <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor0}" />
             <Setter Property="Padding" Value="0" />
             <Setter Property="Transitions">
@@ -486,25 +490,30 @@
             <Style Selector="^:pointerover">
                 <Setter Property="Background" Value="{DynamicResource SukiPrimaryColor25}" />
             </Style>
+
             <Style Selector="^.Close">
+
                 <Style Selector="^:pointerover">
-                    <Setter Property="Background" Value="#90D00000"/>
+                    <Setter Property="Background" Value="#90D00000" />
+                    <Setter Property="Foreground" Value="White"></Setter>
                 </Style>
                 <Style Selector="^:pressed">
-                    <Setter Property="Background" Value="#C5D30000"/>
+                    <Setter Property="Background" Value="#C5D30000" />
                 </Style>
             </Style>
+
         </Style>
+
         <Style Selector="^.Large">
             <Setter Property="FontSize" Value="18" />
             <Setter Property="Padding" Value="30,12" />
             <Setter Property="CornerRadius" Value="9" />
         </Style>
         <Style Selector="^.Icon">
-            <Setter Property="CornerRadius" Value="100"/>
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
-            <Setter Property="Padding" Value="0"/>
+            <Setter Property="CornerRadius" Value="100" />
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="0" />
         </Style>
     </ControlTheme>
     <ControlTheme x:Key="{x:Type Button}"

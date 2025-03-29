@@ -1813,6 +1813,12 @@ public class MaaProcessor
 
     private void CancelOperations()
     {
+        if (!_agentStarted)
+        {
+            _agentProcess?.Kill();
+            _agentProcess?.Dispose();
+            _agentProcess = null;
+        }
         _emulatorCancellationTokenSource?.SafeCancel();
         CancellationTokenSource.SafeCancel();
     }

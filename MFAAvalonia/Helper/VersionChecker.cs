@@ -567,6 +567,42 @@ public static class VersionChecker
             var sourceBytes = Encoding.UTF8.GetBytes(extractDir);
             var sourceDirectory = Encoding.UTF8.GetString(sourceBytes);
             
+            SetProgress(progress, 60);
+            string updaterName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                ? "MFAUpdater.exe"
+                : "MFAUpdater";
+            // 构建完整路径
+            string sourceUpdaterPath = Path.Combine(sourceDirectory, updaterName); // 源目录路径
+            string targetUpdaterPath = Path.Combine(utf8BaseDirectory, updaterName); // 目标目录路径
+
+            try
+            {
+                if (File.Exists(sourceUpdaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var chmodProcess = Process.Start("/bin/chmod", $"+x {sourceDirectory}");
+                    await chmodProcess?.WaitForExitAsync();
+                }
+                File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
+                LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
+        
+                // 验证源文件存在性
+                if (!File.Exists(sourceUpdaterPath))
+                {
+                    LoggerHelper.Error($"更新器在源目录缺失: {sourceUpdaterPath}");
+                    throw new FileNotFoundException("更新程序源文件未找到");
+                }
+            }
+            catch (IOException ex)
+            {
+                LoggerHelper.Error($"文件操作失败: {ex.Message} (错误代码: {ex.HResult})");
+                throw new InvalidOperationException("文件复制过程中发生I/O错误", ex);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                LoggerHelper.Error($"权限不足: {ex.Message}");
+                throw new SecurityException("文件访问权限被拒绝", ex);
+            }
+            
             SetProgress(progress, 100);
             
             await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
@@ -607,38 +643,19 @@ public static class VersionChecker
             : "MFAUpdater";
 
         string updaterPath = Path.Combine(AppContext.BaseDirectory, updaterName);
-        // 构建完整路径
-        string sourceUpdaterPath = Path.Combine(source, updaterName); // 源目录路径
-        string targetUpdaterPath = Path.Combine(target, updaterName); // 目标目录路径
 
-        // try
-        // {
-        //     if (File.Exists(sourceUpdaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-        //     {
-        //         var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
-        //         await chmodProcess?.WaitForExitAsync();
-        //     }
-        //     File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
-        //     LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
-        //
-        //     // 验证源文件存在性
-        //     if (!File.Exists(sourceUpdaterPath))
-        //     {
-        //         LoggerHelper.Error($"更新器在源目录缺失: {sourceUpdaterPath}");
-        //         throw new FileNotFoundException("更新程序源文件未找到");
-        //     }
-        // }
-        // catch (IOException ex)
-        // {
-        //     LoggerHelper.Error($"文件操作失败: {ex.Message} (错误代码: {ex.HResult})");
-        //     throw new InvalidOperationException("文件复制过程中发生I/O错误", ex);
-        // }
-        // catch (UnauthorizedAccessException ex)
-        // {
-        //     LoggerHelper.Error($"权限不足: {ex.Message}");
-        //     throw new SecurityException("文件访问权限被拒绝", ex);
-        // }
-
+        if (!File.Exists(updaterPath))
+        {
+            LoggerHelper.Error($"更新器在目录缺失: {updaterPath}");
+            throw new FileNotFoundException("更新程序源文件未找到");
+        }
+        
+        if (File.Exists(updaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
+            await chmodProcess?.WaitForExitAsync();
+        }
+        
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");

@@ -61,6 +61,7 @@ public partial class AdbEditorDialogViewModel : ObservableObject
     {
         Instances.TaskQueueViewModel.Devices = [Output];
         Instances.TaskQueueViewModel.CurrentDevice = Output;
+
         Dialog.Dismiss();
     }
 

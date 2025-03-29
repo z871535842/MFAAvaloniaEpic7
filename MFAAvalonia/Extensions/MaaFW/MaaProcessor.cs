@@ -87,6 +87,9 @@ public class MaaProcessor
             _agentClient?.Dispose();
             _agentClient = null;
             _agentStarted = false;
+            _agentProcess?.Kill();
+            _agentProcess?.Dispose();
+            _agentProcess = null;
         }
         MaaTasker = maaTasker;
     }

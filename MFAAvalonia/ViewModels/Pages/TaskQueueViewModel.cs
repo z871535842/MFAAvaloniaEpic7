@@ -281,15 +281,24 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     [ObservableProperty] private ObservableCollection<object> _devices = [];
     [ObservableProperty] private object? _currentDevice;
-    private DateTime _lastExecutionTime = DateTime.MinValue;
+    private DateTime? _lastExecutionTime;
     partial void OnCurrentDeviceChanged(object? value)
     {
-        var now = DateTime.Now;
-        if ((now - _lastExecutionTime).TotalSeconds < 1)
+
+        if (value != null)
         {
-            return; 
+            var now = DateTime.Now;
+            if (_lastExecutionTime == null)
+            {
+                _lastExecutionTime = now;
+            }
+            else
+            {
+                if (now - _lastExecutionTime < TimeSpan.FromSeconds(1))
+                    return;
+                _lastExecutionTime = now;
+            }
         }
-        _lastExecutionTime = now;
         if (value is DesktopWindowInfo window)
         {
             ToastHelper.Info("WindowSelectionMessage".ToLocalizationFormatted(false, ""), window.Name);
@@ -299,7 +308,6 @@ public partial class TaskQueueViewModel : ViewModelBase
         }
         else if (value is AdbDeviceInfo device)
         {
-            Console.WriteLine(new StackTrace(true));
             ToastHelper.Info("EmulatorSelectionMessage".ToLocalizationFormatted(false, ""), device.Name);
             MaaProcessor.Config.AdbDevice.Name = device.Name;
             MaaProcessor.Config.AdbDevice.AdbPath = device.AdbPath;

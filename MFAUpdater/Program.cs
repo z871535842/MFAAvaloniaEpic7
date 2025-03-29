@@ -5,7 +5,7 @@ using System.Threading;
 
 public class Program
 {
-    private const int InitDelay = 5000;
+    private const int InitDelay = 2500;
     static void Main(string[] args)
     {
         Thread.Sleep(InitDelay); // 网页[6]启动延迟优化
@@ -40,9 +40,11 @@ public class Program
                 HandleDirectoryTransfer(source, dest);
             else
                 throw new FileNotFoundException($"路径不存在: {source}");
-
+            
             if (args.Length == 4)
-                HandleAppRename(args[2], args[3]); // 重命名与启动分离
+                HandleAppRename(source, dest, args[2], args[3]); // 重命名与启动分离
+            
+            HandleDeleteDirectoryTransfer(source);
         }
         catch (Exception ex)
         {
@@ -53,10 +55,20 @@ public class Program
 
     private static void HandleFileTransfer(string source, string dest)
     {
-        File.Copy(source, dest, true);
-        File.Delete(source);
+        try
+        {
+            if (dest.Contains("MFAAvalonia.dll", StringComparison.OrdinalIgnoreCase) || !dest.Contains("MFAUpdater", StringComparison.OrdinalIgnoreCase) && !dest.Contains("MFAAvalonia", StringComparison.OrdinalIgnoreCase))
+            {
+                File.Copy(source, dest, true);
+                Console.WriteLine($"From {source} to {dest}");
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+
         SetUnixPermissions(dest); // 网页[6][7]权限设置
-        Console.WriteLine($"文件操作完成: {dest}");
     }
 
     private static void HandleDirectoryTransfer(string source, string dest)
@@ -70,21 +82,32 @@ public class Program
         foreach (var file in Directory.GetFiles(source, "*", SearchOption.AllDirectories))
         {
             var destFile = file.Replace(source, dest);
-            File.Copy(file, destFile, true);
-            SetUnixPermissions(destFile);
+            HandleFileTransfer(file, destFile);
         }
 
-        Directory.Delete(source, true);
         Console.WriteLine($"目录迁移完成: {dest}");
     }
 
-    private static void HandleAppRename(string oldName, string newName)
+    private static void HandleDeleteDirectoryTransfer(string source)
     {
-        var oldPath = Path.Combine(AppContext.BaseDirectory, oldName);
-        var newPath = Path.Combine(AppContext.BaseDirectory, newName);
+        try
+        {
+            Directory.Delete(source, true);
+            Console.WriteLine($"源目录{source}删除完成");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"源目录{source}删除失败: {e}");
+        }
 
-        if (File.Exists(newPath)) File.Delete(newPath);
-        File.Move(oldPath, newPath);
+    }
+
+    private static void HandleAppRename(string source, string dest, string oldName, string newName)
+    {
+        var oldPath = Path.Combine(source, oldName);
+        var newPath = Path.Combine(dest, newName);
+
+        File.Move(oldPath, newPath, true);
 
         SetUnixPermissions(newPath); // 网页[6]可执行权限
 

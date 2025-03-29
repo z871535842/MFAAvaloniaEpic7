@@ -21,6 +21,7 @@ using SukiUI.Toasts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -280,9 +281,15 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     [ObservableProperty] private ObservableCollection<object> _devices = [];
     [ObservableProperty] private object? _currentDevice;
-
+    private DateTime _lastExecutionTime = DateTime.MinValue;
     partial void OnCurrentDeviceChanged(object? value)
     {
+        var now = DateTime.Now;
+        if ((now - _lastExecutionTime).TotalSeconds < 1)
+        {
+            return; 
+        }
+        _lastExecutionTime = now;
         if (value is DesktopWindowInfo window)
         {
             ToastHelper.Info("WindowSelectionMessage".ToLocalizationFormatted(false, ""), window.Name);
@@ -292,6 +299,7 @@ public partial class TaskQueueViewModel : ViewModelBase
         }
         else if (value is AdbDeviceInfo device)
         {
+            Console.WriteLine(new StackTrace(true));
             ToastHelper.Info("EmulatorSelectionMessage".ToLocalizationFormatted(false, ""), device.Name);
             MaaProcessor.Config.AdbDevice.Name = device.Name;
             MaaProcessor.Config.AdbDevice.AdbPath = device.AdbPath;
@@ -562,7 +570,7 @@ public partial class TaskQueueViewModel : ViewModelBase
             return;
         }
 
-        DispatcherHelper.RunOnMainThread(() =>
+        DispatcherHelper.PostOnMainThread(() =>
         {
             Devices = [device];
             CurrentDevice = device;

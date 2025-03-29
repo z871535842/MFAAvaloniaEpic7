@@ -42,7 +42,7 @@
             <TextBox
                 Grid.Column="0"
                 Text="{Binding AdbPath}"
-                extensions:FileDragDropExtensions.EnableFileDragDrop="True"
+                extensions:DragDropExtensions.EnableFileDragDrop="True"
                 suki:TextBoxExtensions.AddDeleteButton="True" />
             <Button
                 Command="{Binding LoadCommand}"

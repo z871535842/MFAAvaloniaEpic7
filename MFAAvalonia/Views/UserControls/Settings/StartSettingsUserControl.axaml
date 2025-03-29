@@ -59,7 +59,7 @@
                         HorizontalAlignment="Center"
                         Text="{Binding SoftwarePath}"
                         Width="215"
-                        extensions:FileDragDropExtensions.EnableFileDragDrop="True">
+                        extensions:DragDropExtensions.EnableFileDragDrop="True">
                         <TextBox.InnerRightContent>
                             <Button
                                 BorderBrush="Transparent"

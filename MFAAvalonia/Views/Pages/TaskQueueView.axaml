@@ -27,6 +27,7 @@
     <Design.DataContext>
         <pages:TaskQueueViewModel />
     </Design.DataContext>
+
     <UserControl.Resources>
         <ContextMenu x:Key="TaskMenu">
             <MenuItem Click="Delete" Header="{markup:I18n {x:Static helper:LangKeys.Delete}}" />
@@ -132,59 +133,55 @@
                             </Grid>
                         </suki:GroupBox.Header>
                         <Grid>
-                            <AdornerLayer>
-                                <ListBox
-                                    DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
-                                    DragDrop.DragLeave="OnDragLeave"
-                                    DragDrop.DragOver="OnDragOver"
-                                    DragDrop.Drop="OnDrop"
-                                    ItemsSource="{Binding Path=TaskItemViewModels}"
-                                    Margin="0,3,0,0"
-                                    MinHeight="220"
-                                    PointerMoved="OnPointerMoved"
-                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                    SelectionChanged="SelectingItemsControl_OnSelectionChanged"
-                                    x:Name="TaskListBox">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid
-                                                Background="Transparent"
-                                                ColumnDefinitions="*,25"
-                                                ContextMenu="{StaticResource TaskMenu}"
-                                                x:Name="ListGrid">
-                                                <CheckBox
-                                                    Content="{Binding Name}"
-                                                    Grid.Column="0"
-                                                    HorizontalAlignment="Left"
-                                                    IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
-                                                    IsChecked="{Binding IsCheckedWithNull}"
-                                                    ToolTip.Placement="Right"
-                                                    ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}">
-                                                    <CheckBox.ContentTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock
-                                                                Text="{Binding}"
-                                                                TextTrimming="CharacterEllipsis"
-                                                                TextWrapping="NoWrap"
-                                                                x:DataType="System:String" />
-                                                        </DataTemplate>
-                                                    </CheckBox.ContentTemplate>
-                                                </CheckBox>
+                            <ListBox
+                                DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
+                                ex:DragDropExtensions.EnableDragDrop="True"
+                                ItemsSource="{Binding Path=TaskItemViewModels}"
+                                Margin="0,3,0,0"
+                                MinHeight="220"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionChanged="SelectingItemsControl_OnSelectionChanged"
+                                x:Name="TaskListBox">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid
+                                            Background="Transparent"
+                                            ColumnDefinitions="*,25"
+                                            ContextMenu="{StaticResource TaskMenu}"
+                                            x:Name="ListGrid">
+                                            <CheckBox
+                                                Content="{Binding Name}"
+                                                Grid.Column="0"
+                                                HorizontalAlignment="Left"
+                                                IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
+                                                IsChecked="{Binding IsCheckedWithNull}"
+                                                ToolTip.Placement="Right"
+                                                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}">
+                                                <CheckBox.ContentTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock
+                                                            Text="{Binding}"
+                                                            TextTrimming="CharacterEllipsis"
+                                                            TextWrapping="NoWrap"
+                                                            x:DataType="System:String" />
+                                                    </DataTemplate>
+                                                </CheckBox.ContentTemplate>
+                                            </CheckBox>
 
-                                                <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
-                                                <RadioButton
-                                                    Background="Transparent"
-                                                    BorderThickness="0"
-                                                    Grid.Column="1"
-                                                    GroupName="TaskSettings"
-                                                    HorizontalContentAlignment="Left"
-                                                    IsChecked="{Binding EnableSetting}"
-                                                    IsVisible="False" />
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-                            </AdornerLayer>
+                                            <!--  ReSharper disable once Xaml.StaticResourceNotResolved  -->
+                                            <RadioButton
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                Grid.Column="1"
+                                                GroupName="TaskSettings"
+                                                HorizontalContentAlignment="Left"
+                                                IsChecked="{Binding EnableSetting}"
+                                                IsVisible="False" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
 
                         </Grid>
                     </suki:GroupBox>

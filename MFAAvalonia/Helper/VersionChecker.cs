@@ -22,6 +22,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -552,7 +553,7 @@ public static class VersionChecker
             }
 
             // 解压文件
-            SetProgress(progress, 60);
+            SetProgress(progress, 20);
             var extractDir = Path.Combine(tempPath, $"mfa_{latestVersion}_extracted");
             if (Directory.Exists(extractDir))
                 Directory.Delete(extractDir, true);
@@ -560,14 +561,17 @@ public static class VersionChecker
 
             SetText(textBlock, "ApplyingUpdate".ToLocalization());
             // 执行安全更新
-            SetProgress(progress, 80);
+            SetProgress(progress, 40);
             var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
             var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
             var sourceBytes = Encoding.UTF8.GetBytes(extractDir);
             var sourceDirectory = Encoding.UTF8.GetString(sourceBytes);
+            
+            SetProgress(progress, 100);
+            
             await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
 
-            SetProgress(progress, 100);
+
             Thread.Sleep(500);
         }
         finally
@@ -603,12 +607,37 @@ public static class VersionChecker
             : "MFAUpdater";
 
         string updaterPath = Path.Combine(AppContext.BaseDirectory, updaterName);
+        // 构建完整路径
+        string sourceUpdaterPath = Path.Combine(source, updaterName); // 源目录路径
+        string targetUpdaterPath = Path.Combine(target, updaterName); // 目标目录路径
 
-        if (!File.Exists(updaterPath))
-        {
-            LoggerHelper.Error($"更新器缺失: {updaterPath}");
-            throw new FileNotFoundException("关键组件缺失，无法完成更新");
-        }
+        // try
+        // {
+        //     if (File.Exists(sourceUpdaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        //     {
+        //         var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
+        //         await chmodProcess?.WaitForExitAsync();
+        //     }
+        //     File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
+        //     LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
+        //
+        //     // 验证源文件存在性
+        //     if (!File.Exists(sourceUpdaterPath))
+        //     {
+        //         LoggerHelper.Error($"更新器在源目录缺失: {sourceUpdaterPath}");
+        //         throw new FileNotFoundException("更新程序源文件未找到");
+        //     }
+        // }
+        // catch (IOException ex)
+        // {
+        //     LoggerHelper.Error($"文件操作失败: {ex.Message} (错误代码: {ex.HResult})");
+        //     throw new InvalidOperationException("文件复制过程中发生I/O错误", ex);
+        // }
+        // catch (UnauthorizedAccessException ex)
+        // {
+        //     LoggerHelper.Error($"权限不足: {ex.Message}");
+        //     throw new SecurityException("文件访问权限被拒绝", ex);
+        // }
 
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
@@ -742,21 +771,24 @@ public static class VersionChecker
                 ToastHelper.Warn("DownloadFailed");
                 return;
             }
+            
             SetText(textBlock, "ApplyingUpdate".ToLocalization());
             // 文件替换（复用ReplaceFilesWithRetry）
+            SetProgress(progress, 0);
             var extractDir = Path.Combine(tempPath, $"maafw_{latestVersion}_extracted");
             if (Directory.Exists(extractDir))
                 Directory.Delete(extractDir, true);
             ZipFile.ExtractToDirectory(tempZip, extractDir);
-            SetProgress(progress, 60);
+            SetProgress(progress, 20);
 
             var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
             var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
             var sourceBytes = Encoding.UTF8.GetBytes(Path.Combine(extractDir, "bin"));
             var sourceDirectory = Encoding.UTF8.GetString(utf8Bytes);
+            SetProgress(progress, 100);
+
             // 清理与重启（复用ApplySecureUpdate）
             await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory);
-            SetProgress(progress, 100);
         }
         finally
         {

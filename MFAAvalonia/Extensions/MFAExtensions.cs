@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SukiUI.Controls;
 using SukiUI.Dialogs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -26,7 +27,7 @@ public static class MFAExtensions
         this IEnumerable<KeyValuePair<TKey, MaaNode>>? taskModels,
         IEnumerable<KeyValuePair<TKey, MaaNode>>? additionalModels) where TKey : notnull
     {
-        
+
         if (additionalModels == null)
             return taskModels?.ToDictionary() ?? new Dictionary<TKey, MaaNode>();
         return taskModels?
@@ -47,7 +48,7 @@ public static class MFAExtensions
                 )
             ?? new Dictionary<TKey, MaaNode>();
     }
-    
+
     public static string FormatWith(this string format, params object[] args)
     {
         return string.Format(format, args);
@@ -92,12 +93,12 @@ public static class MFAExtensions
             return localizedKey.FormatWith(processedArgs);
         }
     }
-    
+
     public static bool ContainsKey(this IEnumerable<LocalizationViewModel> settingViewModels, string key)
     {
         return settingViewModels.Any(vm => vm.ResourceKey == key);
     }
-    
+
     public static bool ShouldSwitchButton(this List<MaaInterface.MaaInterfaceOptionCase>? cases, out int yes, out int no)
     {
         yes = -1;
@@ -130,7 +131,7 @@ public static class MFAExtensions
 
         return true;
     }
-    
+
     public static void SafeCancel(this CancellationTokenSource? cts, bool useCancel = true)
     {
         if (cts == null || cts.IsCancellationRequested) return;
@@ -141,5 +142,56 @@ public static class MFAExtensions
             cts.Dispose();
         }
         catch (Exception e) { Console.WriteLine(e); }
+    }
+
+    /// <summary>
+    /// 安全移动元素的扩展方法（泛型版本）
+    /// </summary>
+    /// <param name="targetIndex">目标位置索引应先于实际插入位置</param>
+    /// <remarks>当移动方向为向后移动时，实际插入位置会比targetIndex大1[8](@ref)</remarks>
+    public static void MoveTo<T>(this IList<T> list, int sourceIndex, int targetIndex) where T : class
+    {
+        ValidateIndexes(list, sourceIndex, targetIndex);
+        if (sourceIndex == targetIndex) return;
+
+        var item = list[sourceIndex];
+        
+        list.RemoveAt(sourceIndex);
+        
+        list.Insert(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, item);
+    }
+
+    /// <summary>
+    /// 安全移动元素的扩展方法（非泛型版本）
+    /// </summary>
+    public static void MoveTo(this IList list, int sourceIndex, int targetIndex)
+    {
+        Console.WriteLine($"sourceIndex: {sourceIndex}, targetIndex: {targetIndex}");
+        ValidateIndexes(list, sourceIndex, targetIndex);
+        if (sourceIndex == targetIndex) return;
+
+        var item = list[sourceIndex];
+
+        list.RemoveAt(sourceIndex);
+
+        list.Insert(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, item);
+    }
+    
+    // 扩展方法：范围判断
+    public static bool Between(this double value, double min, double max)
+        => value >= min && value <= max;
+    private static void ValidateIndexes(IList list, int source, int target)
+    {
+        if (source < 0 || source >= list.Count)
+            throw new ArgumentOutOfRangeException(nameof(source), "源索引越界");
+        if (target < 0 || target > list.Count)
+            throw new ArgumentOutOfRangeException(nameof(target), "目标索引越界");
+    }
+    private static void ValidateIndexes<T>(IList<T> list, int source, int target)
+    {
+        if (source < 0 || source >= list.Count)
+            throw new ArgumentOutOfRangeException(nameof(source), "源索引越界");
+        if (target < 0 || target > list.Count)
+            throw new ArgumentOutOfRangeException(nameof(target), "目标索引越界");
     }
 }

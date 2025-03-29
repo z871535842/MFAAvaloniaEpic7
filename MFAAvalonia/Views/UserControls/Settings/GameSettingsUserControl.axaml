@@ -27,7 +27,7 @@
                         Text="{Binding Prescript}"
                         Watermark="e.g. &quot;C:\1.cmd&quot; -minimized"
                         Width="215"
-                        extensions:FileDragDropExtensions.EnableFileDragDrop="True" />
+                        extensions:DragDropExtensions.EnableFileDragDrop="True" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"
@@ -44,7 +44,7 @@
                         Text="{Binding PostScript}"
                         Watermark="e.g. &quot;C:\1.cmd&quot; -minimized"
                         Width="215"
-                        extensions:FileDragDropExtensions.EnableFileDragDrop="True" />
+                        extensions:DragDropExtensions.EnableFileDragDrop="True" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"

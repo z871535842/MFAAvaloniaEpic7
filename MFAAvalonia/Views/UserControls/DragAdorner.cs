@@ -1,6 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Animation;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
 using SukiUI;
 using System;
@@ -15,9 +16,11 @@ public class DragAdorner : Control
     private double _yPosition;
     private bool _begin;
     private bool _end;
+
     public DragAdorner(double x, double width, IBrush brush)
     {
         _linePen = new Pen(brush, 2);
+        _linePen.Bind(Pen.BrushProperty, new DynamicResourceExtension("SukiPrimaryColor"));
         _originX = x;
         _totalWidth = width;
         IsHitTestVisible = false;
@@ -47,8 +50,8 @@ public class DragAdorner : Control
         // 绘制主横线
         context.DrawLine(
             _linePen,
-            new Point(startX, lineY),
-            new Point(endX, lineY)
+            new Point(startX - arrowWidth, lineY),
+            new Point(endX + arrowWidth, lineY)
         );
 
 

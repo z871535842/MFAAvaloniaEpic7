@@ -485,8 +485,7 @@ public partial class TaskQueueView : UserControl
             "html" => input.Replace("\n", "<br/>"), // HTML换行用<br/>
             _ => input
         };
-
-        Console.WriteLine(input);
+        
         return input;
     }
     // private static List<TextStyleMetadata> _currentStyles = new();

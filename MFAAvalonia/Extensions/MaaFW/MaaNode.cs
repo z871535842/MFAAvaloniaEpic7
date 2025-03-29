@@ -35,8 +35,8 @@ public partial class MaaNode : ViewModelBase
     [MaaJsonProperty("focus")] private bool? _focus;
     [MaaJsonProperty("focus_tip")] [JsonConverter(typeof(GenericSingleOrListConverter<string>))]
     private List<string>? _focusTip;
-    [MaaJsonProperty("focus_toast")] [JsonConverter(typeof(GenericSingleOrListConverter<string>))]
-    private List<string>? _focusToast;
+    [MaaJsonProperty("focus_toast")] 
+    private string? _focusToast;
     [MaaJsonProperty("focus_tip_color")] [JsonConverter(typeof(GenericSingleOrListConverter<string>))]
     private List<string>? _focusTipColor;
     [MaaJsonProperty("focus_succeeded")] [JsonConverter(typeof(GenericSingleOrListConverter<string>))]

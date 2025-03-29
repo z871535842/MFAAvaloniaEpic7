@@ -12,21 +12,29 @@ public static class DispatcherHelper
         {
             action();
         }
-        else
-        {
-            Dispatcher.UIThread.Invoke(action);
-        }
+
+        Dispatcher.UIThread.Invoke(action);
+
     }
-    
+
     public static T RunOnMainThread<T>(Func<T> func)
     {
         if (Dispatcher.UIThread.CheckAccess())
         {
             return func();
         }
-        else
+
+        return Dispatcher.UIThread.Invoke(func);
+
+    }
+
+    public static void PostOnMainThread(Action func)
+    {
+        if (Dispatcher.UIThread.CheckAccess())
         {
-            return Dispatcher.UIThread.Invoke(func);
+            func();
         }
+
+        Dispatcher.UIThread.Post(func);
     }
 }

@@ -76,10 +76,12 @@ public partial class LogItemViewModel : ViewModelBase
         IBrush? color,
         string weight = "Regular",
         string dateFormat = "MM'-'dd'  'HH':'mm':'ss",
-        bool showTime = true)
+        bool showTime = true,
+        bool changeColor = true)
     {
         Time = DateTime.Now.ToString(dateFormat);
         _baseBrush = color;
+        _changeColor = changeColor;
         if (_changeColor)
             SukiTheme.GetInstance().OnBaseThemeChanged += OnThemeChanged;
         OnThemeChanged(Instances.GuiSettingsUserControlModel.BaseTheme);

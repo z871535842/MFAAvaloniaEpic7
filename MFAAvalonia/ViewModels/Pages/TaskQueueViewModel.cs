@@ -207,18 +207,39 @@ public partial class TaskQueueViewModel : ViewModelBase
         });
     }
 
+    public const string INFO = "info:";
+    public const string ERROR = "err:";
+    public const string WARN = "warn:";
     public void AddLog(string content,
         IBrush? brush,
         string weight = "Regular",
         bool showTime = true)
     {
         brush ??= Brushes.Black;
+        var changeColor = true;
+        if (content.StartsWith(INFO))
+        {
+            brush = Brushes.Black;
+            content = content.Substring(INFO.Length);
+        }
+        if (content.StartsWith(WARN))
+        {
+            brush = Brushes.Orange;
+            content = content.Substring(WARN.Length);
+            changeColor = false;
+        }
+        if (content.StartsWith(ERROR))
+        {
+            brush = Brushes.OrangeRed;
+            content = content.Substring(ERROR.Length);
+            changeColor = false;
+        }
         Task.Run(() =>
         {
             DispatcherHelper.RunOnMainThread(() =>
             {
                 LogItemViewModels.Add(new LogItemViewModel(content, brush, weight, "HH':'mm':'ss",
-                    showTime: showTime));
+                    showTime: showTime, changeColor: changeColor));
                 LoggerHelper.Info(content);
             });
         });

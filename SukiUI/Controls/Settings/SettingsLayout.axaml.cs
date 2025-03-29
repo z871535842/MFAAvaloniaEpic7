@@ -219,7 +219,7 @@ public partial class SettingsLayout : ItemsControl, ISukiStackPageTitleProvider
             var OffsetY = myScroll.Offset.Y;
 
             // 安全转换点访问 + 处理无效值
-            var l = borders.Select(b => 
+            var l = borders.Select(b =>
             {
                 var point = b.TranslatePoint(new Point(), stackItems);
                 return point.HasValue ? Math.Abs(point.Value.Y - OffsetY) : double.MaxValue;
@@ -295,7 +295,7 @@ public partial class SettingsLayout : ItemsControl, ISukiStackPageTitleProvider
 
         var abortTask = Task.Run(async () =>
         {
-            await Task.Delay(1000);
+            await Task.Delay(Convert.ToInt32(850 / validatedSpeed));
             isAnimatingScroll = false;
         });
 

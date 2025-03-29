@@ -1,10 +1,14 @@
-﻿using MaaFramework.Binding;
+﻿using Avalonia.Media;
+using Avalonia.Threading;
+using MaaFramework.Binding;
+using MaaFramework.Binding.Notification;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.Helper.ValueType;
 using MFAAvalonia.Views.Windows;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +20,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Management;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -76,6 +81,13 @@ public class MaaProcessor
 
     public void SetTasker(MaaTasker? maaTasker = null)
     {
+        if (maaTasker == null)
+        {
+            _agentClient?.LinkStop();
+            _agentClient?.Dispose();
+            _agentClient = null;
+            agentStarted = false;
+        }
         MaaTasker = maaTasker;
     }
 
@@ -98,9 +110,9 @@ public class MaaProcessor
     public AutoInitDictionary AutoInitDictionary { get; } = new();
 
     private MaaAgentClient? _agentClient;
+    private bool agentStarted = false;
 
     #endregion
-
 
     #region MaaTasker初始化
 
@@ -176,12 +188,16 @@ public class MaaProcessor
             };
 
             // 获取代理配置（假设Interface在UI线程中访问）
-            // 使用WPF日志框架记录（需实现ILogger接口）
-
             var agentConfig = Interface?.Agent;
-            if (agentConfig != null)
+            if (agentConfig is { ChildExec: not null } && !agentStarted)
             {
                 RootView.AddLogByKey("StartingAgent");
+                if (_agentClient != null)
+                {
+                    _agentClient.LinkStop();
+                    _agentClient.Dispose();
+                    _agentClient = null;
+                }
                 _agentClient = new MaaAgentClient
                 {
                     Resource = maaResource,
@@ -194,39 +210,88 @@ public class MaaProcessor
                 {
                     throw new Exception("Socket creation failed");
                 }
-                if (agentConfig?.ChildExec != null)
+
+                try
                 {
-                    try
+                    if (!Directory.Exists($"{AppContext.BaseDirectory}"))
+                        Directory.CreateDirectory($"{AppContext.BaseDirectory}");
+                    var program = MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory);
+                    var args = $"{string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket}";
+                    var startInfo = new ProcessStartInfo
                     {
-                        if (!Directory.Exists($"{AppContext.BaseDirectory}"))
-                            Directory.CreateDirectory($"{AppContext.BaseDirectory}");
-                        var startInfo = new ProcessStartInfo
+                        FileName = program,
+                        WorkingDirectory = $"{AppContext.BaseDirectory}",
+                        Arguments = $"{(program.Contains("python") && !args.Contains("-u ") ? "-u " : "")}{args}",
+                        UseShellExecute = false,
+                        RedirectStandardError = true,
+                        RedirectStandardOutput = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
+                    };
+
+                    var process = new Process
+                    {
+                        StartInfo = startInfo
+                    };
+
+                    process.OutputDataReceived += (sender, args) =>
+                    {
+                        if (!string.IsNullOrEmpty(args.Data))
                         {
-                            FileName = MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory),
-                            WorkingDirectory = $"{AppContext.BaseDirectory}",
-                            Arguments = $"{string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket}",
-                            UseShellExecute = false,
-                            CreateNoWindow = true
-                        };
+                            Console.WriteLine($"输出: {args.Data}");
+                            DispatcherHelper.PostOnMainThread(() =>
+                            {
+                                RootView.AddLog($"{args.Data}");
+                            });
+                        }
+                    };
 
-                        TaskManager.RunTaskAsync(() => Process.Start(startInfo), token);
-
-                        // 使用WPF日志框架记录（需实现ILogger接口）
-                        LoggerHelper.Info($"Agent启动: {agentConfig.ChildExec} {string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket} "
-                            + $"socket_id: {socket}");
-                    }
-                    catch (Exception ex)
+                    process.ErrorDataReceived += (sender, args) =>
                     {
-                        LoggerHelper.Error($"Agent启动失败: {ex.Message}");
-                    }
+                        if (!string.IsNullOrEmpty(args.Data))
+                        {
+                            DispatcherHelper.PostOnMainThread(() =>
+                            {
+                                RootView.AddLog($"{args.Data}");
+                            });
+                        }
+                    };
+
+                    process.Start();
+                    LoggerHelper.Info(
+                        $"Agent启动: {MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory)} {string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket} "
+                        + $"socket_id: {socket}");
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+
+                    TaskManager.RunTaskAsync(async () => await process.WaitForExitAsync(token), token);
+
                 }
+                catch (Exception ex)
+                {
+                    LoggerHelper.Error($"Agent启动失败: {ex.Message}");
+                }
+
                 _agentClient?.LinkStart();
+                agentStarted = true;
             }
             // RegisterCustomRecognitionsAndActions(tasker);
             Instances.TaskQueueViewModel.SetConnected(true);
             tasker.Utility.SetOptionRecording(ConfigurationManager.Maa.GetValue(ConfigurationKeys.Recording, false));
             tasker.Utility.SetOptionSaveDraw(ConfigurationManager.Maa.GetValue(ConfigurationKeys.SaveDraw, false));
             tasker.Utility.SetOptionShowHitDraw(ConfigurationManager.Maa.GetValue(ConfigurationKeys.ShowHitDraw, false));
+            tasker.Callback += (_, args) =>
+            {
+                var jObject = JObject.Parse(args.Details);
+                var name = jObject["name"]?.ToString() ?? string.Empty;
+                if (args.Message.StartsWith(MaaMsg.Node.Action.Prefix))
+                {
+                    if (TaskDictionary.TryGetValue(name, out var taskModel))
+                    {
+                        DisplayFocus(taskModel, args.Message);
+                    }
+                }
+            };
             return tasker;
         }
         catch (OperationCanceledException)
@@ -237,6 +302,145 @@ public class MaaProcessor
         catch (Exception)
         {
             return null;
+        }
+    }
+    private void DisplayFocus(MaaNode taskModel, string message)
+    {
+        switch (message)
+        {
+            case MaaMsg.Node.Action.Succeeded:
+                if (taskModel.FocusSucceeded != null)
+                {
+                    for (int i = 0; i < taskModel.FocusSucceeded.Count; i++)
+                    {
+                        IBrush brush = null;
+                        var tip = taskModel.FocusSucceeded[i];
+                        try
+                        {
+                            if (taskModel.FocusSucceededColor != null && taskModel.FocusSucceededColor.Count > i)
+                                brush = BrushHelper.ConvertToBrush(taskModel.FocusSucceededColor[i]);
+                        }
+                        catch (Exception e)
+                        {
+                            LoggerHelper.Error(e);
+                        }
+
+                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                    }
+                }
+                break;
+            case MaaMsg.Node.Action.Failed:
+                if (taskModel.FocusFailed != null)
+                {
+                    for (int i = 0; i < taskModel.FocusFailed.Count; i++)
+                    {
+                        IBrush brush = null;
+                        var tip = taskModel.FocusFailed[i];
+                        try
+                        {
+                            if (taskModel.FocusFailedColor != null && taskModel.FocusFailedColor.Count > i)
+                                brush = BrushHelper.ConvertToBrush(taskModel.FocusFailedColor[i]);
+                        }
+                        catch (Exception e)
+                        {
+                            LoggerHelper.Error(e);
+                        }
+
+                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                    }
+                }
+                break;
+            case MaaMsg.Node.Action.Starting:
+                if (!string.IsNullOrWhiteSpace(taskModel.FocusToast))
+                {
+                    ToastNotification.Show(taskModel.FocusToast);
+                }
+                if (taskModel.FocusTip != null)
+                {
+                    for (int i = 0; i < taskModel.FocusTip.Count; i++)
+                    {
+                        IBrush? brush = null;
+                        var tip = taskModel.FocusTip[i];
+                        try
+                        {
+                            if (taskModel.FocusTipColor != null && taskModel.FocusTipColor.Count > i)
+                            {
+                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            LoggerHelper.Error(e);
+                        }
+
+                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                    }
+                }
+                break;
+        }
+
+    }
+    public static string HandleStringsWithVariables(string content)
+    {
+        try
+        {
+            return Regex.Replace(content, @"\{(\+\+|\-\-)?(\w+)(\+\+|\-\-)?([\+\-\*/]\w+)?\}", match =>
+            {
+                var prefix = match.Groups[1].Value;
+                var counterKey = match.Groups[2].Value;
+                var suffix = match.Groups[3].Value;
+                var operation = match.Groups[4].Value;
+
+                int value = Instance.AutoInitDictionary.GetValueOrDefault(counterKey, 0);
+
+                // 前置操作符7
+                if (prefix == "++")
+                {
+                    value = ++Instance.AutoInitDictionary[counterKey];
+                }
+                else if (prefix == "--")
+                {
+                    value = --Instance.AutoInitDictionary[counterKey];
+                }
+
+                // 后置操作符
+                if (suffix == "++")
+                {
+                    value = Instance.AutoInitDictionary[counterKey]++;
+                }
+                else if (suffix == "--")
+                {
+                    value = Instance.AutoInitDictionary[counterKey]--;
+                }
+
+                // 算术操作
+                if (!string.IsNullOrEmpty(operation))
+                {
+                    string operationType = operation[0].ToString();
+                    string operandKey = operation.Substring(1);
+
+                    if (Instance.AutoInitDictionary.TryGetValue(operandKey, out var operandValue))
+                    {
+                        value = operationType switch
+                        {
+                            "+" => value + operandValue,
+                            "-" => value - operandValue,
+                            "*" => value * operandValue,
+                            "/" => value / operandValue,
+                            _ => value
+                        };
+                    }
+                }
+
+                return value.ToString();
+            });
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            ErrorView.ShowException(e);
+            return content;
         }
     }
 
@@ -1020,6 +1224,7 @@ public class MaaProcessor
     #endregion
 
     #region 命令行获取（平台相关）
+
     [SupportedOSPlatform("windows")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("macos")]
@@ -1072,6 +1277,7 @@ public class MaaProcessor
     #endregion
 
     #region 进程终止（带权限处理）
+
     [SupportedOSPlatform("windows")]
     [SupportedOSPlatform("linux")]
     [SupportedOSPlatform("macos")]
@@ -1201,7 +1407,6 @@ public class MaaProcessor
     public async Task StartTask(List<DragItemViewModel>? tasks, bool onlyStart = false, bool checkUpdate = false)
     {
         CancellationTokenSource = new CancellationTokenSource();
-        SetTasker();
 
         _startTime = DateTime.Now;
 
@@ -1213,7 +1418,6 @@ public class MaaProcessor
             var taskAndParams = tasks.Select(CreateNodeAndParam).ToList();
             InitializeConnectionTasksAsync(token);
             AddCoreTasksAsync(taskAndParams, token);
-
         }
         AddPostTasksAsync(onlyStart, checkUpdate, token);
         await TaskManager.RunTaskAsync(async () =>

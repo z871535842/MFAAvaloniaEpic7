@@ -41,9 +41,9 @@ public class MaaProcessor
 
     private static MaaInterface? _interface;
 
-    public Dictionary<string, MaaNode> BaseTasks = new();
+    public Dictionary<string, MaaNode> BaseNodes = new();
 
-    public Dictionary<string, MaaNode> TaskDictionary = new();
+    public Dictionary<string, MaaNode> NodeDictionary = new();
     public ObservableQueue<MFATask> TaskQueue { get; } = new();
 
     public MaaProcessor()
@@ -86,7 +86,7 @@ public class MaaProcessor
             _agentClient?.LinkStop();
             _agentClient?.Dispose();
             _agentClient = null;
-            agentStarted = false;
+            _agentStarted = false;
         }
         MaaTasker = maaTasker;
     }
@@ -105,12 +105,11 @@ public class MaaProcessor
     }
     public ObservableCollection<DragItemViewModel> TasksSource { get; private set; } =
         [];
-    public Dictionary<string, MaaNode> BaseNodes = new();
-
     public AutoInitDictionary AutoInitDictionary { get; } = new();
 
     private MaaAgentClient? _agentClient;
-    private bool agentStarted = false;
+    private bool _agentStarted;
+    private Process? _agentProcess;
 
     #endregion
 
@@ -189,7 +188,7 @@ public class MaaProcessor
 
             // 获取代理配置（假设Interface在UI线程中访问）
             var agentConfig = Interface?.Agent;
-            if (agentConfig is { ChildExec: not null } && !agentStarted)
+            if (agentConfig is { ChildExec: not null } && !_agentStarted)
             {
                 RootView.AddLogByKey("StartingAgent");
                 if (_agentClient != null)
@@ -197,6 +196,9 @@ public class MaaProcessor
                     _agentClient.LinkStop();
                     _agentClient.Dispose();
                     _agentClient = null;
+                    _agentProcess?.Kill();
+                    _agentProcess?.Dispose();
+                    _agentProcess = null;
                 }
                 _agentClient = new MaaAgentClient
                 {
@@ -221,7 +223,7 @@ public class MaaProcessor
                     {
                         FileName = program,
                         WorkingDirectory = $"{AppContext.BaseDirectory}",
-                        Arguments = $"{(program.Contains("python") && !args.Contains("-u ") ? "-u " : "")}{args}",
+                        Arguments = $"{(program.Contains("python") && args.Contains(".py") && !args.Contains("-u ") ? "-u " : "")}{args}",
                         UseShellExecute = false,
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
@@ -229,24 +231,12 @@ public class MaaProcessor
                         CreateNoWindow = true
                     };
 
-                    var process = new Process
+                    _agentProcess = new Process
                     {
                         StartInfo = startInfo
                     };
 
-                    process.OutputDataReceived += (sender, args) =>
-                    {
-                        if (!string.IsNullOrEmpty(args.Data))
-                        {
-                            Console.WriteLine($"输出: {args.Data}");
-                            DispatcherHelper.PostOnMainThread(() =>
-                            {
-                                RootView.AddLog($"{args.Data}");
-                            });
-                        }
-                    };
-
-                    process.ErrorDataReceived += (sender, args) =>
+                    _agentProcess.OutputDataReceived += (sender, args) =>
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
@@ -257,14 +247,25 @@ public class MaaProcessor
                         }
                     };
 
-                    process.Start();
+                    _agentProcess.ErrorDataReceived += (sender, args) =>
+                    {
+                        if (!string.IsNullOrEmpty(args.Data))
+                        {
+                            DispatcherHelper.PostOnMainThread(() =>
+                            {
+                                RootView.AddLog($"{args.Data}");
+                            });
+                        }
+                    };
+
+                    _agentProcess.Start();
                     LoggerHelper.Info(
                         $"Agent启动: {MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory)} {string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket} "
                         + $"socket_id: {socket}");
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
+                    _agentProcess.BeginOutputReadLine();
+                    _agentProcess.BeginErrorReadLine();
 
-                    TaskManager.RunTaskAsync(async () => await process.WaitForExitAsync(token), token);
+                    TaskManager.RunTaskAsync(async () => await _agentProcess.WaitForExitAsync(token), token);
 
                 }
                 catch (Exception ex)
@@ -273,7 +274,7 @@ public class MaaProcessor
                 }
 
                 _agentClient?.LinkStart();
-                agentStarted = true;
+                _agentStarted = true;
             }
             // RegisterCustomRecognitionsAndActions(tasker);
             Instances.TaskQueueViewModel.SetConnected(true);
@@ -286,7 +287,7 @@ public class MaaProcessor
                 var name = jObject["name"]?.ToString() ?? string.Empty;
                 if (args.Message.StartsWith(MaaMsg.Node.Action.Prefix))
                 {
-                    if (TaskDictionary.TryGetValue(name, out var taskModel))
+                    if (NodeDictionary.TryGetValue(name, out var taskModel))
                     {
                         DisplayFocus(taskModel, args.Message);
                     }
@@ -370,7 +371,6 @@ public class MaaProcessor
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e);
                             LoggerHelper.Error(e);
                         }
 
@@ -379,7 +379,6 @@ public class MaaProcessor
                 }
                 break;
         }
-
     }
     public static string HandleStringsWithVariables(string content)
     {
@@ -733,11 +732,12 @@ public class MaaProcessor
             {
                 if (!taskDictionary.ContainsKey(task))
                 {
-                    ToastHelper.Error("TaskNotFoundError".ToLocalizationFormatted(false, name, task));
+                    ToastHelper.Error("Error".ToLocalization(), "TaskNotFoundError".ToLocalizationFormatted(false, name, task));
                 }
             }
         }
     }
+
     public void ConnectToMAA()
     {
         ConfigureMaaProcessorForADB();
@@ -927,8 +927,7 @@ public class MaaProcessor
         }
 
         TasksSource.AddRange(newItems);
-
-
+        
         if (!Instances.TaskQueueViewModel.TaskItemViewModels.Any())
         {
             Instances.TaskQueueViewModel.TaskItemViewModels = new ObservableCollection<DragItemViewModel>(drags);
@@ -1419,6 +1418,7 @@ public class MaaProcessor
             InitializeConnectionTasksAsync(token);
             AddCoreTasksAsync(taskAndParams, token);
         }
+        
         AddPostTasksAsync(onlyStart, checkUpdate, token);
         await TaskManager.RunTaskAsync(async () =>
         {
@@ -1462,8 +1462,7 @@ public class MaaProcessor
     private void UpdateTaskDictionary(ref Dictionary<string, MaaNode> taskModels,
         List<MaaInterface.MaaInterfaceSelectOption>? options)
     {
-        Instance.TaskDictionary = Instance.TaskDictionary.MergeMaaNodes(taskModels);
-
+        Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(taskModels);
         if (options == null) return;
 
         foreach (var selectOption in options)
@@ -1476,7 +1475,7 @@ public class MaaProcessor
                 && cases[index]?.PipelineOverride != null)
             {
                 var param = interfaceOption.Cases[selectOption.Index.Value].PipelineOverride;
-                Instance.TaskDictionary = Instance.TaskDictionary.MergeMaaNodes(param);
+                Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(param);
                 taskModels = taskModels.MergeMaaNodes(param);
             }
         }
@@ -1504,7 +1503,7 @@ public class MaaProcessor
     private NodeAndParam CreateNodeAndParam(DragItemViewModel task)
     {
         var taskModels = task.InterfaceItem?.PipelineOverride ?? new Dictionary<string, MaaNode>();
-
+        Console.WriteLine(string.Join(",", taskModels.Keys));
         UpdateTaskDictionary(ref taskModels, task.InterfaceItem?.Option);
 
         var taskParams = SerializeTaskParams(taskModels);
@@ -1514,7 +1513,7 @@ public class MaaProcessor
             NullValueHandling = NullValueHandling.Ignore,
             DefaultValueHandling = DefaultValueHandling.Ignore
         };
-        var json = JsonConvert.SerializeObject(Instance.BaseTasks, settings);
+        var json = JsonConvert.SerializeObject(Instance.BaseNodes, settings);
 
         var tasks = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(json, settings);
         tasks = tasks.MergeMaaNodes(taskModels);
@@ -1628,6 +1627,7 @@ public class MaaProcessor
         ToastHelper.Warn("Warning_CannotConnect".ToLocalizationFormatted(true, isAdb ? "Emulator" : "Window"));
         Stop();
     }
+
     private void AddCoreTasksAsync(List<NodeAndParam> taskAndParams, CancellationToken token)
     {
         foreach (var task in taskAndParams)
@@ -1637,7 +1637,7 @@ public class MaaProcessor
                 {
                     token.ThrowIfCancellationRequested();
                     if (task.Tasks != null)
-                        TaskDictionary = task.Tasks;
+                        NodeDictionary = task.Tasks;
                     await TryRunTasksAsync(MaaTasker, task.Entry, task.Param, token);
                 }, task.Count ?? 1
             ));

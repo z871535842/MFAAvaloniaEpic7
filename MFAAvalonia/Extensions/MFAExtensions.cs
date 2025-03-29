@@ -42,7 +42,6 @@ public static class MFAExtensions
                         {
                             mergedModel.Merge(taskModel.Value);
                         }
-
                         return mergedModel;
                     }
                 )

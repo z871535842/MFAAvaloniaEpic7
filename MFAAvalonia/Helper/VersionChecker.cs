@@ -566,7 +566,7 @@ public static class VersionChecker
             var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
             var sourceBytes = Encoding.UTF8.GetBytes(extractDir);
             var sourceDirectory = Encoding.UTF8.GetString(sourceBytes);
-            
+
             SetProgress(progress, 60);
             string updaterName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
                 ? "MFAUpdater.exe"
@@ -583,8 +583,20 @@ public static class VersionChecker
                     await chmodProcess?.WaitForExitAsync();
                 }
                 File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    try
+                    {
+                        File.Copy(Path.Combine(sourceDirectory, "MFAUpdater.dll"), Path.Combine(utf8BaseDirectory, "MFAUpdater.dll"), overwrite: true);
+                        LoggerHelper.Info($"成功复制更新器.dll到目标目录: {Path.Combine(utf8BaseDirectory, "MFAUpdater.dll")}");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
                 LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
-        
+
                 // 验证源文件存在性
                 if (!File.Exists(sourceUpdaterPath))
                 {
@@ -602,11 +614,10 @@ public static class VersionChecker
                 LoggerHelper.Error($"权限不足: {ex.Message}");
                 throw new SecurityException("文件访问权限被拒绝", ex);
             }
-            
-            SetProgress(progress, 100);
-            
-            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
 
+            SetProgress(progress, 100);
+
+            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
 
             Thread.Sleep(500);
         }
@@ -649,13 +660,13 @@ public static class VersionChecker
             LoggerHelper.Error($"更新器在目录缺失: {updaterPath}");
             throw new FileNotFoundException("更新程序源文件未找到");
         }
-        
+
         if (File.Exists(updaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
             await chmodProcess?.WaitForExitAsync();
         }
-        
+
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             var chmodProcess = Process.Start("/bin/chmod", $"+x {updaterPath}");
@@ -788,7 +799,7 @@ public static class VersionChecker
                 ToastHelper.Warn("DownloadFailed");
                 return;
             }
-            
+
             SetText(textBlock, "ApplyingUpdate".ToLocalization());
             // 文件替换（复用ReplaceFilesWithRetry）
             SetProgress(progress, 0);

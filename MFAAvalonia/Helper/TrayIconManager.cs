@@ -62,7 +62,7 @@ public class TrayIconManager
         {
         };
 
-        menuItem3.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.SwitchLanguage));
+        menuItem3.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.SwitchLanguage)); 
         menuItem3.Menu = new NativeMenu();
 
         foreach (var lang in LanguageHelper.SupportedLanguages)
@@ -71,7 +71,7 @@ public class TrayIconManager
             {
                 Header = lang.Name
             };
-            langMenu.Click += (_, _) =>
+            langMenu.Click += (sender, _) =>
             {
                 LanguageHelper.ChangeLanguage(lang);
                 var index = LanguageHelper.SupportedLanguages.ToList().FindIndex(language => language.Key == lang.Key);

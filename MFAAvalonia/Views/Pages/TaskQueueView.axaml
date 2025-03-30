@@ -23,14 +23,16 @@
     xmlns:usersControls="clr-namespace:MFAAvalonia.ViewModels.UsersControls"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
-    xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia">
+    xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia"
+    xmlns:markupExtensions="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
+    xmlns:extensions="clr-namespace:SukiUI.Extensions;assembly=SukiUI">
     <Design.DataContext>
         <pages:TaskQueueViewModel />
     </Design.DataContext>
 
     <UserControl.Resources>
         <ContextMenu x:Key="TaskMenu">
-            <MenuItem Click="Delete" Header="{markup:I18n {x:Static helper:LangKeys.Delete}}" />
+            <MenuItem Click="Delete" Header="{markup:I18n {x:Static helper:LangKeys.Delete}}"  />
         </ContextMenu>
     </UserControl.Resources>
     <Grid ClipToBounds="False" Margin="0,0,0,0">

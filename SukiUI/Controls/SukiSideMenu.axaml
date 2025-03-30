@@ -10,7 +10,7 @@
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="Template">
             <ControlTemplate>
-                <SplitView DisplayMode="CompactInline"
+                <SplitView DisplayMode="CompactInline" CompactPaneLength="{TemplateBinding ClosePaneLength}"
                            IsPaneOpen="{TemplateBinding IsMenuExpanded}"
                            OpenPaneLength="{TemplateBinding OpenPaneLength}">
                     <SplitView.Pane>
@@ -53,14 +53,23 @@
                                         </Panel>
                                     </Button>
                                     <Grid MinHeight="{TemplateBinding HeaderMinHeight}"
-                                          DockPanel.Dock="Top"
-                                          IsVisible="{TemplateBinding IsMenuExpanded}">
-                                        <ContentPresenter Content="{TemplateBinding HeaderContent}" />
+                                          DockPanel.Dock="Top">
+                                        <ContentPresenter IsVisible="{TemplateBinding IsMenuExpanded}"
+                                                          Content="{TemplateBinding HeaderContent}" />
+
                                     </Grid>
-                                    <ContentControl Margin="0,0,0,12"
-                                                    Content="{TemplateBinding FooterContent}"
-                                                    DockPanel.Dock="Bottom"
-                                                    IsVisible="{TemplateBinding IsMenuExpanded}" />
+                                    <StackPanel DockPanel.Dock="Bottom">
+                                        <ContentControl Margin="0,0,0,12"
+                                                        Content="{TemplateBinding FooterContent}"
+                                                        
+                                                        IsVisible="{TemplateBinding IsMenuExpanded}" />
+
+                                        <ItemsControl Margin="0,0,0,4"
+                                                      ItemsSource="{TemplateBinding FooterMenuItems}">
+                                        </ItemsControl>
+
+                                    </StackPanel>
+
                                     <Grid Name="PART_Spacer"
                                           Height="15"
                                           DockPanel.Dock="Top" />
@@ -123,6 +132,7 @@
                                                                 ItemsPanel="{TemplateBinding ItemsPanel}" />
                                             </StackPanel>
                                         </ScrollViewer>
+
                                     </DockPanel>
                                 </DockPanel>
                             </Grid>

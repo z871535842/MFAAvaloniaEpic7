@@ -3,7 +3,10 @@
                     xmlns:content="clr-namespace:SukiUI.Content"
                     xmlns:controls="clr-namespace:SukiUI.Controls"
                     xmlns:converters="clr-namespace:Avalonia.Controls.Converters;assembly=Avalonia.Controls"
-                    xmlns:system="clr-namespace:System;assembly=netstandard">
+                    xmlns:system="clr-namespace:System;assembly=netstandard"
+                    xmlns:extensions="clr-namespace:SukiUI.Extensions"
+                    xmlns:suki="https://github.com/kikipoulet/SukiUI">
+
     <converters:PlatformKeyGestureConverter x:Key="KeyGestureConverter" />
 
     <ControlTheme x:Key="SukiMenuItemStyle" TargetType="MenuItem">
@@ -22,13 +25,21 @@
                     <Panel>
                         <DockPanel Margin="5,10">
                             <ContentPresenter Name="PART_Icon"
-                                              Width="15"
-                                              Height="15"
+                                              Width="24"
+                                              Height="24"
                                               Margin="5,0"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
-                                              Content="{TemplateBinding Icon}"
-                                              DockPanel.Dock="Left" />
+                                              DockPanel.Dock="Left">
+                                <ContentPresenter.Content>
+                                    <MultiBinding Converter="{suki:AdvancedIconSelectorConverter}">
+                                        <Binding Path="(extensions:MenuIconExtensions.MenuIcon)" 
+                                                 RelativeSource="{RelativeSource TemplatedParent}">
+                                        </Binding>
+                                        <Binding Path="Icon" RelativeSource="{RelativeSource TemplatedParent}"></Binding>
+                                    </MultiBinding>
+                                </ContentPresenter.Content>
+                            </ContentPresenter>
                             <Rectangle Width="1"
                                        Margin="5,-2"
                                        DockPanel.Dock="Left"

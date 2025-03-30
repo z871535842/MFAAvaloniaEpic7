@@ -231,9 +231,14 @@ public class SukiSideMenu : ItemsControl
             foreach (var item in _sideMenuItems)
                 item.IsTopMenuExpanded = IsMenuExpanded;
 
-        else if (Items.FirstOrDefault() is SukiSideMenuItem)
-            foreach (SukiSideMenuItem? item in Items)
+        else
+        {
+            if (Items.FirstOrDefault() is SukiSideMenuItem)
+                foreach (SukiSideMenuItem? item in Items)
+                    item!.IsTopMenuExpanded = IsMenuExpanded;
+            foreach (var item in FooterMenuItems)
                 item!.IsTopMenuExpanded = IsMenuExpanded;
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -244,7 +249,13 @@ public class SukiSideMenu : ItemsControl
         {
             SelectedItem = Items.FirstOrDefault() as SukiSideMenuItem ?? FooterMenuItems.First();
         }
-
+        foreach (SukiSideMenuItem? item in Items)
+        {
+            if (item != null)
+                _sideMenuItems.Add(item);
+        }
+        foreach (var item in FooterMenuItems)
+            _sideMenuItems.Add(item);
         e.NameScope.Get<Button>("PART_SidebarToggleButton").Click += (_, _) => MenuExpandedClicked();
         _contentControl = e.NameScope.Get<SukiTransitioningContentControl>("PART_TransitioningContentControl");
         _spacer = e.NameScope.Get<Grid>("PART_Spacer");

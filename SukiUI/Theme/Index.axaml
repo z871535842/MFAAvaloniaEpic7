@@ -35,7 +35,9 @@
     <StyleInclude Source="avares://SukiUI/Theme/ButtonLoadingStyles.axaml" />
 
     <StyleInclude Source="avares://SukiUI/Theme/PathIconStyles.axaml" />
-
+    
+    <StyleInclude Source="avares://SukiUI/Controls/PasswordBox.axaml" />
+    
     <Styles.Resources>
         <ResourceDictionary>
 

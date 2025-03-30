@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace MFAAvalonia.Helper.Converters;
+namespace SukiUI.Converters;
 
 public class BoolToPasswordCharConverter : MarkupExtension, IMultiValueConverter
 {

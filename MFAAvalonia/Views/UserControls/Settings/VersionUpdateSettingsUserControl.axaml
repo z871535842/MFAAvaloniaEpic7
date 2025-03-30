@@ -83,7 +83,7 @@
                     </StackPanel>
                 </DockPanel>
                 <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==1'}">
-                    <userControls:PasswordBox
+                    <suki:PasswordBox
                         DockPanel.Dock="Right"
                         HorizontalAlignment="Center"
                         Password="{Binding CdkPassword}"

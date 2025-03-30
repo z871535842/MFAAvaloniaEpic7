@@ -37,8 +37,10 @@
         <entry key="SukiUI/ColorTheme/Light.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Experimental/DesktopEnvironment/InternalWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/InfoBar.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/PasswordBox.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Settings/SettingsLayout.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/SukiDialog.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/SukiSideMenu.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/SukiWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/en-us.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/zh-cn.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -47,9 +49,11 @@
         <entry key="SukiUI/Theme/Button.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ButtonLoadingStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/Colors.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/Index.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ManagedFileChooser.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/MenuItem.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/PathIcon.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/PathIconStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RadioButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBoxStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextEraserButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />

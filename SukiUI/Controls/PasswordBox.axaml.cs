@@ -2,13 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using System;
 
-namespace MFAAvalonia.Views.UserControls;
+namespace SukiUI.Controls;
 
 [TemplatePart(Name = ElementTextBox, Type = typeof(TextBox))]
 [TemplatePart(Name = ElementToggleButton, Type = typeof(ToggleButton))]
@@ -42,17 +41,6 @@ public class PasswordBox : TemplatedControl
         add => AddHandler(PasswordChangedEvent, value);
         remove => RemoveHandler(PasswordChangedEvent, value);
     }
-
-    // private static void OnPasswordChanged(AvaloniaObject d, AvaloniaPropertyChangedEventArgs e)
-    // {
-    //     var passwordBox = (PasswordBox)d;
-    //     passwordBox.PasswordChanged?.Invoke(passwordBox, EventArgs.Empty);
-    //     var textBox = passwordBox._textBox;
-    //     if (textBox != null && textBox.Text != passwordBox.Password)
-    //     {
-    //         textBox.Text = passwordBox.Password;
-    //     }
-    // }
 
     public string Password
     {
@@ -89,8 +77,8 @@ public class PasswordBox : TemplatedControl
 
         base.OnApplyTemplate(e);
         _textBox = e.NameScope.Find<TextBox>(ElementTextBox);
-        
-        if (Password != _textBox.Text) 
+
+        if (Password != _textBox.Text)
             _textBox.Text = Password;
         var toggleButton = e.NameScope.Find<ToggleButton>(ElementToggleButton);
 

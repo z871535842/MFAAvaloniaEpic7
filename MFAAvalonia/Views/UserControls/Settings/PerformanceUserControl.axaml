@@ -11,23 +11,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.UsersControls.Settings"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions">
     <Design.DataContext>
         <settings:PerformanceUserControlModel />
     </Design.DataContext>
     <suki:GlassCard Margin="0,15,0,0" Padding="25,10,25,10">
         <DockPanel>
-            <ComboBox
-                DisplayMemberBinding="{Binding Name}"
-                DockPanel.Dock="Right"
-                Focusable="False"
-                HorizontalAlignment="Center"
-                IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                ItemsSource="{Binding GpuOptions}"
-                SelectedValue="{Binding GpuOption}"
-                SelectedValueBinding="{Binding Other}"
-                VerticalAlignment="Center"
-                Width="215" />
+            <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                      DisplayMemberBinding="{Binding Name}"
+                      DockPanel.Dock="Right"
+                      Focusable="False"
+                      HorizontalAlignment="Center"
+                      IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                      ItemsSource="{Binding GpuOptions}"
+                      SelectedValue="{Binding GpuOption}"
+                      SelectedValueBinding="{Binding Other}"
+                      VerticalAlignment="Center"
+                      Width="215" />
             <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                 <TextBlock
                     FontSize="16"

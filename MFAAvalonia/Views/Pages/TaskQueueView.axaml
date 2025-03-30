@@ -56,14 +56,14 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
-                    <ComboBox
-                        DisplayMemberBinding="{Binding Name}"
-                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                        ItemsSource="{Binding CurrentResources}"
-                        Margin="10,0,10,0"
-                        SelectedValue="{Binding CurrentResource}"
-                        SelectedValueBinding="{Binding Name}"
-                        VerticalAlignment="Center" />
+                    <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                              DisplayMemberBinding="{Binding Name}"
+                              IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                              ItemsSource="{Binding CurrentResources}"
+                              Margin="10,0,10,0"
+                              SelectedValue="{Binding CurrentResource}"
+                              SelectedValueBinding="{Binding Name}"
+                              VerticalAlignment="Center" />
                 </suki:GroupBox>
 
             </suki:GlassCard>
@@ -135,7 +135,7 @@
                         <Grid>
                             <ListBox
                                 DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
-                                ex:DragDropExtensions.EnableDragDrop="True"
+                                ex:DragDropExtensions.EnableDragDrop="True"  ex:DragDropExtensions.EnableAnimation="True"
                                 ItemsSource="{Binding Path=TaskItemViewModels}"
                                 Margin="0,3,0,0"
                                 MinHeight="220"
@@ -155,7 +155,7 @@
                                                 HorizontalAlignment="Left"
                                                 IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                                 IsChecked="{Binding IsCheckedWithNull}"
-                                                ToolTip.Placement="Right"
+                                                ToolTip.Placement="Top"
                                                 ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}">
                                                 <CheckBox.ContentTemplate>
                                                     <DataTemplate>
@@ -403,11 +403,11 @@
                                 Grid.Column="0"
                                 Text="{markup:I18n {x:Static helper:LangKeys.CurrentController}}"
                                 VerticalAlignment="Center" />
-                            <ComboBox
-                                IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                                ItemsSource="{Binding Devices}"
-                                Margin="5,0,0,0"
-                                SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                                      IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                                      ItemsSource="{Binding Devices}"
+                                      Margin="5,0,0,0"
+                                      SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.DataTemplates>
                                     <DataTemplate DataType="binding:AdbDeviceInfo">
                                         <TextBlock HorizontalAlignment="Left"

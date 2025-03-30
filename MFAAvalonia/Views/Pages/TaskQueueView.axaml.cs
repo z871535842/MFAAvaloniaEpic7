@@ -331,6 +331,7 @@ public partial class TaskQueueView : UserControl
             option.Index = combo.SelectedIndex;
             SaveConfiguration();
         };
+        ComboBoxExtensions.SetDisableNavigationOnLostFocus(combo, true);
         Grid.SetColumn(combo, 1);
         var textBlock = new TextBlock
         {
@@ -485,7 +486,7 @@ public partial class TaskQueueView : UserControl
             "html" => input.Replace("\n", "<br/>"), // HTML换行用<br/>
             _ => input
         };
-        
+
         return input;
     }
     // private static List<TextStyleMetadata> _currentStyles = new();

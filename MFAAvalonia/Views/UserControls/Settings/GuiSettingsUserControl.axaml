@@ -123,11 +123,11 @@
                     </StackPanel>
                 </DockPanel>
                 <DockPanel>
-                    <ComboBox
-                        DockPanel.Dock="Right"
-                        ItemsSource="{Binding AvailableBackgroundStyles}"
-                        SelectedValue="{Binding BackgroundStyle}"
-                        Width="215" />
+                    <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                              DockPanel.Dock="Right"
+                              ItemsSource="{Binding AvailableBackgroundStyles}"
+                              SelectedValue="{Binding BackgroundStyle}"
+                              Width="215" />
                     <StackPanel HorizontalAlignment="Left">
                         <TextBlock
                             FontSize="16"
@@ -181,13 +181,13 @@
         </suki:GlassCard>
         <suki:GlassCard Margin="0,25,0,0" Padding="25">
             <DockPanel>
-                <ComboBox
-                    DisplayMemberBinding="{Binding Name}"
-                    DockPanel.Dock="Right"
-                    ItemsSource="{Binding SupportedLanguages}"
-                    SelectedValue="{Binding CurrentLanguage}"
-                    SelectedValueBinding="{Binding Key}"
-                    Width="215" />
+                <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                          DisplayMemberBinding="{Binding Name}"
+                          DockPanel.Dock="Right"
+                          ItemsSource="{Binding SupportedLanguages}"
+                          SelectedValue="{Binding CurrentLanguage}"
+                          SelectedValueBinding="{Binding Key}"
+                          Width="215" />
                 <StackPanel HorizontalAlignment="Left">
                     <TextBlock
                         FontSize="16"

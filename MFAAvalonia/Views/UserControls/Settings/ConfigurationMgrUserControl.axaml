@@ -12,23 +12,24 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:settings="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:extensions="clr-namespace:MFAAvalonia.Extensions">
     <StackPanel>
         <suki:GlassCard Margin="0,25,0,0" Padding="25">
             <StackPanel Spacing="25">
                 <DockPanel>
-                    <ComboBox
-                        DockPanel.Dock="Right"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Stretch"
-                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                        IsHitTestVisible="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                        ItemsSource="{Binding ConfigurationList}"
-                        SelectedValue="{Binding CurrentConfiguration}"
-                        SelectedValueBinding="{Binding Name}"
-                        VerticalAlignment="Center"
-                        Width="215"
-                        x:Name="SwitchConfigComboBox">
+                    <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                              DockPanel.Dock="Right"
+                              HorizontalAlignment="Center"
+                              HorizontalContentAlignment="Stretch"
+                              IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                              IsHitTestVisible="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                              ItemsSource="{Binding ConfigurationList}"
+                              SelectedValue="{Binding CurrentConfiguration}"
+                              SelectedValueBinding="{Binding Name}"
+                              VerticalAlignment="Center"
+                              Width="215"
+                              x:Name="SwitchConfigComboBox">
                         <ComboBox.Styles>
                             <Style Selector="ComboBoxItem:selected /template/ PathIcon#CheckSelected">
                                 <Setter Property="IsVisible" Value="False" />

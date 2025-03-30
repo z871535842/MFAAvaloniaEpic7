@@ -71,8 +71,8 @@ public class SukiSideMenu : SelectingItemsControl
         get => GetValue(OpenPaneLengthProperty);
         set => SetValue(OpenPaneLengthProperty, value switch
         {
-            >= 200 => value,
-            _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 200, but was {value}")
+            >= 150 => value,
+            _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 150, but was {value}")
         });
     }
 

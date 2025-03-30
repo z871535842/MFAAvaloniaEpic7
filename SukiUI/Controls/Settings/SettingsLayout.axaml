@@ -114,11 +114,14 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <DockPanel MaxWidth="1400" SizeChanged="DockPanel_SizeChanged">
-                        <StackPanel Name="StackSummary"
-                                    Width="{TemplateBinding StackSummaryWidth}"
-                                    Margin="0,25,0,0"
-                                    HorizontalAlignment="Left"
-                                    DockPanel.Dock="Left" />
+                        <ScrollViewer  Name="StackSummaryScroll" VerticalScrollBarVisibility="Hidden"
+                                       Width="{TemplateBinding StackSummaryWidth}"
+                                       Margin="0,25,0,25" VerticalAlignment="Top"
+                                       HorizontalAlignment="Left"
+                                       DockPanel.Dock="Left" >
+                             <StackPanel  Name="StackSummary"  VerticalAlignment="Top"/>
+                        </ScrollViewer>
+                       
                         <ScrollViewer Name="MyScroll" Classes="Stack">
                             <StackPanel Name="StackItems"
                                         Margin="20,0"

@@ -92,7 +92,7 @@
                                         IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                         Margin="7,0,0,0"
                                         Padding="0"
-                                        ToolTip.Placement="Right"
+                                        
                                         ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.SelectAll}}"
                                         Width="16">
                                         <fluent:FluentIcon
@@ -107,7 +107,7 @@
                                         IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                         Margin="7,0,0,0"
                                         Padding="0"
-                                        ToolTip.Placement="Right"
+                                        
                                         ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.DeselectAll}}"
                                         Width="16">
                                         <fluent:FluentIcon
@@ -122,7 +122,7 @@
                                         IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                         Margin="7,0,8,0"
                                         Padding="0"
-                                        ToolTip.Placement="Right"
+                                        
                                         ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.AddTask}}">
                                         <fluent:FluentIcon
                                             Icon="AddSquareMultiple"
@@ -144,19 +144,19 @@
                                 x:Name="TaskListBox">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid
-                                            Background="Transparent"
-                                            ColumnDefinitions="*,25"
-                                            ContextMenu="{StaticResource TaskMenu}"
-                                            x:Name="ListGrid">
+                                        <Grid   
+                                                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}"
+                                                Background="Transparent"
+                                                ColumnDefinitions="*,25"
+                                                ContextMenu="{StaticResource TaskMenu}"
+                                                x:Name="ListGrid">
                                             <CheckBox
                                                 Content="{Binding Name}"
                                                 Grid.Column="0"
                                                 HorizontalAlignment="Left"
                                                 IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                                 IsChecked="{Binding IsCheckedWithNull}"
-                                                ToolTip.Placement="Top"
-                                                ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}">
+                                              >
                                                 <CheckBox.ContentTemplate>
                                                     <DataTemplate>
                                                         <TextBlock
@@ -304,7 +304,7 @@
                                                 Height="11"
                                                 Margin="3,2,4,0"
                                                 Stretch="Uniform"
-                                                ToolTip.Placement="Right"
+                                                
                                                 ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Connected}}" />
                                         </markup:IfConditionConverter.True>
                                         <markup:IfConditionConverter.False>
@@ -314,7 +314,7 @@
                                                 Height="16"
                                                 Margin="3,3,4,0"
                                                 Stretch="Uniform"
-                                                ToolTip.Placement="Right"
+                                                
                                                 ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Unconnected}}"
                                                 VerticalAlignment="Center" />
                                         </markup:IfConditionConverter.False>
@@ -328,7 +328,7 @@
                                     IsVisible="{calcBinding:Binding 'CurrentController == maa:MaaControllerTypes.Adb'}"
                                     Margin="3,0,2,0"
                                     Padding="0"
-                                    ToolTip.Placement="Right"
+                                    
                                     ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.Custom}}">
                                     <fluent:FluentIcon
                                         Height="18"
@@ -343,7 +343,7 @@
                                     IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                     Margin="3,0,3,0"
                                     Padding="0"
-                                    ToolTip.Placement="Right"
+                                    
                                     ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipRefresh}}"
                                     VerticalAlignment="Center">
                                     <fluent:FluentIcon

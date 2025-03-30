@@ -1,4 +1,6 @@
 ﻿using Avalonia;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
@@ -6,6 +8,8 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
+using Avalonia.Styling;
+using Avalonia.Threading;
 using Avalonia.VisualTree;
 using AvaloniaEdit.Utils;
 using MFAAvalonia.Helper;
@@ -16,9 +20,11 @@ using SukiUI;
 using SukiUI.Controls;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace MFAAvalonia.Extensions;
 
@@ -47,14 +53,11 @@ public class DragDropExtensions
         {
             if (args.NewValue.Value)
             {
-                // 启用拖放功能
-                DragDrop.SetAllowDrop(textBox, true);
                 textBox.AddHandler(DragDrop.DragOverEvent, File_DragOver);
                 textBox.AddHandler(DragDrop.DropEvent, File_Drop);
             }
             else
             {
-                // 禁用拖放功能
                 textBox.RemoveHandler(DragDrop.DragOverEvent, File_DragOver);
                 textBox.RemoveHandler(DragDrop.DropEvent, File_Drop);
             }
@@ -82,7 +85,7 @@ public class DragDropExtensions
             textBox.Text = firstFile ?? string.Empty;
         }
     }
-    
+
     public static readonly AttachedProperty<bool> EnableDragDropProperty =
         AvaloniaProperty.RegisterAttached<ListBox, bool>(
             "EnableDragDrop",
@@ -94,7 +97,19 @@ public class DragDropExtensions
         AvaloniaProperty.RegisterAttached<ListBox, DragAdorner?>(
             "DragAdorner",
             typeof(DragDropExtensions));
-    
+
+    public static readonly AttachedProperty<bool> EnableAnimationProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, bool>(
+            "EnableAnimation",
+            typeof(DragDropExtensions),
+            defaultValue: false);
+
+    public static readonly AttachedProperty<double> AnimationDurationProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, double>(
+            "AnimationDuration",
+            typeof(DragDropExtensions),
+            defaultValue: 400.0);
+
     static DragDropExtensions()
     {
         EnableFileDragDropProperty.Changed.Subscribe(OnEnableDragDropChanged);
@@ -113,12 +128,28 @@ public class DragDropExtensions
             }
         });
     }
+    public static bool GetEnableAnimation(ListBox element) =>
+        element.GetValue(EnableAnimationProperty);
+
+    public static void SetEnableAnimation(ListBox element, bool value) =>
+        element.SetValue(EnableAnimationProperty, value);
 
     public static bool GetEnableDragDrop(ListBox element) =>
         element.GetValue(EnableDragDropProperty);
 
     public static void SetEnableDragDrop(ListBox element, bool value) =>
         element.SetValue(EnableDragDropProperty, value);
+
+
+    public static double GetAnimationDuration(ListBox element) =>
+        element.GetValue(AnimationDurationProperty);
+
+    public static void SetAnimationDuration(ListBox element, double value) =>
+        element.SetValue(AnimationDurationProperty, value switch
+        {
+            >= 150 => value,
+            _ => throw new ArgumentOutOfRangeException($"AnimationDuration must be greater than or equal to 150, but was {value}")
+        });
 
     private static void EnableDragDrop(ListBox listBox)
     {
@@ -168,7 +199,7 @@ public class DragDropExtensions
         if (sourceItem == -1) return;
 
         var data = new DataObject();
-
+        listBox.SelectedIndex = Math.Clamp(sourceItem, 0, listBox.Items.Count - 1);
         data.Set(DataFormats.Text, sourceItem.ToString());
 
         DragDrop.DoDragDrop(e, data, DragDropEffects.Move);
@@ -198,9 +229,117 @@ public class DragDropExtensions
 
         if (sourceIndex >= 0 && targetIndex >= 0 && sourceIndex != targetIndex)
         {
-            items.MoveTo(sourceIndex, Math.Clamp(targetIndex, 0, items.Count));
+            if (GetEnableAnimation(listBox))
+            {
+                MoveWithAnimation(listBox, items, sourceIndex, targetIndex);
+            }
+            else
+            {
+                items.MoveTo(sourceIndex, targetIndex);
+            }
         }
         ClearAdorner(listBox);
+    }
+
+    async private static Task AnimateItemMovement(ListBoxItem item, double startY, double endY, double duration = 400)
+    {
+        var completionSource = new TaskCompletionSource<bool>();
+        var animation = new Animation
+        {
+            Duration = TimeSpan.FromMilliseconds(duration),
+            Easing = new CubicEaseOut(),
+            Children =
+            {
+                new KeyFrame
+                {
+                    KeyTime = TimeSpan.Zero,
+                    Setters =
+                    {
+                        new Setter(TranslateTransform.YProperty, startY)
+                    }
+                },
+                new KeyFrame
+                {
+                    KeyTime = TimeSpan.FromMilliseconds(duration - 3),
+                    Setters =
+                    {
+                        new Setter(TranslateTransform.YProperty, endY)
+                    }
+                },
+                new KeyFrame
+                {
+                    KeyTime = TimeSpan.FromMilliseconds(duration),
+                    Setters =
+                    {
+                        new Setter(TranslateTransform.YProperty, endY)
+                    }
+                }
+            }
+        };
+        animation.RunAsync(item).ContinueWith(t =>
+        {
+            completionSource.SetResult(true);
+        });
+
+        await completionSource.Task;
+    }
+
+    async private static Task MoveWithAnimation(ListBox listBox, IList items, int sourceIndex, int targetIndex)
+    {
+        var affectedItems = GetAffectedItems(listBox, sourceIndex, targetIndex);
+        await RunPreUpdateAnimations(listBox, affectedItems, () =>
+        {
+            items.MoveTo(sourceIndex, targetIndex);
+        });
+    }
+
+    private class ListBoxItemAndIndex(ListBoxItem? item, int sourceIndex, int targetIndex)
+    {
+        public ListBoxItem? ListBoxItem => item;
+        public int SourceIndex => sourceIndex;
+        public int TargetIndex => targetIndex;
+    }
+
+    private static IEnumerable<ListBoxItemAndIndex> GetAffectedItems(
+        ListBox listBox,
+        int sourceIndex,
+        int targetIndex)
+    {
+        listBox.UpdateLayout();
+        Dispatcher.UIThread.RunJobs();
+
+        var start = Math.Min(sourceIndex, targetIndex);
+        var end = Math.Max(sourceIndex, targetIndex);
+
+        var increment = sourceIndex < targetIndex ? -1 : +1;
+
+        var affectedItems = new List<ListBoxItemAndIndex>();
+        if (sourceIndex < targetIndex)
+            targetIndex--;
+
+        affectedItems.Add(new ListBoxItemAndIndex(listBox.ContainerFromIndex(sourceIndex) as ListBoxItem, sourceIndex, targetIndex));
+        foreach (var i in Enumerable.Range(start, end - start))
+        {
+            if (i != sourceIndex)
+                affectedItems.Add(new ListBoxItemAndIndex(listBox.ContainerFromIndex(i) as ListBoxItem, i, i + increment));
+        }
+        return affectedItems;
+    }
+
+    async private static Task RunPreUpdateAnimations(ListBox listBox,
+        IEnumerable<ListBoxItemAndIndex> items,
+        Action action)
+    {
+        var animations = items.Select(item =>
+        {
+            var startY = listBox.ContainerFromIndex(item.SourceIndex).Bounds.Y;
+            var endY = listBox.ContainerFromIndex(item.TargetIndex).Bounds.Y;
+
+            return AnimateItemMovement(item.ListBoxItem, 0, endY - startY, GetAnimationDuration(listBox));
+        }).ToList();
+        var delayTask = Task.Delay((int)GetAnimationDuration(listBox) - 2).ContinueWith(_ => action());
+        animations.Add(delayTask);
+        await Task.WhenAll(animations);
     }
 
     private static void OnDragLeave(object? sender, DragEventArgs e)
@@ -237,7 +376,7 @@ public class DragDropExtensions
 
         return defaultValue;
     }
-    
+
     private static int GetTargetIndex(ListBox listBox, Point position)
     {
         var scrollViewer = listBox.GetVisualDescendants()
@@ -276,7 +415,7 @@ public class DragDropExtensions
         var index = Convert.ToInt32(Math.Round(adjustedPosition.Y / itemHeight));
         return Math.Clamp(index, 0, listBox.ItemCount);
     }
-    
+
 
     // 修改装饰器更新逻辑
     private static void UpdateAdorner(ListBox listBox, int index, int count)

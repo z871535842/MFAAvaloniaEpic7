@@ -32,7 +32,7 @@
         <Style Selector="ToggleButton.SP:checked > PathIcon">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
         </Style>
-        
+
     </suki:SukiWindow.Styles>
     <suki:SukiWindow.NonClientAreaContent>
         <StackPanel Orientation="Horizontal" Spacing="5">
@@ -91,10 +91,10 @@
     </suki:SukiWindow.RightWindowTitleBarControls>
     <suki:SukiWindow.LogoContent>
         <Image
-            Height="20"
+            Height="18"
             Source="{x:Static helper:IconHelper.Icon}"
             Stretch="Uniform"
-            Width="20" />
+            Width="18" />
 
     </suki:SukiWindow.LogoContent>
     <Design.DataContext>
@@ -105,7 +105,7 @@
         <suki:SukiDialogHost Manager="{x:Static helper:Instances.DialogManager}" Name="DialogHost" />
     </suki:SukiWindow.Hosts>
     <Grid>
-        <suki:SukiSideMenu IsMenuExpanded="False" IsSearchEnabled="False">
+        <suki:SukiSideMenu IsMenuExpanded="False" IsSearchEnabled="False" OpenPaneLength="150">
             <!-- <suki:SukiSideMenu.Styles> -->
             <!--     <Style Selector="Image.AppIcon"> -->
             <!--         <Setter Property="Transitions"> -->
@@ -119,31 +119,31 @@
             <!--     </Style> -->
             <!-- </suki:SukiSideMenu.Styles> -->
             <suki:SukiSideMenu.Items>
-                <suki:SukiSideMenuItem
-                    Header="{markup:I18n {x:Static helper:LangKeys.Home}}"
-                    Icon="{markupExtensions:FluentIcon Icon=TasksApp,
+                <suki:SukiSideMenuItem IsContentMovable="False"
+                                       Header="{markup:I18n {x:Static helper:LangKeys.Home}}"
+                                       Icon="{markupExtensions:FluentIcon Icon=TasksApp,
                                                        IconVariant=Regular}"
-                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:TaskQueueView}}" />
-                <suki:SukiSideMenuItem
-                    Header="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
-                    Icon="{markupExtensions:FluentIcon Icon=Apps,
+                                       PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:TaskQueueView}}" />
+                <suki:SukiSideMenuItem IsContentMovable="False"
+                                       Header="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
+                                       Icon="{markupExtensions:FluentIcon Icon=Apps,
                                                        IconVariant=Regular}"
-                    IsVisible="False"
-                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:ResourcesView}}" />
-                <suki:SukiSideMenuItem
-                    Header="{markup:I18n {x:Static helper:LangKeys.Settings}}"
-                    Icon="{markupExtensions:FluentIcon Icon=Settings,
-                                                           IconVariant=Regular}"
-                    PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:SettingsView}}" />
+                                       IsVisible="False"
+                                       PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:ResourcesView}}" />
+          
             </suki:SukiSideMenu.Items>
 
             <suki:SukiSideMenu.HeaderContent>
                 <!--  Header Content  -->
             </suki:SukiSideMenu.HeaderContent>
 
-            <suki:SukiSideMenu.FooterContent>
-
-            </suki:SukiSideMenu.FooterContent>
+            <suki:SukiSideMenu.FooterMenuItems>
+                <suki:SukiSideMenuItem IsContentMovable="False"
+                                       Header="{markup:I18n {x:Static helper:LangKeys.Settings}}"
+                                       Icon="{markupExtensions:FluentIcon Icon=Settings,
+                                                           IconVariant=Regular}"
+                                       PageContent="{extensions:ServiceProvider ServiceType={x:Type pages:SettingsView}}" />
+            </suki:SukiSideMenu.FooterMenuItems>
         </suki:SukiSideMenu>
     </Grid>
 

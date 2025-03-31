@@ -61,8 +61,6 @@ namespace SukiUI.Theme
 
         public static void SetAnimatedScroll(StackPanel wrap, bool value)
         {
-
-
             wrap.SetValue(AnimatedScrollProperty, value);
         }
 
@@ -101,7 +99,7 @@ namespace SukiUI.Theme
     public static class ItemsPresenterExtensions
     {
         public static readonly AttachedProperty<bool> AnimatedScrollProperty =
-            AvaloniaProperty.RegisterAttached<ItemsPresenter, bool>("AnimatedScroll", typeof(ItemsPresenter), defaultValue: false);
+            AvaloniaProperty.RegisterAttached<ItemsControl, bool>("AnimatedScroll", typeof(ItemsPresenter), defaultValue: false);
 
         static ItemsPresenterExtensions()
         {

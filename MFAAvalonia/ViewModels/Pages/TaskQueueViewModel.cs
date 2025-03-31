@@ -67,6 +67,7 @@ public partial class TaskQueueViewModel : ViewModelBase
     {
         // 其他初始化代码可以放在这里
     }
+    
     #region 介绍
 
     [ObservableProperty] private string _introduction = string.Empty;
@@ -414,7 +415,13 @@ public partial class TaskQueueViewModel : ViewModelBase
         TaskManager.RunTask(() => AutoDetectDevice(_refreshCancellationTokenSource.Token), _refreshCancellationTokenSource.Token, handleError: (e) => HandleDetectionError(e, CurrentController == MaaControllerTypes.Adb),
             catchException: true, shouldLog: true);
     }
-
+    
+    [RelayCommand]
+    private void Clear()
+    {
+        LogItemViewModels.Clear();
+    }
+    
     public void AutoDetectDevice(CancellationToken token = default)
     {
         var isAdb = CurrentController == MaaControllerTypes.Adb;

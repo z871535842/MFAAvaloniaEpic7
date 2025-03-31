@@ -63,7 +63,7 @@
                                                                 BorderThickness="0"
                                                                 CornerRadius="0"
                                                                 IsAnimated="False" />
-                                                <DockPanel Margin="12,9" LastChildFill="True">
+                                                <DockPanel Margin="12,3,8,3" LastChildFill="True">
                                                     <StackPanel VerticalAlignment="Center"
                                                                 DockPanel.Dock="Right"
                                                                 Orientation="Horizontal"
@@ -100,7 +100,8 @@
                                                         </Button>
                                                         <Button Name="PART_CloseButton"
                                                                 Classes="WindowControlsButton Close">
-                                                            <PathIcon Classes="Close" Foreground="{Binding RelativeSource={RelativeSource  AncestorType=Button}, Path=Foreground}"
+                                                            <PathIcon Classes="Close"
+                                                                      Foreground="{Binding RelativeSource={RelativeSource  AncestorType=Button}, Path=Foreground}"
                                                                       Data="{x:Static icons:Icons.WindowClose}" />
                                                         </Button>
                                                     </StackPanel>

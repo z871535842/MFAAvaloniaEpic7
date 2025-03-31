@@ -16,7 +16,7 @@ using System.Collections.ObjectModel;
 
 namespace SukiUI.Controls;
 
-public class SukiSideMenu : SelectingItemsControl
+public class SukiSideMenu : ItemsControl
 {
     public static readonly StyledProperty<string?> SearchTextProperty =
         AvaloniaProperty.Register<SukiSideMenu, string?>(nameof(SearchText));
@@ -63,6 +63,19 @@ public class SukiSideMenu : SelectingItemsControl
         set => SetValue(IsMenuExpandedProperty, value);
     }
 
+    public static readonly StyledProperty<double> ClosePaneLengthProperty =
+        AvaloniaProperty.Register<SukiSideMenu, double>(nameof(ClosePaneLength), defaultValue: 48.0);
+
+    public double ClosePaneLength
+    {
+        get => GetValue(ClosePaneLengthProperty);
+        set => SetValue(ClosePaneLengthProperty, value switch
+        {
+            >= 48.0 => value,
+            _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 150, but was {value}")
+        });
+    }
+
     public static readonly StyledProperty<int> OpenPaneLengthProperty =
         AvaloniaProperty.Register<SukiSideMenu, int>(nameof(OpenPaneLength), defaultValue: 220);
 
@@ -71,8 +84,8 @@ public class SukiSideMenu : SelectingItemsControl
         get => GetValue(OpenPaneLengthProperty);
         set => SetValue(OpenPaneLengthProperty, value switch
         {
-            >= 200 => value,
-            _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 200, but was {value}")
+            >= 150 => value,
+            _ => throw new ArgumentOutOfRangeException($"OpenPaneLength must be greater than or equal to 150, but was {value}")
         });
     }
 
@@ -131,17 +144,77 @@ public class SukiSideMenu : SelectingItemsControl
         set => SetValue(FooterContentProperty, value);
     }
 
-    private readonly List<SukiSideMenuItem> _footerSideMenuItems = new();
+    public static readonly StyledProperty<ObservableCollection<SukiSideMenuItem>> FooterMenuItemsProperty =
+        AvaloniaProperty.Register<SukiSideMenu, ObservableCollection<SukiSideMenuItem>>(
+            nameof(FooterMenuItems),
+            defaultValue: new ObservableCollection<SukiSideMenuItem>()
+        );
+    public IList<SukiSideMenuItem> FooterMenuItems => GetValue(FooterMenuItemsProperty);
 
+    public IEnumerable<SukiSideMenuItem> FooterMenuItemsSource
+    {
+        get => GetValue(FooterMenuItemsSourceProperty);
+        set
+        {
+            if (value is null)
+            {
+                ClearValue(FooterMenuItemsSourceProperty);
+            }
+            else
+            {
+                SetValue(FooterMenuItemsSourceProperty, value);
+            }
+        }
+    }
+
+    public static readonly StyledProperty<SukiSideMenuItem?> SelectedItemProperty =
+        AvaloniaProperty.Register<SukiSideMenu, SukiSideMenuItem?>(nameof(SelectedItem));
+
+    public SukiSideMenuItem? SelectedItem
+    {
+        get => GetValue(SelectedItemProperty);
+        set
+        {
+            if (value != null)
+            {
+                if (GetValue(SelectedItemProperty) is SukiSideMenuItem oldValue)
+                    oldValue.IsSelected = false;
+                value.IsSelected = true;
+            }
+            SetValue(SelectedItemProperty, value);
+        }
+    }
+
+    private static void OnFooterMenuItemsSourceChanged(object? sender, IEnumerable<SukiSideMenuItem>? newValue)
+    {
+        if (sender is SukiSideMenu menu)
+        {
+            menu.FooterMenuItems.Clear();
+            if (newValue is IEnumerable<SukiSideMenuItem> newItemsSource)
+            {
+                foreach (var item in newItemsSource)
+                {
+                    menu.FooterMenuItems.Add(item);
+                }
+            }
+
+        }
+    }
+
+    /// <summary>Identifies the <see cref="FooterMenuItemsSource"/> dependency property.</summary>
+    public static readonly StyledProperty<IEnumerable<SukiSideMenuItem>> FooterMenuItemsSourceProperty =
+        AvaloniaProperty.Register<SukiSideMenu, IEnumerable<SukiSideMenuItem>>(nameof(FooterMenuItemsSource));
+
+    private ObservableCollection<SukiSideMenuItem> _allItems = new();
     private bool IsSpacerVisible => !IsMenuExpanded;
 
 
     private SukiTransitioningContentControl? _contentControl;
     private Grid? _spacer;
 
+
     public SukiSideMenu()
     {
-        SelectionMode = SelectionMode.Single | SelectionMode.AlwaysSelected;
 
     }
 
@@ -158,26 +231,45 @@ public class SukiSideMenu : SelectingItemsControl
             foreach (var item in _sideMenuItems)
                 item.IsTopMenuExpanded = IsMenuExpanded;
 
-        else if (Items.FirstOrDefault() is SukiSideMenuItem)
-            foreach (SukiSideMenuItem? item in Items)
+        else
+        {
+            if (Items.FirstOrDefault() is SukiSideMenuItem)
+                foreach (SukiSideMenuItem? item in Items)
+                    item!.IsTopMenuExpanded = IsMenuExpanded;
+            foreach (var item in FooterMenuItems)
                 item!.IsTopMenuExpanded = IsMenuExpanded;
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
 
-        if (Items.Any())
+        if (Items.Any() || FooterMenuItems.Any())
         {
-            SelectedItem = Items.First();
+            SelectedItem = Items.FirstOrDefault() as SukiSideMenuItem ?? FooterMenuItems.First();
         }
-
+        foreach (SukiSideMenuItem? item in Items)
+        {
+            if (item != null)
+                _sideMenuItems.Add(item);
+        }
+        foreach (var item in FooterMenuItems)
+            _sideMenuItems.Add(item);
         e.NameScope.Get<Button>("PART_SidebarToggleButton").Click += (_, _) => MenuExpandedClicked();
         _contentControl = e.NameScope.Get<SukiTransitioningContentControl>("PART_TransitioningContentControl");
         _spacer = e.NameScope.Get<Grid>("PART_Spacer");
         if (_spacer != null) _spacer.IsVisible = IsSpacerVisible;
 
 
+    }
+
+    public bool UpdateSelectionFromPointerEvent(SukiSideMenuItem? item)
+    {
+        if (item == null || SelectedItem == item) return false;
+
+        SelectedItem = item;
+        return true;
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -195,7 +287,10 @@ public class SukiSideMenu : SelectingItemsControl
         {
             FilterItems(change.GetNewValue<string>());
         }
-
+        if (change.Property == FooterMenuItemsSourceProperty)
+        {
+            OnFooterMenuItemsSourceChanged(this, change.NewValue as IEnumerable<SukiSideMenuItem>);
+        }
         if (change.Property == SelectedItemProperty && _contentControl != null)
             SetContentControlContent(change.NewValue);
         if (change.Property == IsMenuExpandedProperty && _spacer != null)
@@ -231,21 +326,12 @@ public class SukiSideMenu : SelectingItemsControl
         };
     }
 
-    public bool UpdateSelectionFromPointerEvent(Control source) => UpdateSelectionFromEventSource(source);
-    
+    // public bool UpdateSelectionFromPointerEvent(Control source) => UpdateSelectionFromEventSource(source);
+
     // 容器管理
     private readonly List<SukiSideMenuItem> _mainContainers = new();
     private readonly List<SukiSideMenuItem> _footerContainers = new();
 
-    protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
-    {
-        var menuItem = (ItemTemplate != null && ItemTemplate.Match(item) && ItemTemplate.Build(item) is SukiSideMenuItem sukiMenuItem)
-            ? sukiMenuItem
-            :  new SukiSideMenuItem();
-        menuItem.IsContentMovable = IsSelectedItemContentMovable;
-        _sideMenuItems.Add(menuItem);
-        return menuItem;
-    }
 
     // 处理点击事件
 

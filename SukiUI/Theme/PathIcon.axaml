@@ -22,6 +22,9 @@
                 </Border>
             </ControlTemplate>
         </Setter>
+        <Style Selector="^.Eye">
+            <Setter Property="Foreground" Value="{DynamicResource SukiDisabledText}" />
+        </Style>
         <Style Selector="^.Primary">
             <Setter Property="Foreground" Value="{DynamicResource SukiPrimaryColor}" />
         </Style>

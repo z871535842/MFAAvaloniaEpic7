@@ -18,14 +18,14 @@
         <suki:GlassCard Padding="25">
             <StackPanel Spacing="8">
                 <DockPanel>
-                    <ComboBox
-                        DisplayMemberBinding="{Binding Name}"
-                        DockPanel.Dock="Right"
-                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                        ItemsSource="{Binding BeforeTaskList}"
-                        SelectedValue="{Binding BeforeTask}"
-                        SelectedValueBinding="{Binding ResourceKey}"
-                        Width="215" />
+                    <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                              DisplayMemberBinding="{Binding Name}"
+                              DockPanel.Dock="Right"
+                              IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                              ItemsSource="{Binding BeforeTaskList}"
+                              SelectedValue="{Binding BeforeTask}"
+                              SelectedValueBinding="{Binding ResourceKey}"
+                              Width="215" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"
@@ -34,14 +34,14 @@
                     </StackPanel>
                 </DockPanel>
                 <DockPanel>
-                    <ComboBox
-                        DisplayMemberBinding="{Binding Name}"
-                        DockPanel.Dock="Right"
-                        IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
-                        ItemsSource="{Binding AfterTaskList}"
-                        SelectedValue="{Binding AfterTask}"
-                        SelectedValueBinding="{Binding ResourceKey}"
-                        Width="215" />
+                    <ComboBox extensions:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                              DisplayMemberBinding="{Binding Name}"
+                              DockPanel.Dock="Right"
+                              IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
+                              ItemsSource="{Binding AfterTaskList}"
+                              SelectedValue="{Binding AfterTask}"
+                              SelectedValueBinding="{Binding ResourceKey}"
+                              Width="215" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"

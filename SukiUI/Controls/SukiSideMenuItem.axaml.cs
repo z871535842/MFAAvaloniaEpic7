@@ -3,6 +3,8 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.VisualTree;
+using System;
 
 namespace SukiUI.Controls;
 
@@ -83,8 +85,8 @@ public class SukiSideMenuItem : ListBoxItem
 
         if (e.Handled)
             return;
-
-        if (!e.Handled && ItemsControl.ItemsControlFromItemContainer(this) is SukiSideMenu owner)
+        var parent = this.FindAncestorOfType<SukiSideMenu>();
+        if (!e.Handled && parent is SukiSideMenu owner)
         {
             var p = e.GetCurrentPoint(this);
 
@@ -123,10 +125,10 @@ public class SukiSideMenuItem : ListBoxItem
             var tapSize = settings?.GetTapSize(point.Pointer.Type) ?? new Size(4, 4);
             var tapRect = new Rect(_pointerDownPoint, new Size())
                 .Inflate(new Thickness(tapSize.Width, tapSize.Height));
-
+            var parent = this.FindAncestorOfType<SukiSideMenu>();
             if (new Rect(Bounds.Size).ContainsExclusive(point.Position) &&
                 tapRect.ContainsExclusive(point.Position) &&
-                ItemsControl.ItemsControlFromItemContainer(this) is SukiSideMenu owner)
+                parent is SukiSideMenu owner)
             {
                 if (owner.UpdateSelectionFromPointerEvent(this))
                 {
@@ -138,7 +140,7 @@ public class SukiSideMenuItem : ListBoxItem
                         owner.RaiseEvent(e);
                         e.Source = sourceBackup;
                     }
-
+                
                     e.Handled = true;
                 }
             }

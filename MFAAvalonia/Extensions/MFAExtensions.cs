@@ -165,7 +165,6 @@ public static class MFAExtensions
     /// </summary>
     public static void MoveTo(this IList list, int sourceIndex, int targetIndex)
     {
-        Console.WriteLine($"sourceIndex: {sourceIndex}, targetIndex: {targetIndex}");
         ValidateIndexes(list, sourceIndex, targetIndex);
         if (sourceIndex == targetIndex) return;
 

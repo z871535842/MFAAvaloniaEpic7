@@ -17,10 +17,10 @@
     Title="{markup:I18n {x:Static helper:LangKeys.Announcement}}">
     <suki:SukiWindow.LogoContent>
         <Image
-            Height="20"
+            Height="18"
             Source="{x:Static helper:IconHelper.Icon}"
             Stretch="Uniform"
-            Width="20" />
+            Width="18" />
     </suki:SukiWindow.LogoContent>
     <Grid>
         <Grid.RowDefinitions>

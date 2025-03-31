@@ -24,10 +24,10 @@ public static class ScrollViewerExtensions
     static ScrollViewerExtensions()
     {
         PanningModeProperty.Changed.AddClassHandler<ScrollViewer>(
-            (scrollViewer, args) => OnPanningModeChanged(scrollViewer, args));
+          OnPanningModeChanged);
 
         AutoScrollProperty.Changed.AddClassHandler<ScrollViewer>(
-            (scrollViewer, args) => OnAutoScrollChanged(scrollViewer, args));
+            OnAutoScrollChanged);
     }
 
     

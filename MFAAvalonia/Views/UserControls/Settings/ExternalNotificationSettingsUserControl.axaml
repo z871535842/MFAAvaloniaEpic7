@@ -60,7 +60,7 @@
                 </DockPanel>
                 <StackPanel IsVisible="{Binding DingTalkEnabled}">
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding DingTalkToken, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -73,7 +73,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding DingTalkSecret}"
@@ -120,7 +120,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding EmailSecret}"
@@ -167,7 +167,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding LarkToken}"
@@ -214,7 +214,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding WxPusherToken}"
@@ -261,7 +261,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding TelegramBotToken}"
@@ -308,7 +308,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding DiscordBotToken}"
@@ -355,7 +355,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding OnebotKey}"
@@ -467,7 +467,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel IsVisible="{Binding SmtpRequireAuthentication}">
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding SmtpPassword}"
@@ -540,7 +540,7 @@
                         </StackPanel>
                     </DockPanel>
                     <DockPanel>
-                        <userControls:PasswordBox
+                        <suki:PasswordBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
                             Password="{Binding QmsgKey}"

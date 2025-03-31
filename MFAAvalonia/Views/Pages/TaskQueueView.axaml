@@ -35,10 +35,14 @@
     </UserControl.Resources>
     <Grid ClipToBounds="False" Margin="0,0,0,0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="330" Width="7*" />
-            <ColumnDefinition Width="6*" />
-            <ColumnDefinition Width="7*" />
+            <ColumnDefinition Width="{Binding Column1Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="{Binding Column2Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="{Binding Column3Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
         </Grid.ColumnDefinitions>
+        
+        <!-- 左侧列 -->
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" MaxHeight="150" />
@@ -211,7 +215,27 @@
                 </StackPanel>
             </Grid>
         </Grid>
-        <Grid Grid.Column="1">
+        
+        <!-- 第一个分隔条 -->
+        <GridSplitter Grid.Column="1" 
+                      Background="Transparent"
+                      Margin="0"
+                      MinWidth="5"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch">
+            <GridSplitter.Template>
+                <ControlTemplate>
+                    <Border Padding="2,0">
+                        <Rectangle Width="1" 
+                                  Fill="{DynamicResource SukiControlBorderBrush}"
+                                  HorizontalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+        
+        <!-- 中间列 -->
+        <Grid Grid.Column="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -273,7 +297,27 @@
 
             </suki:GlassCard>
         </Grid>
-        <Grid Grid.Column="2">
+        
+        <!-- 第二个分隔条 -->
+        <GridSplitter Grid.Column="3" 
+                      Background="Transparent"
+                      Margin="0"
+                      MinWidth="5"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch">
+            <GridSplitter.Template>
+                <ControlTemplate>
+                    <Border Padding="2,0">
+                        <Rectangle Width="1" 
+                                  Fill="{DynamicResource SukiControlBorderBrush}"
+                                  HorizontalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </GridSplitter.Template>
+        </GridSplitter>
+        
+        <!-- 右侧列 -->
+        <Grid Grid.Column="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" MaxHeight="250" />
                 <RowDefinition Height="*" />

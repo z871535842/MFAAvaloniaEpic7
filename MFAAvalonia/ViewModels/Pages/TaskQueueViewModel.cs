@@ -27,14 +27,45 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Layout;
 
 namespace MFAAvalonia.ViewModels.Pages;
 
 public partial class TaskQueueViewModel : ViewModelBase
 {
+    public TaskQueueViewModel()
+    {
+        // 只在构造函数中加载列宽配置一次，不使用延迟任务
+        try
+        {
+            // 从配置中直接读取值
+            var config = ConfigurationManager.Current.FileName;
+            var col1Str = ConfigurationManager.Current.GetValue<string>(ConfigurationKeys.TaskQueueColumn1Width, DefaultColumn1Width);
+            var col2Str = ConfigurationManager.Current.GetValue<string>(ConfigurationKeys.TaskQueueColumn2Width, DefaultColumn2Width);
+            var col3Str = ConfigurationManager.Current.GetValue<string>(ConfigurationKeys.TaskQueueColumn3Width, DefaultColumn3Width);
+            
+            LoggerHelper.Info($"加载列宽设置(构造函数): Col1={col1Str}, Col2={col2Str}, Col3={col3Str}, 配置={config}");
+            
+            // 直接设置值，不通过属性或字段
+            Column1Width = GridLength.Parse(col1Str);
+            Column2Width = GridLength.Parse(col2Str);
+            Column3Width = GridLength.Parse(col3Str);
+            
+            // 强制保存一次，确保值正确保存
+            SaveColumnWidths();
+            
+            LoggerHelper.Info("构造函数中列宽设置成功");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"构造函数中设置列宽失败: {ex.Message}");
+            SetDefaultColumnWidths();
+        }
+    }
+
     protected override void Initialize()
     {
-
+        // 其他初始化代码可以放在这里
     }
     #region 介绍
 
@@ -596,4 +627,96 @@ public partial class TaskQueueViewModel : ViewModelBase
     partial void OnCurrentResourceChanged(string value) => HandlePropertyChanged(ConfigurationKeys.Resource, value);
 
     #endregion
+
+    // 三列宽度配置
+    private const string DefaultColumn1Width = "400";
+    private const string DefaultColumn2Width = "1*";
+    private const string DefaultColumn3Width = "1*";
+
+    [ObservableProperty] private GridLength _column1Width;
+    [ObservableProperty] private GridLength _column2Width;
+    [ObservableProperty] private GridLength _column3Width;
+
+    partial void OnColumn1WidthChanged(GridLength value)
+    {
+        try
+        {
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn1Width, value.ToString());
+            // 同步直接保存配置
+            ConfigurationManager.SaveConfiguration(ConfigurationManager.Current.FileName);
+            LoggerHelper.Info($"已保存列宽1: {value}, 配置={ConfigurationManager.Current.FileName}");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"保存列宽1失败: {ex.Message}");
+        }
+    }
+    
+    partial void OnColumn2WidthChanged(GridLength value)
+    {
+        try
+        {
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn2Width, value.ToString());
+            // 同步直接保存配置
+            ConfigurationManager.SaveConfiguration(ConfigurationManager.Current.FileName);
+            LoggerHelper.Info($"已保存列宽2: {value}, 配置={ConfigurationManager.Current.FileName}");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"保存列宽2失败: {ex.Message}");
+        }
+    }
+    
+    partial void OnColumn3WidthChanged(GridLength value)
+    {
+        try
+        {
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn3Width, value.ToString());
+            // 同步直接保存配置
+            ConfigurationManager.SaveConfiguration(ConfigurationManager.Current.FileName);
+            LoggerHelper.Info($"已保存列宽3: {value}, 配置={ConfigurationManager.Current.FileName}");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"保存列宽3失败: {ex.Message}");
+        }
+    }
+    
+    // 保存列宽配置到磁盘
+    private void SaveColumnWidths()
+    {
+        try
+        {
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn1Width, Column1Width.ToString());
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn2Width, Column2Width.ToString());
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskQueueColumn3Width, Column3Width.ToString());
+            ConfigurationManager.SaveConfiguration(ConfigurationManager.Current.FileName);
+            LoggerHelper.Info($"保存所有列宽配置: Col1={Column1Width}, Col2={Column2Width}, Col3={Column3Width}");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"保存列宽配置失败: {ex.Message}");
+        }
+    }
+
+    private void SetDefaultColumnWidths()
+    {
+        // 设置默认值
+        try
+        {
+            LoggerHelper.Info("正在设置默认列宽");
+            Column1Width = GridLength.Parse(DefaultColumn1Width);
+            Column2Width = GridLength.Parse(DefaultColumn2Width);
+            Column3Width = GridLength.Parse(DefaultColumn3Width);
+            
+            // 强制保存默认值
+            SaveColumnWidths();
+            
+            LoggerHelper.Info("默认列宽设置成功");
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"设置默认列宽失败: {ex.Message}");
+        }
+    }
 }

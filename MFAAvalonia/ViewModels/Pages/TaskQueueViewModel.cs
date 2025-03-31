@@ -36,6 +36,7 @@ public partial class TaskQueueViewModel : ViewModelBase
     {
 
     }
+    
     #region 介绍
 
     [ObservableProperty] private string _introduction = string.Empty;

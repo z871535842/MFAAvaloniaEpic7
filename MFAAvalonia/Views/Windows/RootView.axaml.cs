@@ -237,6 +237,7 @@ public partial class RootView : SukiWindow
 
             Instances.RootViewModel.LockController = (MaaProcessor.Interface?.Controller?.Count ?? 0) < 2;
             ConfigurationManager.Current.SetValue(ConfigurationKeys.EnableEdit, ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableEdit, false));
+           
             foreach (var task in Instances.TaskQueueViewModel.TaskItemViewModels)
             {
                 if (task.InterfaceItem?.Option is { Count: > 0 } || task.InterfaceItem?.Document != null || task.InterfaceItem?.Repeatable == true)
@@ -245,6 +246,7 @@ public partial class RootView : SukiWindow
                     break;
                 }
             }
+            
             if (!string.IsNullOrWhiteSpace(MaaProcessor.Interface?.Message))
             {
                 ToastHelper.Info(MaaProcessor.Interface.Message);

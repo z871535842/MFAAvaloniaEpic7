@@ -178,7 +178,7 @@
                                                         <TextBlock
                                                             Text="{Binding}"
                                                             TextTrimming="CharacterEllipsis"
-                                                            TextWrapping="NoWrap" 
+                                                            TextWrapping="NoWrap"
                                                             x:DataType="System:String" />
                                                     </DataTemplate>
                                                 </CheckBox.ContentTemplate>
@@ -203,7 +203,7 @@
                     </suki:GroupBox>
 
                 </suki:GlassCard>
-                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <StackPanel HorizontalAlignment="Center" Margin="15 0 0  7" Orientation="Horizontal">
                     <StackPanel.Resources>
                         <markup:IfConditionConverter x:Key="StatusConditionConverter">
                             <markup:IfConditionConverter.True>
@@ -221,9 +221,8 @@
                         FontWeight="DemiBold"
                         Height="40"
                         HorizontalAlignment="Center"
-                        Margin="0,0,0,7"
                         VerticalAlignment="Bottom"
-                        Width="160" />
+                        Width="150" />
                 </StackPanel>
             </Grid>
         </Grid>

@@ -8,7 +8,9 @@
     xmlns:System="clr-namespace:System;assembly=System.Runtime"
     xmlns:avaloniaEdit="https://github.com/avaloniaui/avaloniaedit"
     xmlns:binding="clr-namespace:MaaFramework.Binding;assembly=MaaFramework.Binding"
+    xmlns:avalonia="https://github.com/projektanker/icons.avalonia"
     xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+    xmlns:controls="clr-namespace:SukiUI.Controls;assembly=SukiUI"
     xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ex="clr-namespace:MFAAvalonia.Extensions"
@@ -17,15 +19,20 @@
     xmlns:maa="clr-namespace:MFAAvalonia.Extensions.MaaFW"
     xmlns:markup="https://codewf.com"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
     xmlns:pages="clr-namespace:MFAAvalonia.ViewModels.Pages"
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:type="clr-namespace:MFAAvalonia.Helper.ValueType"
     xmlns:usersControls="clr-namespace:MFAAvalonia.ViewModels.UsersControls"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
+    xmlns:vm="using:MFAAvalonia.ViewModels"
     xmlns:ctxt="clr-namespace:ColorTextBlock.Avalonia;assembly=ColorTextBlock.Avalonia"
     xmlns:markupExtensions="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
-    xmlns:extensions="clr-namespace:SukiUI.Extensions;assembly=SukiUI">
+    xmlns:extensions="clr-namespace:SukiUI.Extensions;assembly=SukiUI"
+    xmlns:behaviors="using:Avalonia.Xaml.Interactions.Core"
+    xmlns:interaction="using:Avalonia.Xaml.Interactivity"
+    xmlns:i="using:Avalonia.Xaml.Interactivity"
+    xmlns:ia="using:Avalonia.Xaml.Interactions.Core">
     <Design.DataContext>
         <pages:TaskQueueViewModel />
     </Design.DataContext>
@@ -35,7 +42,7 @@
             <MenuItem Click="Delete" Header="{markup:I18n {x:Static helper:LangKeys.Delete}}"  />
         </ContextMenu>
     </UserControl.Resources>
-    <Grid ClipToBounds="False" Margin="0,0,0,0">
+    <Grid ClipToBounds="False" Margin="0,0,0,0" x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Column1Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
             <ColumnDefinition Width="Auto" />
@@ -224,7 +231,8 @@
                       Margin="0"
                       MinWidth="5"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch">
+                      VerticalAlignment="Stretch"
+                      Name="Splitter1">
             <GridSplitter.Template>
                 <ControlTemplate>
                     <Border Padding="2,0">
@@ -234,6 +242,14 @@
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="DragStarted">
+                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}" CommandParameter="Splitter1" />
+                </ia:EventTriggerBehavior>
+                <ia:EventTriggerBehavior EventName="DragCompleted">
+                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}" CommandParameter="Splitter1" />
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
         </GridSplitter>
         
         <!-- 中间列 -->
@@ -306,7 +322,8 @@
                       Margin="0"
                       MinWidth="5"
                       HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch">
+                      VerticalAlignment="Stretch"
+                      Name="Splitter2">
             <GridSplitter.Template>
                 <ControlTemplate>
                     <Border Padding="2,0">
@@ -316,6 +333,14 @@
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
+            <i:Interaction.Behaviors>
+                <ia:EventTriggerBehavior EventName="DragStarted">
+                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}" CommandParameter="Splitter2" />
+                </ia:EventTriggerBehavior>
+                <ia:EventTriggerBehavior EventName="DragCompleted">
+                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}" CommandParameter="Splitter2" />
+                </ia:EventTriggerBehavior>
+            </i:Interaction.Behaviors>
         </GridSplitter>
         
         <!-- 右侧列 -->

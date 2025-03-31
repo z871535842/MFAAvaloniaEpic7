@@ -45,9 +45,9 @@
     <Grid ClipToBounds="False" Margin="0,0,0,0" x:Name="MainGrid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="{Binding Column1Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="15" />
             <ColumnDefinition Width="{Binding Column2Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="15" />
             <ColumnDefinition Width="{Binding Column3Width, Source={x:Static helper:Instances.TaskQueueViewModel}}" MinWidth="200" />
         </Grid.ColumnDefinitions>
         
@@ -57,7 +57,7 @@
                 <RowDefinition Height="Auto" MaxHeight="150" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <suki:GlassCard Grid.Row="0" Margin="15,15,15,5">
+            <suki:GlassCard Grid.Row="0" Margin="15,15,0,5">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -81,7 +81,7 @@
 
             </suki:GlassCard>
             <Grid Grid.Row="1">
-                <suki:GlassCard Grid.Column="0" Margin="15,5,15,25">
+                <suki:GlassCard Grid.Column="0" Margin="15,5,0,25">
                     <suki:GroupBox>
                         <suki:GroupBox.Header>
                             <Grid Grid.Row="0">
@@ -229,16 +229,23 @@
         <GridSplitter Grid.Column="1" 
                       Background="Transparent"
                       Margin="0"
-                      MinWidth="5"
-                      HorizontalAlignment="Center"
+                      Width="15"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Name="Splitter1">
             <GridSplitter.Template>
                 <ControlTemplate>
-                    <Border Padding="2,0">
-                        <Rectangle Width="1" 
-                                  Fill="{DynamicResource SukiControlBorderBrush}"
-                                  HorizontalAlignment="Center" />
+                    <Border Background="Transparent"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Cursor="SizeWestEast">
+                        <StackPanel VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center" 
+                                    Spacing="3">
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                        </StackPanel>
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
@@ -258,7 +265,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <suki:GlassCard Grid.Row="0" Margin="5,15,15,5" x:Name="Row1">
+            <suki:GlassCard Grid.Row="0" Margin="0,15,0,5" x:Name="Row1">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -278,7 +285,7 @@
                     </ScrollViewer>
                 </suki:GroupBox>
             </suki:GlassCard>
-            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25" MaxHeight="{Binding Bounds.Height, ElementName=Row1}">
+            <suki:GlassCard Grid.Row="1" Margin="0,8,0,25" MaxHeight="{Binding Bounds.Height, ElementName=Row1}">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock
@@ -320,16 +327,23 @@
         <GridSplitter Grid.Column="3" 
                       Background="Transparent"
                       Margin="0"
-                      MinWidth="5"
-                      HorizontalAlignment="Center"
+                      Width="15"
+                      HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Name="Splitter2">
             <GridSplitter.Template>
                 <ControlTemplate>
-                    <Border Padding="2,0">
-                        <Rectangle Width="1" 
-                                  Fill="{DynamicResource SukiControlBorderBrush}"
-                                  HorizontalAlignment="Center" />
+                    <Border Background="Transparent"
+                            VerticalAlignment="Stretch"
+                            HorizontalAlignment="Stretch"
+                            Cursor="SizeWestEast">
+                        <StackPanel VerticalAlignment="Center" 
+                                    HorizontalAlignment="Center" 
+                                    Spacing="3">
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                            <Ellipse Width="4" Height="4" Fill="{DynamicResource SukiControlBorderBrush}" />
+                        </StackPanel>
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
@@ -349,7 +363,7 @@
                 <RowDefinition Height="Auto" MaxHeight="250" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <suki:GlassCard Grid.Row="0" Margin="5,15,15,8">
+            <suki:GlassCard Grid.Row="0" Margin="0,15,15,8">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <Grid>
@@ -496,7 +510,7 @@
                     </WrapPanel>
                 </suki:GroupBox>
             </suki:GlassCard>
-            <suki:GlassCard Grid.Row="1" Margin="5,8,15,25">
+            <suki:GlassCard Grid.Row="1" Margin="0,8,15,25">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <Grid>

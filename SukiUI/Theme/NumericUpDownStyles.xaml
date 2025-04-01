@@ -4,8 +4,9 @@
         xmlns:theme="clr-namespace:SukiUI.Theme">
     <Design.PreviewWith>
         <Border Padding="20">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-                <NumericUpDown Value="4" />
+            <StackPanel Orientation="Vertical" Spacing="5">
+                <NumericUpDown Value="4" Width="150" />
+                <ComboBox></ComboBox>
                 <TextBox Classes="NoShadow" Text="test" />
             </StackPanel>
         </Border>
@@ -16,10 +17,10 @@
         <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="4" />
+        <Setter Property="Padding" Value="6,6,-6,6" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border   Background="{TemplateBinding Background}"
+                <Border   Background="{TemplateBinding Background}" Padding="5"
                           BorderBrush="{TemplateBinding BorderBrush}"
                           BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
                 <suki:GlassCard Padding="0"

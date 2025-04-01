@@ -258,9 +258,9 @@ public partial class TaskQueueView : UserControl
         var numericUpDown = new NumericUpDown
         {
             Value = source.InterfaceItem.RepeatCount ?? 1,
-            MinWidth = 146,
             VerticalAlignment = VerticalAlignment.Center,
-            Margin = new Thickness(8, 0, 5, 0),
+            MinWidth = 150,
+            Margin = new Thickness(0, 5, 5, 5),
             Increment = 1,
             Minimum = -1,
         };

@@ -83,7 +83,6 @@
                             </Transitions>
                         </suki:GlassCard.Transitions>
                         <Grid ColumnDefinitions="*,Auto">
-
                             <Grid.Resources>
                                 <theme:BiggestItemConverter x:Key="BigItem" />
                             </Grid.Resources>
@@ -113,10 +112,8 @@
                                             Foreground="{DynamicResource SukiText}" />
                             <ToggleButton Name="toggle"
                                           Grid.Column="1"
-                                       
                                           Background="Transparent"
-                                          BorderThickness="0"
-                                          ClickMode="Press"
+                                          BorderThickness="0" IsHitTestVisible="False"
                                           CornerRadius="{DynamicResource SmallCornerRadius}"
                                           Focusable="False"
                                           IsChecked="{TemplateBinding IsDropDownOpen,
@@ -127,7 +124,7 @@
                                       VerticalAlignment="Center"
                                       Data="F1 M 301.14,-189.041L 311.57,-189.041L 306.355,-182.942L 301.14,-189.041 Z"
                                       Fill="{DynamicResource SukiText}"
-                                      Stretch="Uniform" >
+                                      Stretch="Uniform">
                                     <Path.Transitions>
                                         <Transitions>
                                             <TransformOperationsTransition Property="RenderTransform"
@@ -178,56 +175,58 @@
         </Setter>
     </Style>
 
-    <Style Selector="ComboBox[IsDropDownOpen=True] /template/ LayoutTransformControl#PART_LayoutTransform">
-        <Style.Resources>
-            <theme:PlusNineConverter x:Key="NineConverter" />
-        </Style.Resources>
-        <Style.Animations>
-            <Animation Easing="SineEaseOut"
-                       FillMode="Forward"
-                       Duration="0:0:0.3">
-                <KeyFrame Cue="0%">
-                    <Setter Property="ScaleTransform.ScaleY" Value="0.92" />
-                    <Setter Property="ScaleTransform.ScaleX" Value="0.95" />
-                    <Setter Property="Opacity" Value="0" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                    <Setter Property="Opacity" Value="1" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>
-
-    <Style Selector="ComboBox[IsDropDownOpen=False] /template/ LayoutTransformControl#PART_LayoutTransform">
-        <Style.Resources>
-            <theme:PlusNineConverter x:Key="NineConverter" />
-        </Style.Resources>
-        <Style.Animations>
-            <Animation Easing="CircularEaseOut"
-                       FillMode="Forward"
-                       Duration="0:0:0.3">
-                <KeyFrame Cue="0%">
-                    <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                    <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                    <Setter Property="Opacity" Value="1" />
-                </KeyFrame>
-                <KeyFrame Cue="100%">
-                    <Setter Property="ScaleTransform.ScaleY" Value="0.9" />
-                    <Setter Property="ScaleTransform.ScaleX" Value="0.9" />
-                    <Setter Property="Opacity" Value="0" />
-                </KeyFrame>
-            </Animation>
-        </Style.Animations>
-    </Style>
-    
+  
     <Style Selector="ComboBox[IsDropDownOpen=True]">
         <Style Selector="^ /template/ Path#PART_DropDownIcon">
             <Setter Property="RenderTransform" Value="rotate(180deg)" />
         </Style>
+        <Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransform">
+            <Style.Resources>
+                <theme:PlusNineConverter x:Key="NineConverter" />
+            </Style.Resources>
+            <Style.Animations>
+                <Animation Easing="SineEaseOut"
+                           FillMode="Forward"
+                           Duration="0:0:0.3">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="ScaleTransform.ScaleY" Value="0.92" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="0.95" />
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
     </Style>
-    
+    <Style Selector="ComboBox[IsDropDownOpen=False]">
+        <Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransform">
+            <Style.Resources>
+                <theme:PlusNineConverter x:Key="NineConverter" />
+            </Style.Resources>
+            <Style.Animations>
+                <Animation Easing="CircularEaseOut"
+                           FillMode="Forward"
+                           Duration="0:0:1">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleY" Value="0.9" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="0.9" />
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </Style>
+
+
     <Style Selector="ComboBox:pointerover /template/ suki|GlassCard#border">
         <Setter Property="BorderBrush" Value="{DynamicResource SukiLightBorderBrush}" />
     </Style>

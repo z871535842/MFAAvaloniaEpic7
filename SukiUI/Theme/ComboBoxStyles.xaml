@@ -224,7 +224,10 @@
             </Style.Animations>
         </Style>
     </Style>
-
+    
+    <Style Selector="ComboBox.LimitWidth /template/ Popup#PART_Popup">
+        <Setter Property="MaxWidth" Value="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}" />
+    </Style>
 
     <Style Selector="ComboBox:pointerover /template/ suki|GlassCard#border">
         <Setter Property="BorderBrush" Value="{DynamicResource SukiLightBorderBrush}" />

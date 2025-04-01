@@ -70,7 +70,7 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
-                    <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                    <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True" Classes="LimitWidth"
                               DisplayMemberBinding="{Binding Name}"
                               IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                               ItemsSource="{Binding CurrentResources}"
@@ -480,7 +480,7 @@
                                 Foreground="{DynamicResource SukiLowText}"
                                 Text="{markup:I18n {x:Static helper:LangKeys.CurrentController}}"
                                 VerticalAlignment="Center" />
-                            <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
+                            <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True" Classes="LimitWidth"
                                       IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                       ItemsSource="{Binding Devices}"
                                       Margin="5,0,0,5"

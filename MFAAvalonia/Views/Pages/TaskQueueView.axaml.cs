@@ -522,7 +522,7 @@ public partial class TaskQueueView : UserControl
         var combo = new ComboBox
         {
             DisplayMemberBinding = new Binding("Name"),
-            MinWidth = 150,
+            MinWidth = 150,Classes = { "LimitWidth" },
             Margin = new Thickness(0, 5, 5, 5),
             ItemsSource = interfaceOption.Cases?.Select(c => new
             {

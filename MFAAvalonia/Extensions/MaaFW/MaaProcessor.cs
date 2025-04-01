@@ -249,8 +249,9 @@ public class MaaProcessor
                                 outData = Regex.Replace(outData, @"\x1B\[[0-9;]*[a-zA-Z]", "");
                             }
                             catch (Exception)
-                            {  }
-        
+                            {
+                            }
+
                             DispatcherHelper.PostOnMainThread(() =>
                             {
                                 RootView.AddLog(outData);
@@ -268,8 +269,9 @@ public class MaaProcessor
                                 outData = Regex.Replace(outData, @"\x1B\[[0-9;]*[a-zA-Z]", "");
                             }
                             catch (Exception)
-                            {  }
-                            
+                            {
+                            }
+
                             DispatcherHelper.PostOnMainThread(() =>
                             {
                                 RootView.AddLog(outData);
@@ -868,34 +870,31 @@ public class MaaProcessor
         var updateList = new List<DragItemViewModel>();
 
         if (drags.Count == 0)
+            return (updateList, removeList);
+
+        foreach (var oldItem in drags)
         {
-            updateList.AddRange(tasks.Select(t => new DragItemViewModel(t)).ToList());
-        }
-        else
-        {
-            foreach (var oldItem in drags)
+            if (newDict.TryGetValue((oldItem.Name, oldItem.InterfaceItem?.Entry), out var newItem))
             {
-                if (newDict.TryGetValue((oldItem.Name, oldItem.InterfaceItem?.Entry), out var newItem))
+                UpdateExistingItem(oldItem, newItem);
+                updateList.Add(oldItem);
+            }
+            else
+            {
+                var sameNameTasks = tasks.Where(t => t.Entry == oldItem.InterfaceItem?.Entry).ToList();
+                if (sameNameTasks.Any())
                 {
-                    UpdateExistingItem(oldItem, newItem);
+                    var firstTask = sameNameTasks.First();
+                    UpdateExistingItem(oldItem, firstTask);
                     updateList.Add(oldItem);
                 }
                 else
                 {
-                    var sameNameTasks = tasks.Where(t => t.Entry == oldItem.InterfaceItem?.Entry).ToList();
-                    if (sameNameTasks.Any())
-                    {
-                        var firstTask = sameNameTasks.First();
-                        UpdateExistingItem(oldItem, firstTask);
-                        updateList.Add(oldItem);
-                    }
-                    else
-                    {
-                        removeList.Add(oldItem);
-                    }
+                    removeList.Add(oldItem);
                 }
             }
         }
+
         return (updateList, removeList);
     }
 
@@ -925,7 +924,7 @@ public class MaaProcessor
         }).ToList();
     }
 
-    private void SetDefaultOptionValue(MaaInterface.MaaInterfaceSelectOption option)
+    public void SetDefaultOptionValue(MaaInterface.MaaInterfaceSelectOption option)
     {
         if (!(Interface?.Option?.TryGetValue(option.Name ?? string.Empty, out var interfaceOption) ?? false)) return;
 
@@ -938,6 +937,7 @@ public class MaaProcessor
     private void UpdateViewModels(IList<DragItemViewModel> drags, List<MaaInterface.MaaInterfaceTask> tasks)
     {
         var newItems = tasks.Select(t => new DragItemViewModel(t)).ToList();
+
         foreach (var item in newItems)
         {
             if (item.InterfaceItem?.Option != null && !drags.Any())
@@ -950,7 +950,7 @@ public class MaaProcessor
 
         if (!Instances.TaskQueueViewModel.TaskItemViewModels.Any())
         {
-            Instances.TaskQueueViewModel.TaskItemViewModels = new ObservableCollection<DragItemViewModel>(drags);
+            Instances.TaskQueueViewModel.TaskItemViewModels = new ObservableCollection<DragItemViewModel>(drags.Any() ? drags : newItems);
         }
     }
 

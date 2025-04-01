@@ -133,7 +133,7 @@
                                     </Path.Transitions>
                                 </Path>
                             </ToggleButton>
-                            <Popup Name="PART_Popup"
+                            <Popup Name="PART_Popup" 
                                    MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    HorizontalOffset="-5"
@@ -174,8 +174,7 @@
             </ControlTemplate>
         </Setter>
     </Style>
-
-  
+    
     <Style Selector="ComboBox[IsDropDownOpen=True]">
         <Style Selector="^ /template/ Path#PART_DropDownIcon">
             <Setter Property="RenderTransform" Value="rotate(180deg)" />

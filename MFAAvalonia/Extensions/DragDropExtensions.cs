@@ -28,6 +28,7 @@ using System.Threading.Tasks;
 
 namespace MFAAvalonia.Extensions;
 
+#pragma warning disable CS4014  // 异步方法没有等待 
 public class DragDropExtensions
 {
     // 定义附加属性：是否启用拖放功能

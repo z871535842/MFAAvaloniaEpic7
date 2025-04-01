@@ -366,7 +366,7 @@
         <!-- 右侧列 -->
         <Grid Grid.Column="4">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" MaxHeight="250" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <suki:GlassCard Grid.Row="0" Margin="0,15,15,8">
@@ -450,55 +450,42 @@
                             </StackPanel>
                         </Grid>
                     </suki:GroupBox.Header>
-                    <WrapPanel HorizontalAlignment="Stretch" x:Name="connectionPanel">
-                        <!--  左侧按钮组  -->
-                        <WrapPanel HorizontalAlignment="Left" x:Name="Tab">
-                            <RadioButton
-                                Classes="GigaChips"
-                                Content="{markup:I18n {x:Static helper:LangKeys.TabADB}}"
-                                FontSize="12"
-                                GroupName="Controller"
-                                IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
-                                IsEnabled="{calcBinding:Binding '!LockController and Idle',
+                    <Grid x:Name="connectionGrid" HorizontalAlignment="Stretch">
+                        <RadioButton
+                            Classes="GigaChips"
+                            Content="{markup:I18n {x:Static helper:LangKeys.TabADB}}"
+                            FontSize="12"
+                            GroupName="Controller"
+                            IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Adb}, Mode=TwoWay}"
+                            IsEnabled="{calcBinding:Binding '!LockController and Idle',
                                                                 Source={x:Static helper:Instances.RootViewModel}}"
-                                MinWidth="{Binding Bounds.Width, ElementName=SecondButton}"
-                                x:Name="FirstButton" />
-                            <RadioButton
-                                Classes="GigaChips"
-                                Content="{markup:I18n {x:Static helper:LangKeys.TabWin32}}"
-                                FontSize="12"
-                                GroupName="Controller"
-                                IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
-                                IsEnabled="{calcBinding:Binding '!LockController and Idle',
+                            MinWidth="120"
+                            x:Name="FirstButton" />
+                        <RadioButton
+                            Classes="GigaChips"
+                            Content="{markup:I18n {x:Static helper:LangKeys.TabWin32}}"
+                            FontSize="12"
+                            GroupName="Controller"
+                            IsChecked="{Binding CurrentController, Converter={converters:UniversalEqualityConverter}, ConverterParameter={x:Static maa:MaaControllerTypes.Win32}, Mode=TwoWay}"
+                            IsEnabled="{calcBinding:Binding '!LockController and Idle',
                                                                 Source={x:Static helper:Instances.RootViewModel}}"
-                                MinWidth="{Binding Bounds.Width, ElementName=FirstButton}"
-                                x:Name="SecondButton" />
-                        </WrapPanel>
-                        <DockPanel
-                            HorizontalAlignment="Stretch"
-                            LastChildFill="True"
-                            Margin="5,0"
-                            MinWidth="200">
-                            <DockPanel.Width>
-                                <MultiBinding Converter="{converters:DynamicWidthConverter}">
-                                    <!--  父容器宽度  -->
-                                    <Binding ElementName="connectionPanel" Path="Bounds.Width" />
-                                    <!--  同级元素宽度  -->
-                                    <Binding ElementName="Tab" Path="Bounds.Width" />
-                                    <!--  自身最小宽度  -->
-                                    <Binding Path="MinWidth" RelativeSource="{RelativeSource Self}" />
-                                </MultiBinding>
-                            </DockPanel.Width>
+                            MinWidth="120"
+                            x:Name="SecondButton" />
+
+                        <DockPanel x:Name="ControllerPanel"
+                                   HorizontalAlignment="Stretch"
+                                   LastChildFill="True"
+                                   Margin="5,0"
+                                   MinWidth="200">
                             <TextBlock
                                 FontSize="12"
                                 Foreground="{DynamicResource SukiLowText}"
-                                Grid.Column="0"
                                 Text="{markup:I18n {x:Static helper:LangKeys.CurrentController}}"
                                 VerticalAlignment="Center" />
                             <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
                                       IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                                       ItemsSource="{Binding Devices}"
-                                      Margin="5,0,0,0"
+                                      Margin="5,0,0,5"
                                       SelectedValue="{Binding CurrentDevice, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                 <ComboBox.DataTemplates>
                                     <DataTemplate DataType="binding:AdbDeviceInfo">
@@ -512,8 +499,8 @@
                                 </ComboBox.DataTemplates>
                             </ComboBox>
                         </DockPanel>
+                    </Grid>
 
-                    </WrapPanel>
                 </suki:GroupBox>
             </suki:GlassCard>
             <suki:GlassCard Grid.Row="1" Margin="0,8,15,25">

@@ -54,7 +54,7 @@ public partial class TaskQueueView : UserControl
         DataContext = Instances.TaskQueueViewModel;
         InitializeComponent();
         MaaProcessor.Instance.InitializeData();
-        // Introduction.TextArea.TextView.LineTransformers.Add(new RichTextLineTransformer());
+        InitializeControllerUI();
     }
 
     #region UI
@@ -123,6 +123,98 @@ public partial class TaskQueueView : UserControl
     }
 
     #endregion
+
+    private void InitializeControllerUI()
+    {
+        connectionGrid.SizeChanged += (sender, e) =>
+        {
+            var actualWidth = connectionGrid.Bounds.Width;
+            double totalMinWidth = connectionGrid.Children.Sum(c => c.MinWidth);
+            if (actualWidth >= totalMinWidth)
+            {
+                // 左右布局模式
+                connectionGrid.ColumnDefinitions.Clear();
+                connectionGrid.ColumnDefinitions.AddRange([
+                        new ColumnDefinition
+                        {
+                            Width = new GridLength(FirstButton.MinWidth, GridUnitType.Pixel)
+                        },
+                        new ColumnDefinition
+                        {
+                            Width = new GridLength(SecondButton.MinWidth, GridUnitType.Pixel)
+                        },
+                        new ColumnDefinition
+                        {
+                            Width = new GridLength(1, GridUnitType.Star)
+                        }
+                    ]
+                );
+
+                Grid.SetColumn(FirstButton, 0);
+                Grid.SetColumn(SecondButton, 1);
+                Grid.SetColumn(ControllerPanel, 2);
+                Grid.SetRow(FirstButton, 0);
+                Grid.SetRow(SecondButton, 0);
+                Grid.SetRow(ControllerPanel, 0);
+            }
+            else if (actualWidth >= FirstButton.MinWidth + SecondButton.MinWidth)
+            {
+                // 上下布局模式（两行）
+                connectionGrid.ColumnDefinitions.Clear();
+                connectionGrid.RowDefinitions.Clear();
+    
+                // 创建两行结构
+                connectionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                connectionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+
+                // 定义两列等宽布局（网页4提到的Star单位）
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+                // 设置控件位置
+                Grid.SetRow(FirstButton, 0);
+                Grid.SetColumn(FirstButton, 0);
+                Grid.SetRow(SecondButton, 0);
+                Grid.SetColumn(SecondButton, 1);
+    
+                // 设置DockPanel跨两列
+                Grid.SetRow(ControllerPanel, 1);
+                Grid.SetColumnSpan(ControllerPanel, 2);
+                Grid.SetColumn(ControllerPanel, 0);
+
+                // 强制刷新布局（网页3提到的布局刷新机制）
+                FirstButton.InvalidateMeasure();
+                SecondButton.InvalidateMeasure();
+            }
+            else
+            {
+                // 三层布局模式
+                connectionGrid.ColumnDefinitions.Clear();
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+                connectionGrid.RowDefinitions.Clear();
+                connectionGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+                connectionGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+                connectionGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+
+                Grid.SetRow(FirstButton, 0);
+                Grid.SetColumn(FirstButton, 0);
+                Grid.SetRow(SecondButton, 1);
+                Grid.SetColumn(SecondButton, 0);
+                Grid.SetRow(ControllerPanel, 2);
+                Grid.SetColumn(ControllerPanel, 0);
+            }
+        };
+    }
 
     private void SelectingItemsControl_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {

@@ -273,7 +273,8 @@ public class MaaProcessor
                 }
                 catch (Exception ex)
                 {
-                    LoggerHelper.Error($"Agent启动失败: {ex.Message}");
+                    LoggerHelper.Error($"{"AgentStartFailed".ToLocalization()}: {ex.Message}");
+                    ToastHelper.Error("AgentStartFailed".ToLocalization(), ex.Message);
                 }
 
                 _agentClient?.LinkStart();
@@ -930,7 +931,7 @@ public class MaaProcessor
         }
 
         TasksSource.AddRange(newItems);
-        
+
         if (!Instances.TaskQueueViewModel.TaskItemViewModels.Any())
         {
             Instances.TaskQueueViewModel.TaskItemViewModels = new ObservableCollection<DragItemViewModel>(drags);
@@ -1421,7 +1422,7 @@ public class MaaProcessor
             InitializeConnectionTasksAsync(token);
             AddCoreTasksAsync(taskAndParams, token);
         }
-        
+
         AddPostTasksAsync(onlyStart, checkUpdate, token);
         await TaskManager.RunTaskAsync(async () =>
         {

@@ -1046,4 +1046,7 @@
     <data name="StartingAgent" xml:space="preserve">
         <value>正在啟動 Agent（耗時可能較久）</value>
     </data>
+    <data name="AgentStartFailed" xml:space="preserve">
+        <value>Agen啟動失敗</value>
+    </data>
 </root>

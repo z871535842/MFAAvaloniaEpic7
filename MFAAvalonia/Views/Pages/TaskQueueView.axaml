@@ -30,9 +30,7 @@
     xmlns:markupExtensions="clr-namespace:FluentIcons.Avalonia.Fluent.MarkupExtensions;assembly=FluentIcons.Avalonia.Fluent"
     xmlns:extensions="clr-namespace:SukiUI.Extensions;assembly=SukiUI"
     xmlns:behaviors="using:Avalonia.Xaml.Interactions.Core"
-    xmlns:interaction="using:Avalonia.Xaml.Interactivity"
-    xmlns:i="using:Avalonia.Xaml.Interactivity"
-    xmlns:ia="using:Avalonia.Xaml.Interactions.Core">
+    xmlns:interaction="using:Avalonia.Xaml.Interactivity">
     <Design.DataContext>
         <pages:TaskQueueViewModel />
     </Design.DataContext>
@@ -251,16 +249,16 @@
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
-            <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="DragStarted">
-                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}"
-                                            CommandParameter="Splitter1" />
-                </ia:EventTriggerBehavior>
-                <ia:EventTriggerBehavior EventName="DragCompleted">
-                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}"
-                                            CommandParameter="Splitter1" />
-                </ia:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
+            <interaction:Interaction.Behaviors>
+                <behaviors:EventTriggerBehavior EventName="DragStarted">
+                    <behaviors:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}"
+                                                   CommandParameter="Splitter1" />
+                </behaviors:EventTriggerBehavior>
+                <behaviors:EventTriggerBehavior EventName="DragCompleted">
+                    <behaviors:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}"
+                                                   CommandParameter="Splitter1" />
+                </behaviors:EventTriggerBehavior>
+            </interaction:Interaction.Behaviors>
         </GridSplitter>
 
         <!-- 中间列 -->
@@ -351,16 +349,16 @@
                     </Border>
                 </ControlTemplate>
             </GridSplitter.Template>
-            <i:Interaction.Behaviors>
-                <ia:EventTriggerBehavior EventName="DragStarted">
-                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}"
-                                            CommandParameter="Splitter2" />
-                </ia:EventTriggerBehavior>
-                <ia:EventTriggerBehavior EventName="DragCompleted">
-                    <ia:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}"
-                                            CommandParameter="Splitter2" />
-                </ia:EventTriggerBehavior>
-            </i:Interaction.Behaviors>
+            <interaction:Interaction.Behaviors>
+                <behaviors:EventTriggerBehavior EventName="DragStarted">
+                    <behaviors:InvokeCommandAction Command="{Binding GridSplitterDragStartedCommand}"
+                                                   CommandParameter="Splitter2" />
+                </behaviors:EventTriggerBehavior>
+                <behaviors:EventTriggerBehavior EventName="DragCompleted">
+                    <behaviors:InvokeCommandAction Command="{Binding GridSplitterDragCompletedCommand}"
+                                                   CommandParameter="Splitter2" />
+                </behaviors:EventTriggerBehavior>
+            </interaction:Interaction.Behaviors>
         </GridSplitter>
 
         <!-- 右侧列 -->

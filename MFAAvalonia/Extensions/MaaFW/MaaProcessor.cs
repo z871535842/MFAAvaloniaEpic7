@@ -243,9 +243,17 @@ public class MaaProcessor
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
+                            var outData = args.Data;
+                            try
+                            {
+                                outData = Regex.Replace(outData, @"\x1B\[[0-9;]*[a-zA-Z]", "");
+                            }
+                            catch (Exception)
+                            {  }
+        
                             DispatcherHelper.PostOnMainThread(() =>
                             {
-                                RootView.AddLog($"{args.Data}");
+                                RootView.AddLog(outData);
                             });
                         }
                     };
@@ -254,9 +262,17 @@ public class MaaProcessor
                     {
                         if (!string.IsNullOrEmpty(args.Data))
                         {
+                            var outData = args.Data;
+                            try
+                            {
+                                outData = Regex.Replace(outData, @"\x1B\[[0-9;]*[a-zA-Z]", "");
+                            }
+                            catch (Exception)
+                            {  }
+                            
                             DispatcherHelper.PostOnMainThread(() =>
                             {
-                                RootView.AddLog($"{args.Data}");
+                                RootView.AddLog(outData);
                             });
                         }
                     };

@@ -76,7 +76,7 @@
                                                                 CornerRadius="0"
                                                                 IsAnimated="False"
                                                                 IsVisible="{TemplateBinding ShowTitlebarBackground}" />
-                                                <DockPanel Margin="12,3,3,3" LastChildFill="True">
+                                                <DockPanel Margin="12,3,10,3" LastChildFill="True">
                                                     <StackPanel VerticalAlignment="Center"
                                                                 DockPanel.Dock="Right"
                                                                 Orientation="Horizontal"

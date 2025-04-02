@@ -72,6 +72,8 @@ public static class Icons
     // Material Icons
     public static readonly StreamGeometry Login = Parse("M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z");
 
+    public static readonly StreamGeometry Logout = Parse("M17 7L15.59 8.41L18.17 11H8V13H18.17L15.59 15.58L17 17L22 12M4 5H12V3H4C2.9 3 2 3.9 2 5V19C2 20.1 2.9 21 4 21H12V19H4V5Z");
+
     // Material Icons
     public static readonly StreamGeometry ChevronUp = Parse("M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z");
 
@@ -93,6 +95,8 @@ public static class Icons
     // Material Icons
     public static readonly StreamGeometry CircleInformation = Parse("M13,9H11V7H13M13,17H11V11H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z");
 
+    public static readonly StreamGeometry CircleHelp = Parse("M15.07,11.25L14.17,12.17C13.45,12.89 13,13.5 13,15H11V14.5C11,13.39 11.45,12.39 12.17,11.67L13.41,10.41C13.78,10.05 14,9.55 14,9C14,7.89 13.1,7 12,7A2,2 0 0,0 10,9H8A4,4 0 0,1 12,5A4,4 0 0,1 16,9C16,9.88 15.64,10.67 15.07,11.25M13,19H11V17H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12C22,6.47 17.5,2 12,2Z");
+    
     // Material Icons
     public static readonly StreamGeometry CircleClose =
         Parse("M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z");
@@ -140,6 +144,8 @@ public static class Icons
     // Material Icons
     public static readonly StreamGeometry InformationOutline = Parse("M11 9H13V7H11V9M11 17H13V11H11V17Z");
 
+    public static readonly StreamGeometry TriangleAlert = Parse("M13 14H11V9H13M13 18H11V16H13M1 21H23L12 2L1 21Z");
+
     // Material Icons
     public static readonly StreamGeometry AlertOutline = Parse("M 11,4L 13,4L 13,15L 11,15L 11,4 Z M 13,18L 13,20L 11,20L 11,18L 13,18 Z");
 
@@ -154,5 +160,11 @@ public static class Icons
     public static readonly StreamGeometry OpenEye =
         Parse("M512 274C303.3 274 64 526 64 526s239.3 252 448 252 448-252 448-252-239.3-252-448-252z m0 420c-92.7 0-168-75.2-168-168 0-92.7 75.3-168 168-168 92.8 0 168 75.3 168 168 0 92.8-75.2 168-168 168z m0-56c-61.8 0-112-50.2-112-112s50.2-112 112-112 112 50.2 112 112-50.2 112-112 112z");
     
+    public static readonly StreamGeometry Cancel = Parse("M12 2C17.5 2 22 6.5 22 12S17.5 22 12 22 2 17.5 2 12 6.5 2 12 2M12 4C10.1 4 8.4 4.6 7.1 5.7L18.3 16.9C19.3 15.5 20 13.8 20 12C20 7.6 16.4 4 12 4M16.9 18.3L5.7 7.1C4.6 8.4 4 10.1 4 12C4 16.4 7.6 20 12 20C13.9 20 15.6 19.4 16.9 18.3Z");
+
+    public static readonly StreamGeometry Refresh = Parse("M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z");
+
+    public static readonly StreamGeometry DebugStepOver = Parse("M12,14A2,2 0 0,1 14,16A2,2 0 0,1 12,18A2,2 0 0,1 10,16A2,2 0 0,1 12,14M23.46,8.86L21.87,15.75L15,14.16L18.8,11.78C17.39,9.5 14.87,8 12,8C8.05,8 4.77,10.86 4.12,14.63L2.15,14.28C2.96,9.58 7.06,6 12,6C15.58,6 18.73,7.89 20.5,10.72L23.46,8.86Z");
+
     private static StreamGeometry Parse(string path) => StreamGeometry.Parse(path);
 }

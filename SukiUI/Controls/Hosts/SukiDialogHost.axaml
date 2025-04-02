@@ -6,7 +6,7 @@
             <ControlTemplate>
                 <Panel>
                     <Border Name="PART_DialogBackground"
-                            HorizontalAlignment="Stretch" IsVisible="False"
+                            HorizontalAlignment="Stretch" 
                             VerticalAlignment="Stretch"
                             Background="{DynamicResource SukiDialogBackground}"
                             Opacity="0" />
@@ -17,15 +17,15 @@
                                     Content="{TemplateBinding Dialog}">
                         <ContentControl.Transitions>
                             <Transitions>
-                                <ThicknessTransition Property="Margin" Duration="0:0:0.25">
+                                <ThicknessTransition Property="Margin" Duration="0:0:0.40">
                                     <ThicknessTransition.Easing>
-                                        <CircularEaseOut />
+                                        <suki:SukiEasingOut />
                                     </ThicknessTransition.Easing>
                                 </ThicknessTransition>
-                                <DoubleTransition Property="Opacity" Duration="0:0:0.15" />
-                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.25">
+                                <DoubleTransition Property="Opacity" Duration="0:0:0.20" />
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.40">
                                     <TransformOperationsTransition.Easing>
-                                        <CircularEaseOut />
+                                        <suki:SukiEasingOut />
                                     </TransformOperationsTransition.Easing>
                                 </TransformOperationsTransition>
                             </Transitions>

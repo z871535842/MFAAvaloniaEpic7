@@ -73,6 +73,14 @@ public class MaaProcessor
                     Path = paths
                 };
             }
+
+            if (value != null)
+            {
+                Instances.SettingsViewModel.ShowResourceIssues = !string.IsNullOrWhiteSpace(value.Url);
+                Instances.SettingsViewModel.ResourceGithub = value.Url;
+                Instances.SettingsViewModel.ResourceIssues = $"{value.Url}/issues";
+            }
+
         }
     }
 

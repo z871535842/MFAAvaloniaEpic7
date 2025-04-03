@@ -347,4 +347,13 @@ public static class LangKeys
 	public static readonly string ExternalNotificationOneBotUser = "ExternalNotificationOneBotUser";
 	public static readonly string CreateCustomTheme = "CreateCustomTheme";
 	public static readonly string ConfigurePrimaryAccent = "ConfigurePrimaryAccent";
+	public static readonly string ColorThemeAlreadyExists = "ColorThemeAlreadyExists";
+	public static readonly string Later = "Later";
+	public static readonly string ErrorWhenCheck = "ErrorWhenCheck";
+	public static readonly string Resource = "Resource";
+	public static readonly string MirrorCdkExpired = "MirrorCdkExpired";
+	public static readonly string MirrorCdkInvalid = "MirrorCdkInvalid";
+	public static readonly string MirrorCdkMismatch = "MirrorCdkMismatch";
+	public static readonly string StartingAgent = "StartingAgent";
+	public static readonly string AgentStartFailed = "AgentStartFailed";
 }

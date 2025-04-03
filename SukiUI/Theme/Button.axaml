@@ -492,7 +492,6 @@
             </Style>
 
             <Style Selector="^.Close">
-
                 <Style Selector="^:pointerover">
                     <Setter Property="Background" Value="#90D00000" />
                     <Setter Property="Foreground" Value="White"></Setter>

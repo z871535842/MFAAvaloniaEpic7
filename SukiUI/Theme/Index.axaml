@@ -1,7 +1,8 @@
 <Styles x:Class="SukiUI.SukiTheme"
         xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:system="clr-namespace:System;assembly=netstandard">
+        xmlns:system="clr-namespace:System;assembly=netstandard"
+        xmlns:suki="https://github.com/kikipoulet/SukiUI">
 
     <SimpleTheme />
 
@@ -54,7 +55,8 @@
             <system:TimeSpan x:Key="LongAnimationDuration">0.5</system:TimeSpan>
             <system:TimeSpan x:Key="MediumAnimationDuration">0.35</system:TimeSpan>
             <system:TimeSpan x:Key="ShortAnimationDuration">0.2</system:TimeSpan>
-            <Easing x:Key="MenuEasing">CircularEaseOut</Easing>
+            <suki:SukiEasingOutBounced x:Key="MenuEasing" BounceIntensity="Soft" />
+
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="avares://sukiUI/Theme/TextBlock.xaml" />

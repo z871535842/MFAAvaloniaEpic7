@@ -112,7 +112,7 @@
                                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                             Foreground="{DynamicResource SukiText}" />
                             <ToggleButton Name="toggle"
-                                          Grid.Column="1"
+                                          Grid.Column="1" Classes="CircleGlass" Margin="2,0,2,0"
                                           Background="Transparent"
                                           BorderThickness="0" IsHitTestVisible="False"
                                           CornerRadius="{DynamicResource SmallCornerRadius}"
@@ -139,10 +139,11 @@
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    HorizontalOffset="-5"
                                    IsLightDismissEnabled="True"
-                                   IsOpen="{TemplateBinding IsDropDownOpen,
-                                                            Mode=TwoWay}"
+                                   IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
                                    PlacementTarget="{TemplateBinding}">
-                                <LayoutTransformControl Name="PART_LayoutTransform" RenderTransformOrigin="50%, 0%">
+
+                                <LayoutTransformControl Name="PART_LayoutTransform" RenderTransformOrigin="50%, 0%"
+                                                        Opacity="0">
 
                                     <Border Name="B1" Padding="5,10,5,5">
                                         <Panel>
@@ -159,8 +160,8 @@
                                                         HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                                         VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 
-                                                        <ItemsPresenter Name="PART_ItemsPresenter" 
-                                                                        Margin="0,3,0,0" 
+                                                        <ItemsPresenter Name="PART_ItemsPresenter"
+                                                                        Margin="0,3,0,0"
                                                                         ItemsPanel="{TemplateBinding ItemsPanel}" />
                                                     </ScrollViewer>
                                                 </Panel>
@@ -181,59 +182,57 @@
             <Setter Property="RenderTransform" Value="rotate(180deg)" />
         </Style>
         <Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransform">
-            <Style.Resources>
-                <theme:PlusNineConverter x:Key="NineConverter" />
-            </Style.Resources>
             <Style.Animations>
                 <Animation FillMode="Forward" Duration="0:0:0.4">
                     <Animation.Easing>
-                        <SineEaseOut />
+                        <suki:SukiEasingOutBounced BounceIntensity="Soft" />
                     </Animation.Easing>
                     <KeyFrame Cue="0%">
                         <Setter Property="ScaleTransform.ScaleY" Value="0.7" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="0.8" />
-                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="0.7" />
                     </KeyFrame>
-                    <KeyFrame Cue="60%">
-                        <Setter Property="Opacity" Value="0.3" />
-                    </KeyFrame>
-                    <KeyFrame Cue="70%">
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.015" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.015" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                        <Setter Property="Opacity" Value="1" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
-    </Style>
-    <Style Selector="ComboBox[IsDropDownOpen=False]">
-        <Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransform">
-            <Style.Resources>
-                <theme:PlusNineConverter x:Key="NineConverter" />
-            </Style.Resources>
-            <Style.Animations>
-                <Animation Easing="CircularEaseOut"
-                           FillMode="Forward"
-                           Duration="0:0:1">
-                    <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
-                        <Setter Property="Opacity" Value="1" />
-                    </KeyFrame>
-                    <KeyFrame Cue="100%">
-                        <Setter Property="ScaleTransform.ScaleY" Value="0.9" />
-                        <Setter Property="ScaleTransform.ScaleX" Value="0.9" />
-                        <Setter Property="Opacity" Value="0" />
-                    </KeyFrame>
-                </Animation>
-            </Style.Animations>
-        </Style>
-    </Style>
 
+                    <KeyFrame Cue="100%">
+                        <Setter Property="ScaleTransform.ScaleY" Value="1" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1" />
+
+                    </KeyFrame>
+                </Animation>
+
+                <Animation FillMode="Forward" Duration="0:0:0.4">
+                    <Animation.Easing>
+                        <SineEaseInOut />
+                    </Animation.Easing>
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0" />
+                    </KeyFrame>
+
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1" />
+                    </KeyFrame>
+                </Animation>
+
+            </Style.Animations>
+        </Style>
+    </Style>
+    <!-- <Style Selector="ComboBox[IsDropDownOpen=false] /template/ LayoutTransformControl#PART_LayoutTransform"> -->
+    <!--     <Style.Animations> -->
+    <!--         <Animation Easing="CircularEaseOut" -->
+    <!--                    FillMode="Forward" -->
+    <!--                    Duration="0:0:0.3"> -->
+    <!--             <KeyFrame Cue="0%"> -->
+    <!--                 <Setter Property="ScaleTransform.ScaleY" Value="1" /> -->
+    <!--                 <Setter Property="ScaleTransform.ScaleX" Value="1" /> -->
+    <!--                 <Setter Property="Opacity" Value="1" /> -->
+    <!--             </KeyFrame> -->
+    <!--             <KeyFrame Cue="100%"> -->
+    <!--                 <Setter Property="ScaleTransform.ScaleY" Value="0.9" /> -->
+    <!--                 <Setter Property="ScaleTransform.ScaleX" Value="0.9" /> -->
+    <!--                 <Setter Property="Opacity" Value="0" /> -->
+    <!--             </KeyFrame> -->
+    <!--         </Animation> -->
+    <!--     </Style.Animations> -->
+    <!-- </Style> -->
     <Style Selector="ComboBox.LimitWidth /template/ Popup#PART_Popup">
         <Setter Property="MaxWidth"
                 Value="{calcBinding:Binding 'Bounds.Width + 30', RelativeSource={RelativeSource TemplatedParent}}" />

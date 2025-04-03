@@ -693,7 +693,7 @@ public class MaaProcessor
                             JsonConvert.SerializeObject(new Dictionary<string, MaaNode>
                             {
                                 {
-                                    "MFAWPF", new MaaNode
+                                    "MFAAvalonia", new MaaNode
                                     {
                                         Action = "DoNothing"
                                     }
@@ -970,7 +970,7 @@ public class MaaProcessor
         string timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
         string formattedLogMessage =
             $"[{timeStamp}][INF][Px14600][Tx16498][Parser.cpp][L56][MaaNS::ProjectInterfaceNS::Parser::parse_interface] ";
-        var logMessage = $"MFAWPF Version: [mfa.version={Instances.VersionUpdateSettingsUserControlModel.MfaVersion}] "
+        var logMessage = $"MFAAvalonia Version: [mfa.version={Instances.VersionUpdateSettingsUserControlModel.MfaVersion}] "
             + $"Interface Version: [data.version=v{resourceVersion.Replace("v", "")}] ";
         LoggerHelper.Info(logMessage);
 
@@ -1943,7 +1943,7 @@ public class MaaProcessor
     {
         if (Instances.TaskQueueViewModel.CurrentController == MaaControllerTypes.Adb)
         {
-            EmulatorHelper.KillEmulatorAsync();
+            EmulatorHelper.KillEmulatorModeSwitcher();
         }
         else
         {

@@ -62,7 +62,7 @@ public class TrayIconManager
         {
         };
 
-        menuItem3.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.SwitchLanguage)); 
+        menuItem3.Bind(NativeMenuItem.HeaderProperty, new I18nBinding(LangKeys.SwitchLanguage));
         menuItem3.Menu = new NativeMenu();
 
         foreach (var lang in LanguageHelper.SupportedLanguages)
@@ -140,8 +140,7 @@ public class TrayIconManager
 
     private static void App_exit(object sender, EventArgs e)
     {
-        if (Instances.RootView.ConfirmExit())
-            Instances.ApplicationLifetime.Shutdown();
+        Instances.RootView.ConfirmExit();
     }
 
     private static void App_hide(object sender, EventArgs e) =>

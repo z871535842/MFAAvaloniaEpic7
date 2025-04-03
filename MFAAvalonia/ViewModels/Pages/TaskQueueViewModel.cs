@@ -106,7 +106,7 @@ public partial class TaskQueueViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task AddTask()
+    private void AddTask()
     {
         Instances.DialogManager.CreateDialog().WithTitle("AdbEditor".ToLocalization()).WithViewModel(dialog => new AddTaskDialogViewModel(dialog, MaaProcessor.Instance.TasksSource)).TryShow();
     }

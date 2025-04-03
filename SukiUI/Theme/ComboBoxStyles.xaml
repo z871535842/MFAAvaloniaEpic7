@@ -4,7 +4,8 @@
         xmlns:objectModel="clr-namespace:System.Collections.ObjectModel;assembly=netstandard"
         xmlns:suki="https://github.com/kikipoulet/SukiUI"
         xmlns:system="clr-namespace:System;assembly=netstandard"
-        xmlns:theme="clr-namespace:SukiUI.Theme">
+        xmlns:theme="clr-namespace:SukiUI.Theme"
+        xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva">
 
     <Design.PreviewWith>
         <Border Padding="20" Background="Transparent">
@@ -133,7 +134,7 @@
                                     </Path.Transitions>
                                 </Path>
                             </ToggleButton>
-                            <Popup Name="PART_Popup" 
+                            <Popup Name="PART_Popup"
                                    MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    HorizontalOffset="-5"
@@ -158,8 +159,8 @@
                                                         HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
                                                         VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
 
-                                                        <ItemsPresenter Name="PART_ItemsPresenter"
-                                                                        Margin="0,3,0,0"
+                                                        <ItemsPresenter Name="PART_ItemsPresenter" 
+                                                                        Margin="0,3,0,0" 
                                                                         ItemsPanel="{TemplateBinding ItemsPanel}" />
                                                     </ScrollViewer>
                                                 </Panel>
@@ -174,7 +175,7 @@
             </ControlTemplate>
         </Setter>
     </Style>
-    
+
     <Style Selector="ComboBox[IsDropDownOpen=True]">
         <Style Selector="^ /template/ Path#PART_DropDownIcon">
             <Setter Property="RenderTransform" Value="rotate(180deg)" />
@@ -232,9 +233,10 @@
             </Style.Animations>
         </Style>
     </Style>
-    
+
     <Style Selector="ComboBox.LimitWidth /template/ Popup#PART_Popup">
-        <Setter Property="MaxWidth" Value="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}" />
+        <Setter Property="MaxWidth"
+                Value="{calcBinding:Binding 'Bounds.Width + 30', RelativeSource={RelativeSource TemplatedParent}}" />
     </Style>
 
     <Style Selector="ComboBox:pointerover /template/ suki|GlassCard#border">

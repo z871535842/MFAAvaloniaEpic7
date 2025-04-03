@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
@@ -238,12 +239,12 @@ public partial class TaskQueueView : UserControl
             itemViewModel.EnableSetting = true;
         }
     }
-    
+
     private void CheckBox_PointerPressed(object sender, PointerPressedEventArgs e)
     {
         e.Handled = true; // 阻止事件冒泡到 ListBoxItem
     }
-    
+
     private void Delete(object? sender, RoutedEventArgs e)
     {
         var menuItem = sender as MenuItem;
@@ -443,7 +444,7 @@ public partial class TaskQueueView : UserControl
         if (MaaProcessor.Interface?.Option?.TryGetValue(option.Name ?? string.Empty, out var interfaceOption) != true) return;
         Control control = interfaceOption.Cases.ShouldSwitchButton(out var yes, out var no)
             ? CreateToggleControl(option, yes, no, source)
-            : CreateComboControl(option, interfaceOption, source);
+            : CreateComboBoxControl(option, interfaceOption, source);
 
         panel.Children.Add(control);
     }
@@ -518,7 +519,7 @@ public partial class TaskQueueView : UserControl
         return grid;
     }
 
-    private Grid CreateComboControl(
+    private Grid CreateComboBoxControl(
         MaaInterface.MaaInterfaceSelectOption option,
         MaaInterface.MaaInterfaceOption interfaceOption,
         DragItemViewModel source)
@@ -541,17 +542,32 @@ public partial class TaskQueueView : UserControl
 
         var combo = new ComboBox
         {
-            DisplayMemberBinding = new Binding("Name"),
             MinWidth = 150,
             Classes =
             {
                 "LimitWidth"
             },
             Margin = new Thickness(0, 5, 5, 5),
-            ItemsSource = interfaceOption.Cases?.Select(c => new
+            ItemsSource = interfaceOption.Cases,
+            ItemTemplate = new FuncDataTemplate<MaaInterface.MaaInterfaceOptionCase>((optionCase, b) =>
             {
-                Name = LanguageHelper.GetLocalizedString(c.Name)
-            }),
+                var data =
+                    new TextBlock
+                    {
+                        Text = optionCase.Name,
+                        TextTrimming = TextTrimming.WordEllipsis,
+                        TextWrapping = TextWrapping.NoWrap
+                    };
+                ToolTip.SetTip(data, optionCase.Name);
+                return data;
+            }, true),
+            SelectionBoxItemTemplate = new FuncDataTemplate<MaaInterface.MaaInterfaceOptionCase>((optionCase, b) =>
+                new ContentControl
+                {
+                    Content = optionCase.Name
+                }
+            ,
+            true),
             SelectedIndex = option.Index ?? 0,
         };
 

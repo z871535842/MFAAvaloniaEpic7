@@ -134,6 +134,12 @@
         <None Remove="Content\Shaders\Background\backgroundshadcn.sksl"/>
         <EmbeddedResource Include="Content\Shaders\Background\backgroundshadcn.sksl"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="CalcBindingAva">
+        <HintPath>..\..\..\nuget\packages\calcbindingava\2.5.3\lib\net6.0\CalcBindingAva.dll</HintPath>
+      </Reference>
+    </ItemGroup>
     <PropertyGroup>
         <!-- 禁用所有编译器警告 -->
         <WarningLevel>0</WarningLevel>

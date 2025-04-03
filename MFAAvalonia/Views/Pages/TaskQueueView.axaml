@@ -70,7 +70,7 @@
                             Text="{markup:I18n {x:Static helper:LangKeys.ResourceOption}}"
                             VerticalAlignment="Center" />
                     </suki:GroupBox.Header>
-                    <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True" Classes="LimitWidth"
+                    <ComboBox ex:ComboBoxExtensions.DisableNavigationOnLostFocus="True"
                               DisplayMemberBinding="{Binding Name}"
                               IsEnabled="{Binding Idle, Source={x:Static helper:Instances.RootViewModel}}"
                               ItemsSource="{Binding CurrentResources}"

@@ -137,6 +137,7 @@ public class TrayIconManager
 
     private static void StopTask(object sender, EventArgs e) =>
         Instances.TaskQueueViewModel.StopTask();
+#pragma warning disable CS4014 // 由于此调用不会等待，因此在此调用完成之前将会继续执行当前方法。请考虑将 "await" 运算符应用于调用结果。
 
     private static void App_exit(object sender, EventArgs e)
     {

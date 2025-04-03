@@ -577,31 +577,47 @@ public static class VersionChecker
 
             try
             {
-                if (File.Exists(sourceUpdaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                if (File.Exists(targetUpdaterPath) && File.Exists(sourceUpdaterPath))
                 {
-                    var chmodProcess = Process.Start("/bin/chmod", $"+x {sourceDirectory}");
-                    await chmodProcess?.WaitForExitAsync();
-                }
-                File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                {
-                    try
+                    var targetVersionInfo = FileVersionInfo.GetVersionInfo(targetUpdaterPath);
+                    var sourceVersionInfo = FileVersionInfo.GetVersionInfo(sourceUpdaterPath);
+                    var targetVersion = targetVersionInfo.FileVersion; // 或 ProductVersion
+                    var sourceVersion = sourceVersionInfo.FileVersion;
+
+                    // 使用Version类比较版本
+                    var vTarget = new Version(targetVersion);
+                    var vSource = new Version(sourceVersion);
+
+                    int result = vTarget.CompareTo(vSource);
+                    if (result < 0)
                     {
-                        File.Copy(Path.Combine(sourceDirectory, "MFAUpdater.dll"), Path.Combine(utf8BaseDirectory, "MFAUpdater.dll"), overwrite: true);
-                        LoggerHelper.Info($"成功复制更新器.dll到目标目录: {Path.Combine(utf8BaseDirectory, "MFAUpdater.dll")}");
+                        if (File.Exists(sourceUpdaterPath) && !RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        {
+                            var chmodProcess = Process.Start("/bin/chmod", $"+x {sourceDirectory}");
+                            await chmodProcess?.WaitForExitAsync();
+                        }
+                        File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        {
+                            try
+                            {
+                                File.Copy(Path.Combine(sourceDirectory, "MFAUpdater.dll"), Path.Combine(utf8BaseDirectory, "MFAUpdater.dll"), overwrite: true);
+                                LoggerHelper.Info($"成功复制更新器.dll到目标目录: {Path.Combine(utf8BaseDirectory, "MFAUpdater.dll")}");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+                        }
+                        LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
+
                 }
-                LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
 
                 // 验证源文件存在性
                 if (!File.Exists(sourceUpdaterPath))
                 {
                     LoggerHelper.Error($"更新器在源目录缺失: {sourceUpdaterPath}");
-                    throw new FileNotFoundException("更新程序源文件未找到");
                 }
             }
             catch (IOException ex)
@@ -646,9 +662,34 @@ public static class VersionChecker
         }
         return false;
     }
+    private static string BuildArguments(string source, string target, string oldName, string newName)
+    {
+        var args = new List<string>
+        {
+            EscapeArgument(source),
+            EscapeArgument(target)
+        };
+
+        if (!string.IsNullOrWhiteSpace(oldName) && !string.IsNullOrWhiteSpace(newName))
+        {
+            args.Add(EscapeArgument(oldName));
+            args.Add(EscapeArgument(newName));
+        }
+
+        return string.Join(" ", args);
+    }
+
+// 处理含空格的参数
+    private static string EscapeArgument(string arg) => $"\"{arg.Replace("\"", "\\\"")}\"";
 
     async private static Task ApplySecureUpdate(string source, string target, string oldName = "", string newName = "")
     {
+        source = Path.GetFullPath(source).Replace('\\', Path.DirectorySeparatorChar);
+        target = Path.GetFullPath(target).Replace('\\', Path.DirectorySeparatorChar);
+
+        target = target.TrimEnd('\\', '/');
+        source = source.TrimEnd('\\', '/');
+
         string updaterName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
             ? "MFAUpdater.exe"
             : "MFAUpdater";
@@ -675,15 +716,15 @@ public static class VersionChecker
 
         var psi = new ProcessStartInfo
         {
-            FileName = updaterName,
             WorkingDirectory = AppContext.BaseDirectory,
-            UseShellExecute = RuntimeInformation.IsOSPlatform(OSPlatform.Windows),
-            Arguments = (string.IsNullOrWhiteSpace(oldName) || string.IsNullOrWhiteSpace(newName)) ? $"{source} {target}" : $"{source} {target} {oldName} {newName}",
+            FileName = updaterName,
+            Arguments = BuildArguments(source, target, oldName, newName),
             CreateNoWindow = true,
             WindowStyle = ProcessWindowStyle.Hidden
         };
 
-        LoggerHelper.Info($"{AppContext.BaseDirectory}{updaterName} {source} {target} {oldName} {newName}");
+
+        LoggerHelper.Info($"{Path.Combine(AppContext.BaseDirectory, updaterName)} {BuildArguments(source, target, oldName, newName)}");
 
         try
         {

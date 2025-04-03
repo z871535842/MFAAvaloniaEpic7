@@ -6,6 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <ApplicationIcon>logo.ico</ApplicationIcon>
+        <AssemblyVersion>1.0.1</AssemblyVersion>
+        <FileVersion>1.0.1</FileVersion>
     </PropertyGroup>
 	
     <PropertyGroup>
@@ -18,12 +20,4 @@
 		<InvariantGlobalization>true</InvariantGlobalization> <!-- 移除全球化资源 -->
 		<IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="ShimSkiaSharp" Version="2.0.0.4" />
-	  <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="3.118.0-preview.2.3" />
-	  <PackageReference Include="SkiaSharp.NativeAssets.macOS" Version="3.118.0-preview.2.3" />
-	  <PackageReference Include="SkiaSharp.NativeAssets.WebAssembly" Version="3.118.0-preview.2.3" />
-	  <PackageReference Include="SkiaSharp.NativeAssets.Win32" Version="3.118.0-preview.2.3" />
-	</ItemGroup>
 </Project>

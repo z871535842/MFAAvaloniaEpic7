@@ -32,8 +32,8 @@
         <ApplicationRevision>0</ApplicationRevision>
         <ApplicationVersion>1.1.0</ApplicationVersion>
         <Version>1.1</Version>
-        <FileVersion>1.0.5</FileVersion>
-        <AssemblyVersion>1.0.5</AssemblyVersion>
+        <FileVersion>1.0.6</FileVersion>
+        <AssemblyVersion>1.0.6</AssemblyVersion>
         <InformationalVersion>0.0.1</InformationalVersion>
     </PropertyGroup>
 
@@ -100,7 +100,7 @@
         <PackageReference Include="System.Management" Version="10.0.0-preview.2.25163.2" />
 
 		<ProjectReference Include="../LazyStaticGenerator/LazyStaticGenerator.csproj" OutputItemType="Analyzer" ExcludeAssets="runtime;build;native;contentfiles" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\MFAUpdater\MFAUpdater.csproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
+        <ProjectReference Include="..\MFAUpdater\MFAUpdater.csproj" />
 
 	    <ProjectReference Include="../SukiUI/SukiUI.csproj" />
 	</ItemGroup>

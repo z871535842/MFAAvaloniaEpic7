@@ -37,6 +37,8 @@
         <entry key="SukiUI/ColorTheme/Light.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Experimental/DesktopEnvironment/InternalWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/GlassMorphism/GlassCard.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/Hosts/SukiDialogHost.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/Hosts/SukiMessageBoxHost.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/InfoBar.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/PasswordBox.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Settings/SettingsLayout.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -44,13 +46,16 @@
         <entry key="SukiUI/Controls/SukiSideMenu.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/SukiSideMenuItem.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/SukiStackPage.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/SukiToast.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/SukiWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/WaveProgress.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/en-us.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/zh-cn.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/zh-hans.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Locale/zh-hant.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/Button.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ButtonLoadingStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/CheckBoxStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/Colors.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ComboBoxItemStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ComboBoxStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -63,10 +68,16 @@
         <entry key="SukiUI/Theme/NumericUpDownStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/PathIcon.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/PathIconStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ProgressBarStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RadioButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/RichTextBoxStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/SplitButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/SplitView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TabControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TextBlock.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBoxStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextEraserButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TextStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TimePickerStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ToggleButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ToggleSwitchStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />

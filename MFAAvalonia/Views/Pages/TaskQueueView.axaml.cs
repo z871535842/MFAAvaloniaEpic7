@@ -162,21 +162,33 @@ public partial class TaskQueueView : UserControl
                 // 上下布局模式（两行）
                 connectionGrid.ColumnDefinitions.Clear();
                 connectionGrid.RowDefinitions.Clear();
-    
+
                 // 创建两行结构
-                connectionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                connectionGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                connectionGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
+                connectionGrid.RowDefinitions.Add(new RowDefinition
+                {
+                    Height = GridLength.Auto
+                });
 
                 // 定义两列等宽布局（网页4提到的Star单位）
-                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = new GridLength(1, GridUnitType.Star)
+                });
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = new GridLength(1, GridUnitType.Star)
+                });
 
                 // 设置控件位置
                 Grid.SetRow(FirstButton, 0);
                 Grid.SetColumn(FirstButton, 0);
                 Grid.SetRow(SecondButton, 0);
                 Grid.SetColumn(SecondButton, 1);
-    
+
                 // 设置DockPanel跨两列
                 Grid.SetRow(ControllerPanel, 1);
                 Grid.SetColumnSpan(ControllerPanel, 2);
@@ -190,7 +202,10 @@ public partial class TaskQueueView : UserControl
             {
                 // 三层布局模式
                 connectionGrid.ColumnDefinitions.Clear();
-                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                connectionGrid.ColumnDefinitions.Add(new ColumnDefinition
+                {
+                    Width = new GridLength(1, GridUnitType.Star)
+                });
 
                 connectionGrid.RowDefinitions.Clear();
                 connectionGrid.RowDefinitions.Add(new RowDefinition
@@ -223,7 +238,12 @@ public partial class TaskQueueView : UserControl
             itemViewModel.EnableSetting = true;
         }
     }
-
+    
+    private void CheckBox_PointerPressed(object sender, PointerPressedEventArgs e)
+    {
+        e.Handled = true; // 阻止事件冒泡到 ListBoxItem
+    }
+    
     private void Delete(object? sender, RoutedEventArgs e)
     {
         var menuItem = sender as MenuItem;
@@ -522,7 +542,11 @@ public partial class TaskQueueView : UserControl
         var combo = new ComboBox
         {
             DisplayMemberBinding = new Binding("Name"),
-            MinWidth = 150,Classes = { "LimitWidth" },
+            MinWidth = 150,
+            Classes =
+            {
+                "LimitWidth"
+            },
             Margin = new Thickness(0, 5, 5, 5),
             ItemsSource = interfaceOption.Cases?.Select(c => new
             {

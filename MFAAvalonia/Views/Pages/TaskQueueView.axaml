@@ -162,13 +162,13 @@
                                         <Grid
                                             ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}"
                                             Background="Transparent"
-                                            ColumnDefinitions="9*,1*"
+                                            ColumnDefinitions="8*,1*"
                                             ContextMenu="{StaticResource TaskMenu}"
                                             x:Name="ListGrid">
                                             <CheckBox
                                                 Content="{Binding Name}"
                                                 Grid.Column="0" MinWidth="150"
-                                                HorizontalAlignment="Left"
+                                                HorizontalAlignment="Left"  PointerPressed="CheckBox_PointerPressed"
                                                 IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                                 IsChecked="{Binding IsCheckedWithNull}">
                                                 <CheckBox.ContentTemplate>

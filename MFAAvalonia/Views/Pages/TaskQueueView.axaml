@@ -150,10 +150,12 @@
                             <ListBox
                                 DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                 ex:DragDropExtensions.EnableDragDrop="True"
+                                ex:DragDropExtensions.HoldDurationMilliseconds="800"
                                 ex:DragDropExtensions.EnableAnimation="True"
                                 ItemsSource="{Binding Path=TaskItemViewModels}"
                                 Margin="0,3,0,0"
                                 MinHeight="220"
+                                Width="{Binding Bounds.Width,RelativeSource={RelativeSource FindAncestor,AncestorType=Grid}}"
                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
                                 SelectionChanged="SelectingItemsControl_OnSelectionChanged"
                                 x:Name="TaskListBox">
@@ -168,7 +170,7 @@
                                             <CheckBox
                                                 Content="{Binding Name}"
                                                 Grid.Column="0" MinWidth="150"
-                                                HorizontalAlignment="Left"  PointerPressed="CheckBox_PointerPressed"
+                                                HorizontalAlignment="Left" PointerPressed="CheckBox_PointerPressed"
                                                 IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                                 IsChecked="{Binding IsCheckedWithNull}">
                                                 <CheckBox.ContentTemplate>

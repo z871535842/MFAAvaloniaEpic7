@@ -135,7 +135,7 @@
                                 </Path>
                             </ToggleButton>
                             <Popup Name="PART_Popup"
-                                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+
                                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
                                    HorizontalOffset="-5"
                                    IsLightDismissEnabled="True"
@@ -233,7 +233,14 @@
     <!--         </Animation> -->
     <!--     </Style.Animations> -->
     <!-- </Style> -->
+    <Style Selector="ComboBox /template/ Popup#PART_Popup">
+        <Setter Property="MinWidth"
+                Value="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}" />
+    </Style>
     <Style Selector="ComboBox.LimitWidth /template/ Popup#PART_Popup">
+        <Setter Property="MinWidth"
+                Value="{calcBinding:Binding 'Bounds.Width + 30', RelativeSource={RelativeSource TemplatedParent}}" />
+
         <Setter Property="MaxWidth"
                 Value="{calcBinding:Binding 'Bounds.Width + 30', RelativeSource={RelativeSource TemplatedParent}}" />
     </Style>

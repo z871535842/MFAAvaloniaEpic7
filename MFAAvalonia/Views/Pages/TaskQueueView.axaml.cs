@@ -559,15 +559,16 @@ public partial class TaskQueueView : UserControl
                         TextWrapping = TextWrapping.NoWrap
                     };
                 ToolTip.SetTip(data, optionCase.Name);
+                ToolTip.SetShowDelay(data, 100);
                 return data;
             }, true),
             SelectionBoxItemTemplate = new FuncDataTemplate<MaaInterface.MaaInterfaceOptionCase>((optionCase, b) =>
-                new ContentControl
-                {
-                    Content = optionCase.Name
-                }
-            ,
-            true),
+                    new ContentControl
+                    {
+                        Content = optionCase.Name
+                    }
+                ,
+                true),
             SelectedIndex = option.Index ?? 0,
         };
 

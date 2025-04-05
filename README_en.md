@@ -27,7 +27,7 @@ on **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** ✨_
 ## Preview
 
 <p align="center">
-  <img alt="preview" src="https://github.com/SweetSmellFox/MFAAvalonia/blob/master/MFAAvalonia/Img/preview.png" width="512" height="256" />
+  <img alt="preview" src="https://github.com/SweetSmellFox/MFAAvalonia/blob/master/MFAAvalonia/Img/preview.png" height="595" width="900" />
 </p>
 
 ## Requirements

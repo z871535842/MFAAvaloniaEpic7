@@ -970,6 +970,13 @@ public static class VersionChecker
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("MFAComponentUpdater/1.0");
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
+        if (!string.IsNullOrWhiteSpace(Instances.VersionUpdateSettingsUserControlModel.GitHubToken))
+        {
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
+                "Bearer", 
+                Instances.VersionUpdateSettingsUserControlModel.GitHubToken);
+        }
+        
         try
         {
             var response = httpClient.GetAsync(releaseUrl).Result;

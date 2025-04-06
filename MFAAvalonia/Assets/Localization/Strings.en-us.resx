@@ -1049,4 +1049,7 @@
     <data name="AgentStartFailed" xml:space="preserve">
         <value>Agent startup failure</value>
     </data>
+    <data name="Optional" xml:space="preserve">
+        <value>Optional</value>
+    </data>
 </root>

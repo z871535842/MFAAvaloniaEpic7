@@ -82,6 +82,20 @@
                             VerticalAlignment="Center" />
                     </StackPanel>
                 </DockPanel>
+                <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==0'}">
+                    <suki:PasswordBox
+                        DockPanel.Dock="Right" Watermark="{markup:I18n {x:Static helper:LangKeys.Optional}}"
+                        HorizontalAlignment="Center"
+                        Password="{Binding GitHubToken}"
+                        Width="215" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="Token"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                </DockPanel>
                 <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==1'}">
                     <suki:PasswordBox
                         DockPanel.Dock="Right"
@@ -92,7 +106,7 @@
                         <TextBlock
                             FontSize="16"
                             FontWeight="SemiBold"
-                            Text="{markup:I18n {x:Static helper:LangKeys.AutomaticUpdateResource}}"
+                            Text="CDK"
                             VerticalAlignment="Center" />
                     </StackPanel>
                 </DockPanel>

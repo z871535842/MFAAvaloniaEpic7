@@ -1049,4 +1049,7 @@
     <data name="AgentStartFailed" xml:space="preserve">
         <value>Agent啟動失敗</value>
     </data>
+    <data name="Optional" xml:space="preserve">
+        <value>可選</value>
+    </data>
 </root>

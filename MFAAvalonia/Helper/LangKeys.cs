@@ -356,4 +356,5 @@ public static class LangKeys
 	public static readonly string MirrorCdkMismatch = "MirrorCdkMismatch";
 	public static readonly string StartingAgent = "StartingAgent";
 	public static readonly string AgentStartFailed = "AgentStartFailed";
+	public static readonly string Optional = "Optional";
 }

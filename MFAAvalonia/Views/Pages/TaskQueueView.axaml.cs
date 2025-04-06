@@ -580,7 +580,6 @@ public partial class TaskQueueView : UserControl
 
         combo.SelectionChanged += (_, _) =>
         {
-            Console.WriteLine(combo.SelectedIndex);
             option.Index = combo.SelectedIndex;
             SaveConfiguration();
         };

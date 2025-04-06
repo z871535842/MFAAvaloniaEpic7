@@ -240,10 +240,7 @@ public partial class TaskQueueView : UserControl
         }
     }
 
-    private void CheckBox_PointerPressed(object sender, PointerPressedEventArgs e)
-    {
-        e.Handled = true; // 阻止事件冒泡到 ListBoxItem
-    }
+    
 
     private void Delete(object? sender, RoutedEventArgs e)
     {
@@ -580,9 +577,11 @@ public partial class TaskQueueView : UserControl
 
         combo.SelectionChanged += (_, _) =>
         {
+            Console.WriteLine(combo.SelectedIndex);
             option.Index = combo.SelectedIndex;
             SaveConfiguration();
         };
+        
         ComboBoxExtensions.SetDisableNavigationOnLostFocus(combo, true);
         Grid.SetColumn(combo, 1);
         var textBlock = new TextBlock

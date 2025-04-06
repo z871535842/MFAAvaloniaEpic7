@@ -163,16 +163,16 @@
                                     <DataTemplate>
                                         <Grid
                                             ToolTip.Tip="{markup:I18n {x:Static helper:LangKeys.TooltipDragLabel}}"
-                                            Background="Transparent"
-                                            ColumnDefinitions="8*,1*"
-                                            ContextMenu="{StaticResource TaskMenu}"
+                                            Background="Transparent" ex:DragDropExtensions.LimitDragDrop="True" 
+                                            ColumnDefinitions="8*,1*"  ContextMenu="{StaticResource TaskMenu}"
                                             x:Name="ListGrid">
-                                            <CheckBox
-                                                Content="{Binding Name}"
-                                                Grid.Column="0" MinWidth="150"
-                                                HorizontalAlignment="Left" PointerPressed="CheckBox_PointerPressed"
-                                                IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
-                                                IsChecked="{Binding IsCheckedWithNull}">
+                                            <CheckBox IsThreeState="True" 
+                                                      Content="{Binding Name}"
+                                                      Grid.Column="0" MinWidth="150"
+                                                      ex:CheckBoxExtensions.EnableRightClickNull="True"
+                                                      HorizontalAlignment="Left"      ex:CheckBoxExtensions.LimitDragDrop="True"
+                                                      IsEnabled="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
+                                                      IsChecked="{Binding IsCheckedWithNull}">
                                                 <CheckBox.ContentTemplate>
                                                     <DataTemplate>
                                                         <TextBlock

@@ -139,6 +139,7 @@ public class DragDropExtensions
                 }
             }
         });
+        LimitDragDropProperty.Changed.Subscribe(OnLimitDragDropChanged);
     }
     public static bool GetEnableAnimation(ListBox element) =>
         element.GetValue(EnableAnimationProperty);
@@ -177,7 +178,7 @@ public class DragDropExtensions
 
     private static void SetPressedTime(ListBox element, DateTime? value) =>
         element.SetValue(PressedTimeProperty, value);
-    
+
     private static void EnableDragDrop(ListBox listBox)
     {
         if (listBox.Parent is not AdornerLayer adornerLayer)
@@ -221,21 +222,55 @@ public class DragDropExtensions
         listBox.RemoveHandler(DragDrop.DropEvent, OnDrop);
         listBox.RemoveHandler(DragDrop.DragLeaveEvent, OnDragLeave);
     }
-    
+    public static readonly AttachedProperty<bool> LimitDragDropProperty =
+        AvaloniaProperty.RegisterAttached<Control, bool>(
+            "LimitDragDrop",
+            typeof(DragDropExtensions),
+            defaultValue: false);
+    public static void SetLimitDragDrop(Control element, bool value) =>
+        element.SetValue(LimitDragDropProperty, value);
+    public static bool GetLimitDragDrop(Control element) => element.GetValue(LimitDragDropProperty);
+    private static void OnLimitDragDropChanged(AvaloniaPropertyChangedEventArgs<bool> args)
+    {
+        if (args.Sender is Control textBox)
+        {
+            if (args.NewValue.Value)
+            {
+                textBox.AddHandler(InputElement.PointerExitedEvent, OnPointerExited);
+                textBox.AddHandler(InputElement.PointerReleasedEvent, OnPointerReleased);
+            }
+            else
+            {
+                textBox.RemoveHandler(InputElement.PointerExitedEvent, OnPointerExited);
+                textBox.RemoveHandler(InputElement.PointerReleasedEvent, OnPointerReleased);
+            }
+        }
+    }
+
     private static void OnPointerExited(object? sender, PointerEventArgs e)
     {
-        if (sender is not ListBox listBox)
-            return;
-        SetPressedTime(listBox, DateTime.Now);
+        if (sender is ListBox listBox)
+        {
+            SetPressedTime(listBox, DateTime.Now);
+        }
+        else if (sender is Control { Parent: ListBox lb })
+        {
+            SetPressedTime(lb, DateTime.Now);
+        }
     }
-    
+
     private static void OnPointerReleased(object? sender, PointerEventArgs e)
     {
-        if (sender is not ListBox listBox)
-            return;
-        SetPressedTime(listBox, DateTime.Now);
+        if (sender is ListBox listBox)
+        {
+            SetPressedTime(listBox, DateTime.Now);
+        }
+        else if (sender is Control { Parent: ListBox lb })
+        {
+            SetPressedTime(lb, DateTime.Now);
+        }
     }
-    
+
     private static void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (sender is not ListBox listBox || !e.GetCurrentPoint(listBox).Properties.IsLeftButtonPressed)

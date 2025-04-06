@@ -44,6 +44,7 @@ using HorizontalAlignment = Avalonia.Layout.HorizontalAlignment;
 using Point = Avalonia.Point;
 using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
 using Avalonia.Threading;
+using MFAAvalonia.ViewModels.Other;
 using SukiUI.Controls;
 
 namespace MFAAvalonia.Views.Pages;
@@ -545,8 +546,11 @@ public partial class TaskQueueView : UserControl
                 "LimitWidth"
             },
             Margin = new Thickness(0, 5, 5, 5),
-            ItemsSource = interfaceOption.Cases,
-            ItemTemplate = new FuncDataTemplate<MaaInterface.MaaInterfaceOptionCase>((optionCase, b) =>
+            ItemsSource = interfaceOption.Cases.Select(caseOption => new LocalizationViewModel()
+            {
+                Name = caseOption.Name,
+            }),
+            ItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
             {
                 var data =
                     new TextBlock
@@ -558,14 +562,13 @@ public partial class TaskQueueView : UserControl
                 ToolTip.SetTip(data, optionCase.Name);
                 ToolTip.SetShowDelay(data, 100);
                 return data;
-            }, true),
-            SelectionBoxItemTemplate = new FuncDataTemplate<MaaInterface.MaaInterfaceOptionCase>((optionCase, b) =>
+            }),
+            SelectionBoxItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
                     new ContentControl
                     {
                         Content = optionCase.Name
                     }
-                ,
-                true),
+                ),
             SelectedIndex = option.Index ?? 0,
         };
 

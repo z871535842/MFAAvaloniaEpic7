@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace MFAAvalonia.Extensions.MaaFW;
 
-public class MaaInterface
+public partial class MaaInterface
 {
     public class MaaInterfaceOptionCase
     {

@@ -546,27 +546,28 @@ public partial class TaskQueueView : UserControl
                 "LimitWidth"
             },
             Margin = new Thickness(0, 5, 5, 5),
-            ItemsSource = interfaceOption.Cases.Select(caseOption => new LocalizationViewModel()
+            ItemsSource = interfaceOption.Cases.Select(caseOption => new LocalizationViewModel
             {
                 Name = caseOption.Name,
-            }),
+            }).ToList(),
             ItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
             {
+                
                 var data =
                     new TextBlock
                     {
-                        Text = optionCase.Name,
+                        Text = optionCase?.Name ?? string.Empty,
                         TextTrimming = TextTrimming.WordEllipsis,
                         TextWrapping = TextWrapping.NoWrap
                     };
-                ToolTip.SetTip(data, optionCase.Name);
+                ToolTip.SetTip(data, optionCase?.Name?? string.Empty);
                 ToolTip.SetShowDelay(data, 100);
                 return data;
             }),
             SelectionBoxItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
                     new ContentControl
                     {
-                        Content = optionCase.Name
+                        Content = optionCase?.Name ?? string.Empty
                     }
                 ),
             SelectedIndex = option.Index ?? 0,

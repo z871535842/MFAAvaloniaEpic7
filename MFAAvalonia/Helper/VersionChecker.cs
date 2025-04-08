@@ -898,14 +898,14 @@ public static class VersionChecker
         int page = 1;
         const int perPage = 5;
         using var httpClient = new HttpClient();
-        
+
         if (!string.IsNullOrWhiteSpace(Instances.VersionUpdateSettingsUserControlModel.GitHubToken))
         {
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                "Bearer", 
+                "Bearer",
                 Instances.VersionUpdateSettingsUserControlModel.GitHubToken);
         }
-        
+
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
         httpClient.DefaultRequestHeaders.Accept.TryParseAdd("application/json");
 

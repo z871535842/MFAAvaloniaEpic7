@@ -153,8 +153,16 @@ public partial class RootView : SukiWindow
 
         if (result is SukiMessageBoxResult.Yes)
         {
-            action?.Invoke();
-            Environment.Exit(0);
+            try
+            {
+                action?.Invoke();
+            }
+            catch (Exception e)
+            {
+                LoggerHelper.Error(e);
+            }
+            finally { Environment.Exit(0); }
+
             return true;
         }
         return false;

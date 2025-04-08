@@ -126,6 +126,15 @@ public class MaaProcessor
 
     #region MaaTasker初始化
 
+    private static string ConvertPath(string path)
+    {
+        if (Path.Exists(path) && !path.Contains("\""))
+        {
+            return $"\"{path}\"";
+        }
+        return path;
+    }
+    
     async private Task<MaaTasker?> InitializeMaaTasker(CancellationToken token) // 添加 async 和 token
     {
         AutoInitDictionary.Clear();
@@ -229,11 +238,11 @@ public class MaaProcessor
                     if (!Directory.Exists($"{AppContext.BaseDirectory}"))
                         Directory.CreateDirectory($"{AppContext.BaseDirectory}");
                     var program = MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory);
-                    var args = $"{string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory))} {socket}";
+                    var args = $"{string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory).Select(ConvertPath))} {socket}";
                     var startInfo = new ProcessStartInfo
                     {
-                        FileName = program,
-                        WorkingDirectory = $"{AppContext.BaseDirectory}",
+                        FileName = $"\"{program}\"",
+                        WorkingDirectory = AppContext.BaseDirectory,
                         Arguments = $"{(program.Contains("python") && args.Contains(".py") && !args.Contains("-u ") ? "-u " : "")}{args}",
                         UseShellExecute = false,
                         RedirectStandardError = true,

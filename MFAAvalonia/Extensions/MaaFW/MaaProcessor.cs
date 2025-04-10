@@ -134,7 +134,7 @@ public class MaaProcessor
         }
         return path;
     }
-    
+
     async private Task<MaaTasker?> InitializeMaaTasker(CancellationToken token) // 添加 async 和 token
     {
         AutoInitDictionary.Clear();
@@ -1083,7 +1083,7 @@ public class MaaProcessor
 
         ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",
+            FileName = MFAExtensions.GetFallbackCommand(),
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             CreateNoWindow = true,
@@ -1114,7 +1114,7 @@ public class MaaProcessor
 
         ProcessStartInfo processStartInfo = new ProcessStartInfo
         {
-            FileName = "cmd.exe",
+            FileName = MFAExtensions.GetFallbackCommand(),
             RedirectStandardInput = true,
             RedirectStandardOutput = true,
             CreateNoWindow = true,

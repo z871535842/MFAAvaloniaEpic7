@@ -241,7 +241,7 @@ public class MaaProcessor
                     var args = $"{string.Join(" ", MaaInterface.ReplacePlaceholder(agentConfig.ChildArgs ?? Enumerable.Empty<string>(), AppContext.BaseDirectory).Select(ConvertPath))} {socket}";
                     var startInfo = new ProcessStartInfo
                     {
-                        FileName = $"\"{program}\"",
+                        FileName = program,
                         WorkingDirectory = AppContext.BaseDirectory,
                         Arguments = $"{(program.Contains("python") && args.Contains(".py") && !args.Contains("-u ") ? "-u " : "")}{args}",
                         UseShellExecute = false,

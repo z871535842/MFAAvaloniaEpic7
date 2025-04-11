@@ -574,11 +574,12 @@ public static class VersionChecker
             // 构建完整路径
             string sourceUpdaterPath = Path.Combine(sourceDirectory, updaterName); // 源目录路径
             string targetUpdaterPath = Path.Combine(utf8BaseDirectory, updaterName); // 目标目录路径
-
+            bool update = false;
             try
             {
                 if (File.Exists(targetUpdaterPath) && File.Exists(sourceUpdaterPath))
                 {
+                    update = true;
                     var targetVersionInfo = FileVersionInfo.GetVersionInfo(targetUpdaterPath);
                     var sourceVersionInfo = FileVersionInfo.GetVersionInfo(sourceUpdaterPath);
                     var targetVersion = targetVersionInfo.FileVersion; // 或 ProductVersion
@@ -596,20 +597,6 @@ public static class VersionChecker
                             var chmodProcess = Process.Start("/bin/chmod", $"+x {sourceDirectory}");
                             await chmodProcess?.WaitForExitAsync();
                         }
-                        File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
-                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                        {
-                            try
-                            {
-                                File.Copy(Path.Combine(sourceDirectory, "MFAUpdater.dll"), Path.Combine(utf8BaseDirectory, "MFAUpdater.dll"), overwrite: true);
-                                LoggerHelper.Info($"成功复制更新器.dll到目标目录: {Path.Combine(utf8BaseDirectory, "MFAUpdater.dll")}");
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
-                        }
-                        LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
                     }
 
                 }
@@ -630,7 +617,28 @@ public static class VersionChecker
                 LoggerHelper.Error($"权限不足: {ex.Message}");
                 throw new SecurityException("文件访问权限被拒绝", ex);
             }
-
+            catch (Exception ex)
+            {
+                update = true;
+                LoggerHelper.Error($"操作失败: {ex.Message} (具体: {ex})");
+            }
+            if (update)
+            {
+                File.Copy(sourceUpdaterPath, targetUpdaterPath, overwrite: true);
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    try
+                    {
+                        File.Copy(Path.Combine(sourceDirectory, "MFAUpdater.dll"), Path.Combine(utf8BaseDirectory, "MFAUpdater.dll"), overwrite: true);
+                        LoggerHelper.Info($"成功复制更新器.dll到目标目录: {Path.Combine(utf8BaseDirectory, "MFAUpdater.dll")}");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+                LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");
+            }
             SetProgress(progress, 100);
 
             await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
@@ -973,10 +981,10 @@ public static class VersionChecker
         if (!string.IsNullOrWhiteSpace(Instances.VersionUpdateSettingsUserControlModel.GitHubToken))
         {
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(
-                "Bearer", 
+                "Bearer",
                 Instances.VersionUpdateSettingsUserControlModel.GitHubToken);
         }
-        
+
         try
         {
             var response = httpClient.GetAsync(releaseUrl).Result;

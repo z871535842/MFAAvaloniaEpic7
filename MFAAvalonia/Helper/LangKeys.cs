@@ -136,7 +136,9 @@ public static class LangKeys
 	public static readonly string ExternalNotificationBotToken = "ExternalNotificationBotToken";
 	public static readonly string ExternalNotificationDingTalkSecret = "ExternalNotificationDingTalkSecret";
 	public static readonly string ExternalNotificationDingTalkToken = "ExternalNotificationDingTalkToken";
+	public static readonly string ExternalNotificationDiscordChannelId = "ExternalNotificationDiscordChannelId";
 	public static readonly string ExternalNotificationDiscordUserId = "ExternalNotificationDiscordUserId";
+	public static readonly string ExternalNotificationDiscordWebhookName = "ExternalNotificationDiscordWebhookName";
 	public static readonly string ExternalNotificationEmailAccount = "ExternalNotificationEmailAccount";
 	public static readonly string ExternalNotificationEmailSecret = "ExternalNotificationEmailSecret";
 	public static readonly string ExternalNotificationEnabled = "ExternalNotificationEnabled";
@@ -157,6 +159,7 @@ public static class LangKeys
 	public static readonly string ExternalNotificationSmtpUser = "ExternalNotificationSmtpUser";
 	public static readonly string ExternalNotificationTelegramChatId = "ExternalNotificationTelegramChatId";
 	public static readonly string ExternalNotificationTips = "ExternalNotificationTips";
+	public static readonly string ExternalNotificationWebhookUrl = "ExternalNotificationWebhookUrl";
 	public static readonly string ExternalNotificationWxPusherUID = "ExternalNotificationWxPusherUID";
 	public static readonly string FailToGetCurrentVersionInfo = "FailToGetCurrentVersionInfo";
 	public static readonly string FailToGetDownloadUrl = "FailToGetDownloadUrl";

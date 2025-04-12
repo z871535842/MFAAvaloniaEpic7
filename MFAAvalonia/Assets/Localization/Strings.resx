@@ -396,8 +396,14 @@
     <data name="ExternalNotificationDingTalkToken" xml:space="preserve">
         <value>钉钉 Token</value>
     </data>
+    <data name="ExternalNotificationDiscordChannelId" xml:space="preserve">
+        <value>频道 ID</value>
+    </data>
     <data name="ExternalNotificationDiscordUserId" xml:space="preserve">
         <value>用户 ID</value>
+    </data>
+    <data name="ExternalNotificationDiscordWebhookName" xml:space="preserve">
+        <value>Webhook 名称</value>
     </data>
     <data name="ExternalNotificationEmailAccount" xml:space="preserve">
         <value>邮箱 账户</value>
@@ -458,6 +464,9 @@
     </data>
     <data name="ExternalNotificationTips" xml:space="preserve">
         <value>请注意：外部通知功能目前仅会发送“所有任务完成”的通知。</value>
+    </data>
+    <data name="ExternalNotificationWebhookUrl" xml:space="preserve">
+        <value>Webhook Url</value>
     </data>
     <data name="ExternalNotificationWxPusherUID" xml:space="preserve">
         <value>用户 UID</value>

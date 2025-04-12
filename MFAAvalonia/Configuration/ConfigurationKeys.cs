@@ -96,7 +96,10 @@ public static class ConfigurationKeys
     public const string ExternalNotificationTelegramBotToken = "ExternalNotificationTelegramBotToken";
     public const string ExternalNotificationTelegramChatId = "ExternalNotificationTelegramChatId";
     public const string ExternalNotificationDiscordBotToken = "ExternalNotificationDiscordBotToken";
+    public const string ExternalNotificationDiscordChannelId = "ExternalNotificationDiscordChannelId";
     public const string ExternalNotificationDiscordUserId = "ExternalNotificationDiscordUserId";
+    public const string ExternalNotificationDiscordWebhookUrl = "ExternalNotificationDiscordWebhookUrl";
+    public const string ExternalNotificationDiscordWebhookName = "ExternalNotificationDiscordWebhookName";
     public const string ExternalNotificationSmtpServer = "ExternalNotificationSmtpServer";
     public const string ExternalNotificationSmtpPort = "ExternalNotificationSmtpPort";
     public const string ExternalNotificationSmtpUser = "ExternalNotificationSmtpUser";

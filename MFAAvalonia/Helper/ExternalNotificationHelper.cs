@@ -66,8 +66,15 @@ public static class ExternalNotificationHelper
                     break;
                 case Key.DiscordKey:
                     await Discord.SendAsync(
-                        Instances.ExternalNotificationSettingsUserControlModel.DiscordUserId,
+                        Instances.ExternalNotificationSettingsUserControlModel.DiscordChannelId,
                         Instances.ExternalNotificationSettingsUserControlModel.DiscordBotToken,
+                        cancellationToken
+                    );
+                    break;
+                case Key.DiscordWebhookKey:
+                    await DiscordWebhook.SendAsync(
+                        Instances.ExternalNotificationSettingsUserControlModel.DiscordWebhookName,
+                        Instances.ExternalNotificationSettingsUserControlModel.DiscordWebhookUrl,
                         cancellationToken
                     );
                     break;
@@ -98,6 +105,7 @@ public static class ExternalNotificationHelper
         public const string WxPusherKey = "WxPusher"; // 微信公众号
         public const string TelegramKey = "Telegram"; // 电报
         public const string DiscordKey = "Discord"; // Discord
+        public const string DiscordWebhookKey = "DiscordWebhook"; // Discord Webhook
         public const string OneBotKey = "OneBot"; // OneBot
         public const string QmsgKey = "Qmsg"; // QMsg酱
         public const string SmtpKey = "SMTP"; // SMTP协议
@@ -110,6 +118,7 @@ public static class ExternalNotificationHelper
             WxPusherKey,
             TelegramKey,
             DiscordKey,
+            DiscordWebhookKey,
             SmtpKey,
             QmsgKey,
         ];
@@ -506,6 +515,60 @@ public static class ExternalNotificationHelper
             catch (Exception ex)
             {
                 LoggerHelper.Error($"Discord通信异常: {ex.Message}");
+                return false;
+            }
+        }
+    }
+
+    #endregion
+
+    #region DiscordWebhook通知
+
+    public static class DiscordWebhook
+    {
+        public async static Task<bool> SendAsync(
+            string webhookName,
+            string webhookUrl,
+            CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                using var client = new HttpClient();
+
+                var payload = new
+                {
+                    username = string.IsNullOrWhiteSpace(webhookName) ? "Notifier" : webhookName,
+                    content = "TaskAllCompleted".ToLocalization(),
+                    allowed_mentions = new
+                    {
+                        parse = new[] { "users" }
+                    }
+                };
+
+                var response = await client.PostAsync(
+                    webhookUrl,
+                    new StringContent(JsonConvert.SerializeObject(payload), Encoding.UTF8, "application/json"),
+                    cancellationToken
+                );
+
+                if (response.IsSuccessStatusCode)
+                {
+                    LoggerHelper.Info("Discord Webhook 訊息發送成功");
+                    return true;
+                }
+
+                var errorContent = await response.Content.ReadAsStringAsync(cancellationToken);
+                LoggerHelper.Error($"Discord Webhook 發送失敗: {errorContent}");
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                LoggerHelper.Warning("Discord Webhook 訊息發送已取消");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.Error($"Discord Webhook 發送異常: {ex.Message}");
                 return false;
             }
         }

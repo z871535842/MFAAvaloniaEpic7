@@ -32,6 +32,7 @@ public partial class ExternalNotificationSettingsUserControlModel : ViewModelBas
         SmtpEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.SmtpKey);
         TelegramEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.TelegramKey);
         DiscordEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.DiscordKey);
+        DiscordWebhookEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.DiscordWebhookKey);
         OnebotEnabled = EnabledExternalNotificationProviderList.Contains(ExternalNotificationHelper.Key.OneBotKey);
     }
 
@@ -189,9 +190,26 @@ public partial class ExternalNotificationSettingsUserControlModel : ViewModelBas
     [ObservableProperty] private string _discordBotToken = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordBotToken, string.Empty);
     partial void OnDiscordBotTokenChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordBotToken, SimpleEncryptionHelper.Encrypt(value));
 
+    [ObservableProperty] private string _discordChannelId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordChannelId, string.Empty);
+    partial void OnDiscordChannelIdChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordChannelId, SimpleEncryptionHelper.Encrypt(value));
 
     [ObservableProperty] private string _discordUserId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordUserId, string.Empty);
     partial void OnDiscordUserIdChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordUserId, SimpleEncryptionHelper.Encrypt(value));
+
+    #endregion
+
+    #region DiscordWebhook
+
+    [ObservableProperty] private bool _discordWebhookEnabled;
+
+    partial void OnDiscordWebhookEnabledChanged(bool value) => UpdateEnabledExternalNotificationProviderList(ExternalNotificationHelper.Key.DiscordWebhookKey, value);
+
+    [ObservableProperty] private string _discordWebhookUrl = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordWebhookUrl, string.Empty);
+    partial void OnDiscordWebhookUrlChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordWebhookUrl, SimpleEncryptionHelper.Encrypt(value));
+    
+
+    [ObservableProperty] private string _discordWebhookName = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordWebhookName, string.Empty);
+    partial void OnDiscordWebhookNameChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordWebhookName, SimpleEncryptionHelper.Encrypt(value));
 
     #endregion
 

@@ -392,6 +392,9 @@
     <data name="ExternalNotificationDiscordUserId" xml:space="preserve">
         <value>用戶 ID</value>
     </data>
+    <data name="ExternalNotificationDiscordWebhookName" xml:space="preserve">
+        <value>Webhook 名稱</value>
+    </data>
     <data name="ExternalNotificationEmailAccount" xml:space="preserve">
         <value>電郵 帳戶</value>
     </data>
@@ -451,6 +454,9 @@
     </data>
     <data name="ExternalNotificationTips" xml:space="preserve">
         <value>請注意：外部通知功能目前僅會發送「所有任務完成」 的通知。</value>
+    </data>
+    <data name="ExternalNotificationWebhookUrl" xml:space="preserve">
+        <value>Webhook Url</value>
     </data>
     <data name="ExternalNotificationWxPusherUID" xml:space="preserve">
         <value>用戶 UID</value>

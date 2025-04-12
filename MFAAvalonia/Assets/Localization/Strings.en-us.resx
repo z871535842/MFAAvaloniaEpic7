@@ -392,6 +392,9 @@
     <data name="ExternalNotificationDiscordUserId" xml:space="preserve">
         <value>User ID</value>
     </data>
+    <data name="ExternalNotificationDiscordWebhookName" xml:space="preserve">
+        <value>Webhook Name</value>
+    </data>
     <data name="ExternalNotificationEmailAccount" xml:space="preserve">
         <value>Email Account</value>
     </data>
@@ -451,6 +454,9 @@
     </data>
     <data name="ExternalNotificationTips" xml:space="preserve">
         <value>Please note: The external notification feature currently only sends 「All tasks completed」 notifications.</value>
+    </data>
+    <data name="ExternalNotificationWebhookUrl" xml:space="preserve">
+        <value>Webhook Url</value>
     </data>
     <data name="ExternalNotificationWxPusherUID" xml:space="preserve">
         <value>User UID</value>

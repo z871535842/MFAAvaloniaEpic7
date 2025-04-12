@@ -389,6 +389,9 @@
     <data name="ExternalNotificationDingTalkToken" xml:space="preserve">
         <value>釘釘 Token</value>
     </data>
+    <data name="ExternalNotificationDiscordChannelId" xml:space="preserve">
+        <value>頻道 ID</value>
+    </data>
     <data name="ExternalNotificationDiscordUserId" xml:space="preserve">
         <value>用戶 ID</value>
     </data>

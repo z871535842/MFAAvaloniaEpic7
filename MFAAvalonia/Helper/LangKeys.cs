@@ -136,6 +136,7 @@ public static class LangKeys
 	public static readonly string ExternalNotificationBotToken = "ExternalNotificationBotToken";
 	public static readonly string ExternalNotificationDingTalkSecret = "ExternalNotificationDingTalkSecret";
 	public static readonly string ExternalNotificationDingTalkToken = "ExternalNotificationDingTalkToken";
+	public static readonly string ExternalNotificationDiscordChannelId = "ExternalNotificationDiscordChannelId";
 	public static readonly string ExternalNotificationDiscordUserId = "ExternalNotificationDiscordUserId";
 	public static readonly string ExternalNotificationDiscordWebhookName = "ExternalNotificationDiscordWebhookName";
 	public static readonly string ExternalNotificationEmailAccount = "ExternalNotificationEmailAccount";

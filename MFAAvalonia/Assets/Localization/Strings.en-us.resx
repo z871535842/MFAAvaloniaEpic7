@@ -389,6 +389,9 @@
     <data name="ExternalNotificationDingTalkToken" xml:space="preserve">
         <value>DingTalk Token</value>
     </data>
+    <data name="ExternalNotificationDiscordChannelId" xml:space="preserve">
+        <value>Channel ID</value>
+    </data>
     <data name="ExternalNotificationDiscordUserId" xml:space="preserve">
         <value>User ID</value>
     </data>

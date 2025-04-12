@@ -66,7 +66,7 @@ public static class ExternalNotificationHelper
                     break;
                 case Key.DiscordKey:
                     await Discord.SendAsync(
-                        Instances.ExternalNotificationSettingsUserControlModel.DiscordUserId,
+                        Instances.ExternalNotificationSettingsUserControlModel.DiscordChannelId,
                         Instances.ExternalNotificationSettingsUserControlModel.DiscordBotToken,
                         cancellationToken
                     );

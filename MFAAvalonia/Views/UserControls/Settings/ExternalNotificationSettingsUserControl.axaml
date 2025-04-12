@@ -298,12 +298,12 @@
                         <TextBox
                             DockPanel.Dock="Right"
                             HorizontalAlignment="Center"
-                            Text="{Binding DiscordUserId}"
+                            Text="{Binding DiscordChannelId}"
                             Width="215" />
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="16"
-                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationDiscordUserId}}"
+                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationDiscordChannelId}}"
                                 VerticalAlignment="Center" />
                         </StackPanel>
                     </DockPanel>

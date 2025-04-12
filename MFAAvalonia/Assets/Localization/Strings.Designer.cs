@@ -1194,6 +1194,15 @@ namespace MFAAvalonia.Assets.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 频道 ID.
+        /// </summary>
+        public static string ExternalNotificationDiscordChannelId {
+            get {
+                return ResourceManager.GetString("ExternalNotificationDiscordChannelId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 用户 ID.
         /// </summary>
         public static string ExternalNotificationDiscordUserId {

@@ -405,14 +405,13 @@ public class MaaProcessor
                         {
                             if (taskModel.FocusTipColor != null && taskModel.FocusTipColor.Count > i)
                             {
-                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]);
+                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]); 
                             }
                         }
                         catch (Exception e)
                         {
                             LoggerHelper.Error(e);
                         }
-
                         RootView.AddLog(HandleStringsWithVariables(tip), brush);
                     }
                 }

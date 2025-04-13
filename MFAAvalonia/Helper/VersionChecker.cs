@@ -20,6 +20,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -1261,55 +1262,21 @@ public static class VersionChecker
 
     private static SemVersion ParseAndNormalizeVersion(string version)
     {
-        // 移除v前缀和前后空格
-        var sanitized = version.Trim().TrimStart('v', 'V');
+        var pattern = @"^[vV]?(?<major>\d+)(\.(?<minor>\d+))?(\.(?<patch>\d+))?(?:-(?<prerelease>[0-9a-zA-Z\-\.]+))?(?:\+(?<build>[0-9a-zA-Z\-\.]+))?$";
+        var match = Regex.Match(version.Trim(), pattern);
 
-        // 分离构建元数据和预发布标签
-        var buildSeparatorIndex = sanitized.IndexOf('+');
-        var prereleaseSeparatorIndex = sanitized.IndexOf('-');
+        var major = match.Groups["major"].Success ? int.Parse(match.Groups["major"].Value) : 0;
+        var minor = match.Groups["minor"].Success ? int.Parse(match.Groups["minor"].Value) : 0;
+        var patch = match.Groups["patch"].Success ? int.Parse(match.Groups["patch"].Value) : 0;
+        var prerelease = match.Groups["prerelease"].Success 
+            ? match.Groups["prerelease"].Value.Split('.') 
+            : null;
 
-        var versionPart = sanitized;
-        var suffix = "";
+        var build = match.Groups["build"].Success 
+            ? match.Groups["build"].Value.Split('.') 
+            : null;
 
-        // 提取基础版本部分
-        if (prereleaseSeparatorIndex > 0 || buildSeparatorIndex > 0)
-        {
-            var firstSpecialIndex = new[]
-                {
-                    prereleaseSeparatorIndex,
-                    buildSeparatorIndex
-                }
-                .Where(i => i > 0)
-                .DefaultIfEmpty(-1)
-                .Min();
-
-            if (firstSpecialIndex > 0)
-            {
-                versionPart = sanitized.Substring(0, firstSpecialIndex);
-                suffix = sanitized.Substring(firstSpecialIndex);
-            }
-        }
-
-        // 分割版本号组件
-        var versionComponents = versionPart.Split('.')
-            .Select(s => int.TryParse(s, out var num) ? num : 0)
-            .ToList();
-
-        // 标准化为三位版本号
-        while (versionComponents.Count < 3)
-        {
-            versionComponents.Add(0);
-        }
-
-        if (versionComponents.Count > 3)
-        {
-            versionComponents = versionComponents.Take(3).ToList();
-        }
-
-        // 重组标准化版本字符串
-        var normalized = $"{versionComponents[0]}.{versionComponents[1]}.{versionComponents[2]}{suffix}";
-
-        return SemVersion.Parse(normalized, SemVersionStyles.AllowV);
+        return new SemVersion(new BigInteger(major), new BigInteger(minor), new BigInteger(patch), prerelease, build);
     }
 
     async private static Task<bool> DownloadFileAsync(string url, string filePath, ProgressBar? progressBar, string key)

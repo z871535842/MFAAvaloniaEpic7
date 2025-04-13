@@ -11,7 +11,7 @@
         <UserSecretsId>712f85e4-12d3-41b0-a417-5714a113666f</UserSecretsId>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Nullable>enable</Nullable>
-        <LangVersion>13</LangVersion>
+        <LangVersion>default</LangVersion>
     </PropertyGroup>
 
     <PropertyGroup>

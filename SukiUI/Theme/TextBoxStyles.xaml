@@ -12,9 +12,13 @@
 
                 <TextBox Width="200"
                          Margin="5"
-                         Text="test"
+                         Text="test" 
                          Watermark="Elem" />
-
+                <TextBox Width="200"
+                         Margin="5"
+                         Text="test"
+                         UseFloatingWatermark="True"
+                         Watermark="Elem" />
                 <TextBox Width="200"
                          Margin="5"
                          Text="test"
@@ -126,7 +130,7 @@
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="Foreground" Value="{DynamicResource SukiText}" />
         <Setter Property="SelectionBrush" Value="{DynamicResource SukiPrimaryColor75}" />
-        <Setter Property="MinHeight" Value="45" />
+        <Setter Property="MinHeight" Value="24" />
         <Setter Property="Padding" Value="6,8,5,6" />
         <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
 
@@ -384,7 +388,7 @@
     <Style Selector="TextBox.NoShadow /template/ suki|GlassCard#border">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Margin" Value="0,9,0,0" />
+        <Setter Property="Margin" Value="0,0,0,0" />
     </Style>
 
     <Style Selector="TextBox.NoShadow:focus /template/ suki|GlassCard#border">

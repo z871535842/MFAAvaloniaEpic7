@@ -2,13 +2,13 @@
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Extensions.MaaFW;
-using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.ViewModels.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Semver;
 using SukiUI.Dialogs;
+using SukiUI.Enums;
 using SukiUI.Toasts;
 using System;
 using System.Collections.Concurrent;
@@ -153,7 +153,7 @@ public static class VersionChecker
                 {
                     Instances.ToastManager.CreateToast().WithTitle("UpdateResource".ToLocalization())
                         .WithContent("ResourceOption".ToLocalization() + "NewVersionAvailableLatestVersion".ToLocalization() + latestVersion).Dismiss().After(TimeSpan.FromSeconds(6))
-                        .WithActionButtonNormal("Later".ToLocalization(), _ => { }, true)
+                        .WithActionButton("Later".ToLocalization(), _ => { }, true, SukiButtonStyles.Basic)
                         .WithActionButton("Update".ToLocalization(), _ => UpdateResourceAsync(), true).Queue();
                 });
             }
@@ -192,7 +192,7 @@ public static class VersionChecker
                 {
                     Instances.ToastManager.CreateToast().WithTitle("SoftwareUpdate".ToLocalization())
                         .WithContent("MFA" + "NewVersionAvailableLatestVersion".ToLocalization() + latestVersion).Dismiss().After(TimeSpan.FromSeconds(6))
-                        .WithActionButtonNormal("Later".ToLocalization(), _ => { }, true)
+                        .WithActionButton("Later".ToLocalization(), _ => { }, true, SukiButtonStyles.Basic)
                         .WithActionButton("Update".ToLocalization(), _ => UpdateMFAAsync(), true).Queue();
                 });
             }

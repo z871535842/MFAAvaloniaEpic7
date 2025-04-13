@@ -19,13 +19,13 @@
                             <Transitions>
                                 <ThicknessTransition Property="Margin" Duration="0:0:0.40">
                                     <ThicknessTransition.Easing>
-                                        <suki:SukiEasingOutBounced />
+                                        <suki:SukiEaseOutBack  />
                                     </ThicknessTransition.Easing>
                                 </ThicknessTransition>
                                 <DoubleTransition Property="Opacity" Duration="0:0:0.20" />
                                 <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.40">
                                     <TransformOperationsTransition.Easing>
-                                        <suki:SukiEasingOutBounced />
+                                        <suki:SukiEaseOutBack  />
                                     </TransformOperationsTransition.Easing>
                                 </TransformOperationsTransition>
                             </Transitions>

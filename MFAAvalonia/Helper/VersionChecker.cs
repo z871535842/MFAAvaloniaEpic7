@@ -1231,7 +1231,7 @@ public static class VersionChecker
 
     private static string GetLocalVersion()
     {
-        return Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "DEBUG";
+        return RootViewModel.Version;
     }
 
     private static string GetResourceVersion()
@@ -1250,7 +1250,7 @@ public static class VersionChecker
         try
         {
             var normalizedLatest = ParseAndNormalizeVersion(latestVersion);
-            var normalizedLocal = ParseAndNormalizeVersion(localVersion);
+            var normalizedLocal = ParseAndNormalizeVersion(localVersion); 
             return normalizedLatest.ComparePrecedenceTo(normalizedLocal) > 0;
         }
         catch (Exception ex)
@@ -1262,6 +1262,8 @@ public static class VersionChecker
 
     private static SemVersion ParseAndNormalizeVersion(string version)
     {
+        if (!version.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            version = $"v{version}";
         var pattern = @"^[vV]?(?<major>\d+)(\.(?<minor>\d+))?(\.(?<patch>\d+))?(?:-(?<prerelease>[0-9a-zA-Z\-\.]+))?(?:\+(?<build>[0-9a-zA-Z\-\.]+))?$";
         var match = Regex.Match(version.Trim(), pattern);
 

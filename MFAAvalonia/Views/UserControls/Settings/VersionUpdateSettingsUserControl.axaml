@@ -102,31 +102,25 @@
                         HorizontalAlignment="Center"
                         Password="{Binding CdkPassword}"
                         Width="215" />
+                    <Button DockPanel.Dock="Right"
+                            BorderBrush="Transparent"
+                            BorderThickness="0"
+                            Command="{x:Static utilities:UrlUtilities.OpenLink}"
+                            CommandParameter="{x:Static helper:MFAUrls.PurchaseLink}"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                        <TextBlock
+                            FontSize="14" Foreground="{DynamicResource SukiPrimaryColor}"
+                            Text="{markup:I18n {x:Static helper:LangKeys.PurchaseLink}}" />
+                    </Button>
+
+
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                         <TextBlock
                             FontSize="16"
                             FontWeight="SemiBold"
                             Text="CDK"
-                            VerticalAlignment="Center" />
-                    </StackPanel>
-                </DockPanel>
-                <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==1'}">
-                    <Button
-                        BorderBrush="Transparent"
-                        BorderThickness="0"
-                        Command="{x:Static utilities:UrlUtilities.OpenLink}"
-                        CommandParameter="{x:Static helper:MFAUrls.PurchaseLink}"
-                        Content="{markupExtensions:FluentIcon Icon=Send,
-                                                          IconSize=Size16}"
-                        DockPanel.Dock="Right"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        Margin="0,0,4,0" />
-                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
-                        <TextBlock
-                            FontSize="16"
-                            FontWeight="SemiBold"
-                            Text="{markup:I18n {x:Static helper:LangKeys.PurchaseLink}}"
                             VerticalAlignment="Center" />
                     </StackPanel>
                 </DockPanel>

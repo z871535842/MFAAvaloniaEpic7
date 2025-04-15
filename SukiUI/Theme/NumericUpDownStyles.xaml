@@ -7,7 +7,7 @@
             <StackPanel Orientation="Vertical" Spacing="5">
                 <NumericUpDown Value="4" Width="150" />
                 <ComboBox></ComboBox>
-                <TextBox Classes="NoShadow" Text="test" />
+                <TextBox Text="test" />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
@@ -17,7 +17,6 @@
         <Setter Property="CornerRadius" Value="{DynamicResource SmallCornerRadius}" />
         <Setter Property="Background" Value="{DynamicResource SukiBackground}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Padding" Value="6,6,-6,6" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border   Background="{TemplateBinding Background}" Padding="5"

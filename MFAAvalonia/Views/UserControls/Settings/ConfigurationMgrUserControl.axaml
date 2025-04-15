@@ -14,6 +14,9 @@
     xmlns:suki="https://github.com/kikipoulet/SukiUI"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:extensions="clr-namespace:MFAAvalonia.Extensions">
+    <Design.PreviewWith>
+       
+    </Design.PreviewWith>
     <StackPanel>
         <suki:GlassCard Margin="0,25,0,0" Padding="25">
             <StackPanel Spacing="25">
@@ -98,7 +101,7 @@
 
                 <DockPanel>
                     <TextBox
-                        DockPanel.Dock="Right"
+                        DockPanel.Dock="Right" MaxHeight="40"
                         Text="{Binding NewConfigurationName, UpdateSourceTrigger=PropertyChanged}"
                         Watermark="{markup:I18n {x:Static helper:LangKeys.NewConfigName}}"
                         Width="215">

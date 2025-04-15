@@ -9,7 +9,14 @@
                 Padding="20"
                 Background="{DynamicResource SukiBackground}">
             <StackPanel>
-
+                <ComboBox Width="200"
+                          Margin="5">
+                    <ComboBoxItem>1</ComboBoxItem>
+                </ComboBox>
+                <NumericUpDown Width="200"
+                         Margin="5"
+                         Text="13" 
+                         Watermark="Elem" />
                 <TextBox Width="200"
                          Margin="5"
                          Text="test" 
@@ -138,7 +145,7 @@
 
             <ControlTemplate>
 
-                <Grid RowDefinitions="Auto *">
+                <Grid RowDefinitions="Auto *" Margin="5,0">
 
                     <TextBlock Name="floatingWatermark"
                                Grid.Row="0"
@@ -156,8 +163,8 @@
                         </TextBlock.Transitions>
                     </TextBlock>
 
-                    <suki:GlassCard Name="border"
-                                    Grid.Row="1"
+                    <suki:GlassCard Name="border" 
+                                    Grid.Row="1" 
                                     Padding="0"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"

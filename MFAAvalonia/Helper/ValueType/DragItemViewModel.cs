@@ -9,7 +9,7 @@ namespace MFAAvalonia.Helper.ValueType;
 
 public partial class DragItemViewModel : ObservableObject
 {
-     public DragItemViewModel(MaaInterface.MaaInterfaceTask? interfaceItem)
+    public DragItemViewModel(MaaInterface.MaaInterfaceTask? interfaceItem)
     {
         InterfaceItem = interfaceItem;
         Name = interfaceItem?.Name ?? "未命名";
@@ -86,9 +86,7 @@ public partial class DragItemViewModel : ObservableObject
             {
                 if (value.Name != null)
                     Name = value.Name;
-                // SettingVisibility = value is { Option.Count: > 0 } || value.Repeatable.IsTrue() || value.Document != null && value.Document.Count > 0
-                //     ? Visibility.Visible
-                //     : Visibility.Hidden;
+                IsVisible = value is { Option.Count: > 0 } || value.Repeatable == true || value.Document is { Count: > 0 };
                 if (value.Check.HasValue)
                     IsChecked = value.Check.Value;
             }
@@ -97,7 +95,7 @@ public partial class DragItemViewModel : ObservableObject
         }
     }
 
-    // [ObservableProperty] private Visibility _settingVisibility = Visibility.Visible;
+    [ObservableProperty] private bool _isVisible = true;
 
 
     private void UpdateContent()
@@ -123,7 +121,7 @@ public partial class DragItemViewModel : ObservableObject
         MaaInterface.MaaInterfaceTask clonedInterfaceItem = InterfaceItem?.Clone();
 
         // Create a new DragItemViewModel instance with the cloned InterfaceItem
-        DragItemViewModel clone = new (clonedInterfaceItem);
+        DragItemViewModel clone = new(clonedInterfaceItem);
 
         // Copy all other properties to the new instance
         clone.Name = this.Name;

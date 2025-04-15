@@ -1061,4 +1061,13 @@
     <data name="Optional" xml:space="preserve">
         <value>Optional</value>
     </data>
+    <data name="ExternalNotificationEnableCustomNotificationMessage" xml:space="preserve">
+        <value>Enable Custom Notification Message</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContent" xml:space="preserve">
+        <value>Custom Notification Content</value>
+    </data>
+    <data name="ExternalNotificationTest" xml:space="preserve">
+        <value>This is a send test</value>
+    </data>
 </root>

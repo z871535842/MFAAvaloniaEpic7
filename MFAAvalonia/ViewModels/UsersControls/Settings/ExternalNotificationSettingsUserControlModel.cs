@@ -71,7 +71,11 @@ public partial class ExternalNotificationSettingsUserControlModel : ViewModelBas
 #pragma warning disable CS4014 // 由于等待不会停止
     [RelayCommand]
     private void ExternalNotificationSendTest()
-        => ExternalNotificationHelper.ExternalNotificationAsync();
+        => ExternalNotificationHelper.ExternalNotificationAsync("ExternalNotificationTest".ToLocalization());
+
+    [ObservableProperty] private bool _enabledCustom;
+
+    [ObservableProperty] private string _customText = "TaskAllCompleted".ToLocalization();
 
     #endregion
 
@@ -206,7 +210,7 @@ public partial class ExternalNotificationSettingsUserControlModel : ViewModelBas
 
     [ObservableProperty] private string _discordWebhookUrl = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordWebhookUrl, string.Empty);
     partial void OnDiscordWebhookUrlChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordWebhookUrl, SimpleEncryptionHelper.Encrypt(value));
-    
+
 
     [ObservableProperty] private string _discordWebhookName = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordWebhookName, string.Empty);
     partial void OnDiscordWebhookNameChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordWebhookName, SimpleEncryptionHelper.Encrypt(value));

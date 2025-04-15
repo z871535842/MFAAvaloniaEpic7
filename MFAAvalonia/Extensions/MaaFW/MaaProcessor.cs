@@ -405,7 +405,7 @@ public class MaaProcessor
                         {
                             if (taskModel.FocusTipColor != null && taskModel.FocusTipColor.Count > i)
                             {
-                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]); 
+                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]);
                             }
                         }
                         catch (Exception e)
@@ -1920,7 +1920,9 @@ public class MaaProcessor
             }
             if (!onlyStart)
             {
-                ExternalNotificationHelper.ExternalNotificationAsync();
+                ExternalNotificationHelper.ExternalNotificationAsync(Instances.ExternalNotificationSettingsUserControlModel.EnabledCustom
+                    ? Instances.ExternalNotificationSettingsUserControlModel.CustomText
+                    : "TaskAllCompleted".ToLocalization());
                 HandleAfterTaskOperation();
             }
         }

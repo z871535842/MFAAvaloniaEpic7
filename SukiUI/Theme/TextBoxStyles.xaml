@@ -14,18 +14,23 @@
                     <ComboBoxItem>1</ComboBoxItem>
                 </ComboBox>
                 <NumericUpDown Width="200"
-                         Margin="5"
-                         Text="13" 
-                         Watermark="Elem" />
+                               Margin="5"
+                               Text="13"
+                               Watermark="Elem" />
                 <TextBox Width="200"
                          Margin="5"
-                         Text="test" 
+                         Text="test"
                          Watermark="Elem" />
                 <TextBox Width="200"
                          Margin="5"
                          Text="test"
                          UseFloatingWatermark="True"
                          Watermark="Elem" />
+                <StackPanel Orientation="Vertical">
+                    <TextBox  Height="33" Text="54" />
+                    
+                    <suki:PasswordBox Height="33" Password="44444" IsPasswordVisible="True"></suki:PasswordBox>
+                </StackPanel>
                 <TextBox Width="200"
                          Margin="5"
                          Text="test"
@@ -35,7 +40,7 @@
                 <TextBox Classes="NoShadow" Text="Elem" />
 
                 <NumericUpDown Value="1" />
-
+              
                 <Panel>
                     <Border Margin="0,0,0,25" Classes="Card">
                         <StackPanel>
@@ -140,12 +145,11 @@
         <Setter Property="MinHeight" Value="24" />
         <Setter Property="Padding" Value="6,8,5,6" />
         <Setter Property="ContextFlyout" Value="{StaticResource DefaultTextBoxContextFlyout}" />
-
         <Setter Property="Template">
 
             <ControlTemplate>
 
-                <Grid RowDefinitions="Auto *" Margin="5,0">
+                <Grid RowDefinitions="Auto *" Margin="5,0" VerticalAlignment="{TemplateBinding VerticalAlignment}">
 
                     <TextBlock Name="floatingWatermark"
                                Grid.Row="0"
@@ -163,8 +167,8 @@
                         </TextBlock.Transitions>
                     </TextBlock>
 
-                    <suki:GlassCard Name="border" 
-                                    Grid.Row="1" 
+                    <suki:GlassCard Name="border"
+                                    Grid.Row="1"
                                     Padding="0"
                                     BorderBrush="{TemplateBinding BorderBrush}"
                                     BorderThickness="{TemplateBinding BorderThickness}"
@@ -376,7 +380,8 @@
         </Setter>
     </Style>
 
-    <Style Selector="ToggleButton.passwordBoxRevealButton:not(ToggleButton:checked) /template/ Path#PART_GlyphElement_Hide">
+    <Style
+        Selector="ToggleButton.passwordBoxRevealButton:not(ToggleButton:checked) /template/ Path#PART_GlyphElement_Hide">
         <Setter Property="IsVisible" Value="False" />
     </Style>
 

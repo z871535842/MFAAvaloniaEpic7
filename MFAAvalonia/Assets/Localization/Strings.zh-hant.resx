@@ -1061,4 +1061,13 @@
     <data name="Optional" xml:space="preserve">
         <value>可選</value>
     </data>
+    <data name="ExternalNotificationEnableCustomNotificationMessage" xml:space="preserve">
+        <value>啟用自訂通知訊息</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContent" xml:space="preserve">
+        <value>自訂通知內容</value>
+    </data>
+    <data name="ExternalNotificationTest" xml:space="preserve">
+        <value>這是一個發送測試</value>
+    </data>
 </root>

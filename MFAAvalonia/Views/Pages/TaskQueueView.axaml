@@ -264,7 +264,7 @@
         </GridSplitter>
 
         <!-- 中间列 -->
-        <Grid Grid.Column="2">
+        <Grid Grid.Column="2" x:Name="Grid1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -289,7 +289,7 @@
                     </ScrollViewer>
                 </suki:GroupBox>
             </suki:GlassCard>
-            <suki:GlassCard Grid.Row="1" Margin="0,8,0,25" MaxHeight="{Binding Bounds.Height, ElementName=Row1}">
+            <suki:GlassCard Grid.Row="1" Margin="0,8,0,25" MaxHeight="{calcBinding:Binding 'Bounds.Height / 2',RelativeSource={RelativeSource FindAncestor,AncestorType=Grid}}">
                 <suki:GroupBox>
                     <suki:GroupBox.Header>
                         <TextBlock

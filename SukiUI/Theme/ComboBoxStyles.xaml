@@ -112,7 +112,7 @@
                                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                             Foreground="{DynamicResource SukiText}" />
                             <ToggleButton Name="toggle"
-                                          Grid.Column="1" Classes="CircleGlass" Margin="2,0,2,0"
+                                          Grid.Column="1" Classes="Basic" Margin="2,0,2,0"
                                           Background="Transparent"
                                           BorderThickness="0" IsHitTestVisible="False"
                                           CornerRadius="{DynamicResource SmallCornerRadius}"

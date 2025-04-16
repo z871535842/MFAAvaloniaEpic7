@@ -15,8 +15,7 @@
                 </ComboBox>
                 <NumericUpDown Width="200"
                                Margin="5"
-                               Text="13"
-                               Watermark="Elem" />
+                               Text="13" />
                 <TextBox Width="200"
                          Margin="5"
                          Text="test"
@@ -27,9 +26,9 @@
                          UseFloatingWatermark="True"
                          Watermark="Elem" />
                 <StackPanel Orientation="Vertical">
-                    <TextBox  Height="33" Text="54" />
-                    
-                    <suki:PasswordBox Height="33" Password="44444" IsPasswordVisible="True"></suki:PasswordBox>
+                    <TextBox Height="" Text="54" />
+
+                    <suki:PasswordBox Password="44444" IsPasswordVisible="True"></suki:PasswordBox>
                 </StackPanel>
                 <TextBox Width="200"
                          Margin="5"
@@ -40,7 +39,7 @@
                 <TextBox Classes="NoShadow" Text="Elem" />
 
                 <NumericUpDown Value="1" />
-              
+
                 <Panel>
                     <Border Margin="0,0,0,25" Classes="Card">
                         <StackPanel>
@@ -149,7 +148,7 @@
 
             <ControlTemplate>
 
-                <Grid RowDefinitions="Auto *" Margin="5,0" VerticalAlignment="{TemplateBinding VerticalAlignment}">
+                <Grid RowDefinitions="Auto,*" Margin="5,0" VerticalAlignment="{TemplateBinding VerticalAlignment}">
 
                     <TextBlock Name="floatingWatermark"
                                Grid.Row="0"

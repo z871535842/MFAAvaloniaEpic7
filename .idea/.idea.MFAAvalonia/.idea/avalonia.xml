@@ -63,6 +63,7 @@
         <entry key="SukiUI/Theme/ContextMenu.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/DataGridStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/DatePicker.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/DropDownButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/Expander.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/Index.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ListBoxItemStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />

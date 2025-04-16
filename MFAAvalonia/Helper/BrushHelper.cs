@@ -27,13 +27,12 @@ public static class BrushHelper
     /// <returns>对应的SolidColorBrush</returns>
     public static IBrush? ConvertToBrush(string colorString, IBrush? defaultBrush = null)
     {
-        Console.WriteLine("1" + colorString);
         if (string.IsNullOrWhiteSpace(colorString))
             return defaultBrush;
 
         // 统一处理字符串格式
         var normalizedString = NormalizeColorString(colorString);
-        Console.WriteLine(normalizedString);
+
         try
         {
             return ConvertToBrushInternal(normalizedString, defaultBrush);

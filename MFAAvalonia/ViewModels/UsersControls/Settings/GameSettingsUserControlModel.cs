@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using MaaFramework.Binding;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Extensions.MaaFW;
@@ -23,18 +24,21 @@ public partial class GameSettingsUserControlModel : ViewModelBase
     partial void OnEnableRecordingChanged(bool value)
     {
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.Recording, value);
+        MaaProcessor.Utility.SetOptionRecording(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
     }
 
     partial void OnEnableSaveDrawChanged(bool value)
     {
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.SaveDraw, value);
+        MaaProcessor.Utility.SetOptionSaveDraw(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
     }
 
     partial void OnShowHitDrawChanged(bool value)
     {
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.ShowHitDraw, value);
+        MaaProcessor.Utility.SetOptionShowHitDraw(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
     }
 

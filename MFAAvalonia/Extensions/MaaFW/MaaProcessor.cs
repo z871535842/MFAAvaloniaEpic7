@@ -114,6 +114,7 @@ public class MaaProcessor
         MaaTasker ??= await InitializeMaaTasker(token);
         return MaaTasker;
     }
+
     public ObservableCollection<DragItemViewModel> TasksSource { get; private set; } =
         [];
     public AutoInitDictionary AutoInitDictionary { get; } = new();
@@ -203,8 +204,8 @@ public class MaaProcessor
             {
                 Controller = controller,
                 Resource = maaResource,
-                Utility = Utility,
-                Toolkit = Toolkit,
+                Utility = MaaProcessor.Utility,
+                Toolkit = MaaProcessor.Toolkit,
                 DisposeOptions = DisposeOptions.All,
             };
 
@@ -517,7 +518,7 @@ public class MaaProcessor
                 Config.AdbDevice.AdbPath,
                 Config.AdbDevice.AdbSerial,
                 Config.AdbDevice.ScreenCap, Config.AdbDevice.Input,
-                !string.IsNullOrWhiteSpace(Config.AdbDevice.Config) ? Config.AdbDevice.Config : "{}", 
+                !string.IsNullOrWhiteSpace(Config.AdbDevice.Config) ? Config.AdbDevice.Config : "{}",
                 Path.Combine(AppContext.BaseDirectory, "MaaAgentBinary")
             )
             : new MaaWin32Controller(

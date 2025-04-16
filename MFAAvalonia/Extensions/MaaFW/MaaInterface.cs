@@ -77,7 +77,7 @@ public partial class MaaInterface
         [JsonProperty("entry")] public string? Entry;
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("doc")]
         public List<string>? Document;
-        [JsonProperty("check")] public bool? Check;
+        [JsonProperty("check")] public bool? Check = false;
         [JsonProperty("repeatable")] public bool? Repeatable;
         [JsonProperty("repeat_count")] public int? RepeatCount;
         [JsonProperty("advanced")] public List<MaaInterfaceSelectAdvanced>? Advanced;

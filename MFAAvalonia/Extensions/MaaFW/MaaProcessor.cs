@@ -146,6 +146,8 @@ public class MaaProcessor
             var resources = Instances.TaskQueueViewModel.CurrentResources
                     .FirstOrDefault(c => c.Name == Instances.TaskQueueViewModel.CurrentResource)?.Path
                 ?? [];
+            resources = resources.Select(Path.GetFullPath).ToList();
+
             LoggerHelper.Info($"Resource: {string.Join(",", resources)}");
 
 
@@ -515,7 +517,9 @@ public class MaaProcessor
                 Config.AdbDevice.AdbPath,
                 Config.AdbDevice.AdbSerial,
                 Config.AdbDevice.ScreenCap, Config.AdbDevice.Input,
-                !string.IsNullOrWhiteSpace(Config.AdbDevice.Config) ? Config.AdbDevice.Config : "{}")
+                !string.IsNullOrWhiteSpace(Config.AdbDevice.Config) ? Config.AdbDevice.Config : "{}", 
+                Path.Combine(AppContext.BaseDirectory, "MaaAgentBinary")
+            )
             : new MaaWin32Controller(
                 Config.DesktopWindow.HWnd,
                 Config.DesktopWindow.ScreenCap, Config.DesktopWindow.Input,
@@ -1944,7 +1948,7 @@ public class MaaProcessor
                 Instances.TaskQueueViewModel.TaskItemViewModels.Where(t => t.IsCheckedWithNull == null).ToList().ForEach(d => d.IsCheckedWithNull = false);
                 ToastNotification.Show("TaskCompleted".ToLocalization());
             }
-            
+
             if (_startTime != null)
             {
                 var elapsedTime = DateTime.Now - (DateTime)_startTime;

@@ -245,7 +245,7 @@ public partial class RootView : SukiWindow
 
             foreach (var task in Instances.TaskQueueViewModel.TaskItemViewModels)
             {
-                if (task.InterfaceItem?.Option is { Count: > 0 } || task.InterfaceItem?.Document != null || task.InterfaceItem?.Repeatable == true)
+                if (task.InterfaceItem?.Advanced is { Count: > 0 } || task.InterfaceItem?.Option is { Count: > 0 } || task.InterfaceItem?.Document != null || task.InterfaceItem?.Repeatable == true)
                 {
                     task.EnableSetting = true;
                     break;

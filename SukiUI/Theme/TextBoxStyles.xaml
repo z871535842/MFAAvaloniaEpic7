@@ -287,7 +287,7 @@
     <Style Selector="TextBox:error /template/ suki|GlassCard#border">
         <Setter Property="BorderBrush" Value="{DynamicResource ErrorBrush}" />
     </Style>
-    <Style Selector="TextBox /template/ DockPanel">
+    <Style Selector="TextBox /template/ TextPresenter">
         <Setter Property="Cursor" Value="IBeam" />
     </Style>
     <Style Selector="TextBox:disabled /template/ suki|GlassCard#border">

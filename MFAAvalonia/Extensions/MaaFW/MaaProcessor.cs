@@ -605,14 +605,14 @@ public class MaaProcessor
                 }
                 ;
             JsonHelper.SaveJson(Path.Combine(AppContext.BaseDirectory, "interface.json"),
-                Interface, new MaaInterfaceSelectOptionConverter(true));
+                Interface, new MaaInterfaceSelectAdvancedConverter(true), new MaaInterfaceSelectOptionConverter(true));
 
         }
         else
         {
             Interface =
                 JsonHelper.LoadJson(Path.Combine(AppContext.BaseDirectory, "interface.json"),
-                    new MaaInterface(),
+                    new MaaInterface(), new MaaInterfaceSelectAdvancedConverter(false),
                     new MaaInterfaceSelectOptionConverter(false));
         }
 
@@ -923,22 +923,45 @@ public class MaaProcessor
         oldItem.InterfaceItem.Document = newItem.Document;
         oldItem.InterfaceItem.Repeatable = newItem.Repeatable;
 
-        if (newItem.Option == null) return;
-
-        var tempDict = oldItem.InterfaceItem.Option?.ToDictionary(t => t.Name) ?? new Dictionary<string, MaaInterface.MaaInterfaceSelectOption>();
-        var maaInterfaceSelectOptions = JsonConvert.DeserializeObject<List<MaaInterface.MaaInterfaceSelectOption>>(JsonConvert.SerializeObject(newItem.Option));
-        oldItem.InterfaceItem.Option = maaInterfaceSelectOptions.Select(opt =>
+        if (newItem.Advanced != null)
         {
-            if (tempDict.TryGetValue(opt.Name ?? string.Empty, out var existing))
+            var tempDict = oldItem.InterfaceItem.Advanced?.ToDictionary(t => t.Name) ?? new Dictionary<string, MaaInterface.MaaInterfaceSelectAdvanced>();
+            var maaInterfaceSelectAdvanceds = JsonConvert.DeserializeObject<List<MaaInterface.MaaInterfaceSelectAdvanced>>(JsonConvert.SerializeObject(newItem.Advanced));
+            oldItem.InterfaceItem.Advanced = maaInterfaceSelectAdvanceds.Select(opt =>
             {
-                opt.Index = existing.Index;
-            }
-            else
+                if (tempDict.TryGetValue(opt.Name ?? string.Empty, out var existing))
+                {
+                    opt.Data = existing.Data;
+                }
+                return opt;
+            }).ToList();
+        }
+        else
+        {
+            oldItem.InterfaceItem.Advanced = null;
+        }
+
+        if (newItem.Option != null)
+        {
+            var tempDict = oldItem.InterfaceItem.Option?.ToDictionary(t => t.Name) ?? new Dictionary<string, MaaInterface.MaaInterfaceSelectOption>();
+            var maaInterfaceSelectOptions = JsonConvert.DeserializeObject<List<MaaInterface.MaaInterfaceSelectOption>>(JsonConvert.SerializeObject(newItem.Option));
+            oldItem.InterfaceItem.Option = maaInterfaceSelectOptions.Select(opt =>
             {
-                SetDefaultOptionValue(opt);
-            }
-            return opt;
-        }).ToList();
+                if (tempDict.TryGetValue(opt.Name ?? string.Empty, out var existing))
+                {
+                    opt.Index = existing.Index;
+                }
+                else
+                {
+                    SetDefaultOptionValue(opt);
+                }
+                return opt;
+            }).ToList();
+        }
+        else
+        {
+            oldItem.InterfaceItem.Option = null;
+        }
     }
 
     public void SetDefaultOptionValue(MaaInterface.MaaInterfaceSelectOption option)
@@ -1498,23 +1521,38 @@ public class MaaProcessor
 
 
     private void UpdateTaskDictionary(ref Dictionary<string, MaaNode> taskModels,
-        List<MaaInterface.MaaInterfaceSelectOption>? options)
+        List<MaaInterface.MaaInterfaceSelectOption>? options,
+        List<MaaInterface.MaaInterfaceSelectAdvanced> advanceds)
     {
         Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(taskModels);
-        if (options == null) return;
-
-        foreach (var selectOption in options)
+        if (options != null)
         {
-            if (Interface?.Option?.TryGetValue(selectOption.Name ?? string.Empty,
-                    out var interfaceOption)
-                == true
-                && selectOption.Index is int index
-                && interfaceOption.Cases is { } cases
-                && cases[index]?.PipelineOverride != null)
+            foreach (var selectOption in options)
             {
-                var param = interfaceOption.Cases[selectOption.Index.Value].PipelineOverride;
-                Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(param);
-                taskModels = taskModels.MergeMaaNodes(param);
+                if (Interface?.Option?.TryGetValue(selectOption.Name ?? string.Empty,
+                        out var interfaceOption)
+                    == true
+                    && selectOption.Index is int index
+                    && interfaceOption.Cases is { } cases
+                    && cases[index]?.PipelineOverride != null)
+                {
+                    var param = interfaceOption.Cases[selectOption.Index.Value].PipelineOverride;
+                    Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(param);
+                    taskModels = taskModels.MergeMaaNodes(param);
+                }
+            }
+        }
+
+        if (advanceds != null)
+        {
+            foreach (var selectAdvanced in advanceds)
+            {
+                if (!string.IsNullOrWhiteSpace(selectAdvanced.PipelineOverride) && selectAdvanced.PipelineOverride != "{}")
+                {
+                    var param = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(selectAdvanced.PipelineOverride);
+                    Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(param);
+                    taskModels = taskModels.MergeMaaNodes(param);
+                }
             }
         }
     }
@@ -1541,8 +1579,7 @@ public class MaaProcessor
     private NodeAndParam CreateNodeAndParam(DragItemViewModel task)
     {
         var taskModels = task.InterfaceItem?.PipelineOverride ?? new Dictionary<string, MaaNode>();
-        Console.WriteLine(string.Join(",", taskModels.Keys));
-        UpdateTaskDictionary(ref taskModels, task.InterfaceItem?.Option);
+        UpdateTaskDictionary(ref taskModels, task.InterfaceItem?.Option, task.InterfaceItem?.Advanced);
 
         var taskParams = SerializeTaskParams(taskModels);
         var settings = new JsonSerializerSettings

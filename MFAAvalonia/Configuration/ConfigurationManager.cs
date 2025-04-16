@@ -61,7 +61,6 @@ public static class ConfigurationManager
         if (!File.Exists(defaultConfigPath))
             File.WriteAllText(defaultConfigPath, "{}");
         collection.Add(Current.SetConfig(JsonHelper.LoadConfig("config", new Dictionary<string, object>())));
-
         foreach (var file in Directory.EnumerateFiles(_configDir, "*.json"))
         {
             var fileName = Path.GetFileNameWithoutExtension(file);

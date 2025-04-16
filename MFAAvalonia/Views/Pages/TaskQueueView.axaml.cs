@@ -45,7 +45,6 @@ using Point = Avalonia.Point;
 using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
 using Avalonia.Threading;
 using MFAAvalonia.ViewModels.Other;
-using SukiUI.Controls;
 
 namespace MFAAvalonia.Views.Pages;
 
@@ -241,7 +240,6 @@ public partial class TaskQueueView : UserControl
         }
     }
 
-    
 
     private void Delete(object? sender, RoutedEventArgs e)
     {
@@ -310,6 +308,13 @@ public partial class TaskQueueView : UserControl
             foreach (var option in dragItem.InterfaceItem.Option)
             {
                 AddOption(panel, option, dragItem);
+            }
+        }
+        if (dragItem.InterfaceItem?.Advanced != null)
+        {
+            foreach (var option in dragItem.InterfaceItem.Advanced)
+            {
+                AddAdvancedOption(panel, option);
             }
         }
     }
@@ -437,6 +442,115 @@ public partial class TaskQueueView : UserControl
         panel.Children.Add(grid);
     }
 
+    private void AddAdvancedOption(Panel panel, MaaInterface.MaaInterfaceSelectAdvanced option)
+    {
+        if (MaaProcessor.Interface?.Advanced?.TryGetValue(option.Name, out var interfaceOption) != true) return;
+
+        for (int i = 0; i < (interfaceOption.Field?.Count ?? 0); i++)
+        {
+            var field = interfaceOption.Field[i];
+            var defaultValue = option.Data.TryGetValue(field, out var value) ? value : ((interfaceOption.Default?.Count ?? 0) > i ? interfaceOption.Default[i] : string.Empty);
+            var grid = new Grid
+            {
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition
+                    {
+                        Width = new GridLength(7, GridUnitType.Star)
+                    },
+                    new ColumnDefinition
+                    {
+                        Width = new GridLength(4, GridUnitType.Star)
+                    }
+                },
+                Margin = new Thickness(8, 0, 5, 5)
+            };
+
+            var combo = new TextBox()
+            {
+                MinWidth = 150,
+                Margin = new Thickness(0, 5, 5, 5),
+                Text = defaultValue
+            };
+
+
+            combo.Bind(IsEnabledProperty, new Binding("Idle")
+            {
+                Source = Instances.RootViewModel
+            });
+
+            combo.TextChanged += (_, _) =>
+            {
+                option.Data[field] = combo.Text;
+                option.PipelineOverride = interfaceOption.GenerateProcessedPipeline(option.Data);
+                SaveConfiguration();
+            };
+
+            Grid.SetColumn(combo, 1);
+            var textBlock = new TextBlock
+            {
+                FontSize = 14,
+                MinWidth = 180,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                Text = LanguageHelper.GetLocalizedString(field),
+            };
+
+            textBlock.Bind(TextBlock.ForegroundProperty, new DynamicResourceExtension("SukiLowText"));
+            Grid.SetColumn(textBlock, 0);
+            grid.Children.Add(combo);
+            grid.Children.Add(textBlock);
+            grid.SizeChanged += (sender, e) =>
+            {
+                var currentGrid = sender as Grid;
+
+                if (currentGrid == null) return;
+
+                // 计算所有列的 MinWidth 总和
+                var totalMinWidth = currentGrid.Children.Sum(c => c.MinWidth);
+                var availableWidth = currentGrid.Bounds.Width;
+                if (availableWidth < totalMinWidth)
+                {
+                    // 切换为上下结构（两行）
+                    currentGrid.ColumnDefinitions.Clear();
+                    currentGrid.RowDefinitions.Clear();
+                    currentGrid.RowDefinitions.Add(new RowDefinition
+                    {
+                        Height = GridLength.Auto
+                    });
+                    currentGrid.RowDefinitions.Add(new RowDefinition
+                    {
+                        Height = GridLength.Auto
+                    });
+
+                    Grid.SetRow(textBlock, 0);
+                    Grid.SetRow(combo, 1);
+                    Grid.SetColumn(textBlock, 0);
+                    Grid.SetColumn(combo, 0);
+                }
+                else
+                {
+                    // 恢复左右结构（两列）
+                    currentGrid.RowDefinitions.Clear();
+                    currentGrid.ColumnDefinitions.Clear();
+                    currentGrid.ColumnDefinitions.Add(new ColumnDefinition
+                    {
+                        Width = new GridLength(7, GridUnitType.Star)
+                    });
+                    currentGrid.ColumnDefinitions.Add(new ColumnDefinition
+                    {
+                        Width = new GridLength(4, GridUnitType.Star)
+                    });
+
+                    Grid.SetRow(textBlock, 0);
+                    Grid.SetRow(combo, 0);
+                    Grid.SetColumn(textBlock, 0);
+                    Grid.SetColumn(combo, 1);
+                }
+            };
+            panel.Children.Add(grid);
+        }
+    }
     private void AddOption(Panel panel, MaaInterface.MaaInterfaceSelectOption option, DragItemViewModel source)
     {
         if (MaaProcessor.Interface?.Option?.TryGetValue(option.Name ?? string.Empty, out var interfaceOption) != true) return;
@@ -552,7 +666,7 @@ public partial class TaskQueueView : UserControl
             }).ToList(),
             ItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
             {
-                
+
                 var data =
                     new TextBlock
                     {
@@ -560,16 +674,16 @@ public partial class TaskQueueView : UserControl
                         TextTrimming = TextTrimming.WordEllipsis,
                         TextWrapping = TextWrapping.NoWrap
                     };
-                ToolTip.SetTip(data, optionCase?.Name?? string.Empty);
+                ToolTip.SetTip(data, optionCase?.Name ?? string.Empty);
                 ToolTip.SetShowDelay(data, 100);
                 return data;
             }),
             SelectionBoxItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
-                    new ContentControl
-                    {
-                        Content = optionCase?.Name ?? string.Empty
-                    }
-                ),
+                new ContentControl
+                {
+                    Content = optionCase?.Name ?? string.Empty
+                }
+            ),
             SelectedIndex = option.Index ?? 0,
         };
 
@@ -584,7 +698,7 @@ public partial class TaskQueueView : UserControl
             option.Index = combo.SelectedIndex;
             SaveConfiguration();
         };
-        
+
         ComboBoxExtensions.SetDisableNavigationOnLostFocus(combo, true);
         Grid.SetColumn(combo, 1);
         var textBlock = new TextBlock

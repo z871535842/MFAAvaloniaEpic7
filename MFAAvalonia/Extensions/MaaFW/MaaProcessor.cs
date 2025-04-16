@@ -1453,7 +1453,6 @@ public class MaaProcessor
     {
         if (InitializeData())
         {
-            Console.WriteLine(Instances.TaskQueueViewModel.TaskItemViewModels.ToList().FindAll(task => task.IsCheckedWithNull == null).Count);
             var tasks = Instances.TaskQueueViewModel.TaskItemViewModels.ToList().FindAll(task => task.IsChecked || task.IsCheckedWithNull == null);
             ConnectToMAA();
             StartTask(tasks, onlyStart, checkUpdate);
@@ -1945,6 +1944,7 @@ public class MaaProcessor
                 Instances.TaskQueueViewModel.TaskItemViewModels.Where(t => t.IsCheckedWithNull == null).ToList().ForEach(d => d.IsCheckedWithNull = false);
                 ToastNotification.Show("TaskCompleted".ToLocalization());
             }
+            
             if (_startTime != null)
             {
                 var elapsedTime = DateTime.Now - (DateTime)_startTime;

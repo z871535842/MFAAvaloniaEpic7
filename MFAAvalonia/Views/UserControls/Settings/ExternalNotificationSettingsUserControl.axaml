@@ -512,7 +512,7 @@
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="16"
-                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationDiscordUserId}}"
+                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationSmtpServer}}"
                                 VerticalAlignment="Center" />
                         </StackPanel>
                     </DockPanel>
@@ -538,7 +538,7 @@
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="16"
-                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationDiscordUserId}}"
+                                Text="{markup:I18n {x:Static helper:LangKeys.ExternalNotificationSmtpUser}}"
                                 VerticalAlignment="Center" />
                         </StackPanel>
                     </DockPanel>

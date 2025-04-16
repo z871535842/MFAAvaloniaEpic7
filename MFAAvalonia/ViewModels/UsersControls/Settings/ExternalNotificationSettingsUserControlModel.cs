@@ -196,10 +196,6 @@ public partial class ExternalNotificationSettingsUserControlModel : ViewModelBas
 
     [ObservableProperty] private string _discordChannelId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordChannelId, string.Empty);
     partial void OnDiscordChannelIdChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordChannelId, SimpleEncryptionHelper.Encrypt(value));
-
-    [ObservableProperty] private string _discordUserId = ConfigurationManager.Current.GetDecrypt(ConfigurationKeys.ExternalNotificationDiscordUserId, string.Empty);
-    partial void OnDiscordUserIdChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ExternalNotificationDiscordUserId, SimpleEncryptionHelper.Encrypt(value));
-
     #endregion
 
     #region DiscordWebhook

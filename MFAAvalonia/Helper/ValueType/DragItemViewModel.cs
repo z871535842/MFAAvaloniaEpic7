@@ -86,9 +86,8 @@ public partial class DragItemViewModel : ObservableObject
             {
                 if (value.Name != null)
                     Name = value.Name;
-                IsVisible = value is { Option.Count: > 0 } || value.Repeatable == true || value.Document is { Count: > 0 };
-                if (value.Check.HasValue)
-                    IsChecked = value.Check.Value;
+                IsVisible = value is { Advanced.Count: > 0 } || value is { Option.Count: > 0 } || value.Repeatable == true || value.Document is { Count: > 0 };
+                IsCheckedWithNull = value.Check;
             }
 
             SetProperty(ref _interfaceItem, value);

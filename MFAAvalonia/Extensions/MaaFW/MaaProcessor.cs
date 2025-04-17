@@ -326,13 +326,13 @@ public class MaaProcessor
             tasker.Callback += (_, args) =>
             {
                 var jObject = JObject.Parse(args.Details);
+
                 var name = jObject["name"]?.ToString() ?? string.Empty;
-                if (args.Message.StartsWith(MaaMsg.Node.Action.Prefix))
+
+                if (args.Message.StartsWith(MaaMsg.Node.Action.Prefix) && jObject.ContainsKey("focus"))
                 {
-                    if (NodeDictionary.TryGetValue(name, out var taskModel))
-                    {
-                        DisplayFocus(taskModel, args.Message);
-                    }
+                    var maaNode = jObject.ToObject<MaaNode>();
+                    DisplayFocus(maaNode, args.Message);
                 }
             };
             return tasker;
@@ -347,80 +347,157 @@ public class MaaProcessor
             return null;
         }
     }
+
+    private class Focus
+    {
+        [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("start")]
+        public List<string>? Start;
+        [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("succeeded")]
+        public List<string>? Succeeded;
+        [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("failed")]
+        public List<string>? Failed;
+        [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("toast")]
+        public List<string>? Toast;
+    }
+
+    public static (string Text, string? Color) ParseColorText(string input)
+    {
+        var match = Regex.Match(input.Trim(), @"\[color:(?<color>.*?)\](?<text>.*?)\[/color\]", RegexOptions.IgnoreCase);
+
+        if (match.Success)
+        {
+            string color = match.Groups["color"].Value.Trim();
+            string text = match.Groups["text"].Value;
+            return (text, color);
+        }
+
+        return (input, null);
+
+    }
+
     private void DisplayFocus(MaaNode taskModel, string message)
     {
+        var jToken = JToken.FromObject(taskModel.Focus);
+        var focus = new Focus();
+        if (jToken.Type == JTokenType.String)
+            focus.Start = [jToken.Value<string>()];
+
+        if (jToken.Type == JTokenType.Object)
+            focus = jToken.ToObject<Focus>();
         switch (message)
         {
             case MaaMsg.Node.Action.Succeeded:
-                if (taskModel.FocusSucceeded != null)
+                if (focus.Succeeded != null)
                 {
-                    for (int i = 0; i < taskModel.FocusSucceeded.Count; i++)
+                    foreach (var line in focus.Succeeded)
                     {
-                        IBrush brush = null;
-                        var tip = taskModel.FocusSucceeded[i];
-                        try
-                        {
-                            if (taskModel.FocusSucceededColor != null && taskModel.FocusSucceededColor.Count > i)
-                                brush = BrushHelper.ConvertToBrush(taskModel.FocusSucceededColor[i]);
-                        }
-                        catch (Exception e)
-                        {
-                            LoggerHelper.Error(e);
-                        }
-
-                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                        var (text, color) = ParseColorText(line);
+                        RootView.AddLog(HandleStringsWithVariables(text), color == null ? null : BrushHelper.ConvertToBrush(color));
                     }
                 }
                 break;
             case MaaMsg.Node.Action.Failed:
-                if (taskModel.FocusFailed != null)
+                if (focus.Failed != null)
                 {
-                    for (int i = 0; i < taskModel.FocusFailed.Count; i++)
+                    foreach (var line in focus.Failed)
                     {
-                        IBrush brush = null;
-                        var tip = taskModel.FocusFailed[i];
-                        try
-                        {
-                            if (taskModel.FocusFailedColor != null && taskModel.FocusFailedColor.Count > i)
-                                brush = BrushHelper.ConvertToBrush(taskModel.FocusFailedColor[i]);
-                        }
-                        catch (Exception e)
-                        {
-                            LoggerHelper.Error(e);
-                        }
-
-                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                        var (text, color) = ParseColorText(line);
+                        RootView.AddLog(HandleStringsWithVariables(text), color == null ? null : BrushHelper.ConvertToBrush(color));
                     }
                 }
                 break;
             case MaaMsg.Node.Action.Starting:
-                if (!string.IsNullOrWhiteSpace(taskModel.FocusToast))
+                if (focus.Toast is { Count: > 0 })
                 {
-                    ToastNotification.Show(taskModel.FocusToast);
+                    var (text, color) = ParseColorText(focus.Toast[0]);
+                    ToastNotification.Show(HandleStringsWithVariables(text));
                 }
-                if (taskModel.FocusTip != null)
+                if (focus.Start != null)
                 {
-                    for (int i = 0; i < taskModel.FocusTip.Count; i++)
+                    foreach (var line in focus.Start)
                     {
-                        IBrush? brush = null;
-                        var tip = taskModel.FocusTip[i];
-                        try
-                        {
-                            if (taskModel.FocusTipColor != null && taskModel.FocusTipColor.Count > i)
-                            {
-                                brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]);
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            LoggerHelper.Error(e);
-                        }
-                        RootView.AddLog(HandleStringsWithVariables(tip), brush);
+                        var (text, color) = ParseColorText(line);
+                        RootView.AddLog(HandleStringsWithVariables(text), color == null ? null : BrushHelper.ConvertToBrush(color));
                     }
                 }
                 break;
         }
     }
+
+// private void DisplayFocus(MaaNode taskModel, string message)
+    // {
+    //     switch (message)
+    //     {
+    //         case MaaMsg.Node.Action.Succeeded:
+    //             if (taskModel.FocusSucceeded != null)
+    //             {
+    //                 for (int i = 0; i < taskModel.FocusSucceeded.Count; i++)
+    //                 {
+    //                     IBrush brush = null;
+    //                     var tip = taskModel.FocusSucceeded[i];
+    //                     try
+    //                     {
+    //                         if (taskModel.FocusSucceededColor != null && taskModel.FocusSucceededColor.Count > i)
+    //                             brush = BrushHelper.ConvertToBrush(taskModel.FocusSucceededColor[i]);
+    //                     }
+    //                     catch (Exception e)
+    //                     {
+    //                         LoggerHelper.Error(e);
+    //                     }
+    //
+    //                     RootView.AddLog(HandleStringsWithVariables(tip), brush);
+    //                 }
+    //             }
+    //             break;
+    //         case MaaMsg.Node.Action.Failed:
+    //             if (taskModel.FocusFailed != null)
+    //             {
+    //                 for (int i = 0; i < taskModel.FocusFailed.Count; i++)
+    //                 {
+    //                     IBrush brush = null;
+    //                     var tip = taskModel.FocusFailed[i];
+    //                     try
+    //                     {
+    //                         if (taskModel.FocusFailedColor != null && taskModel.FocusFailedColor.Count > i)
+    //                             brush = BrushHelper.ConvertToBrush(taskModel.FocusFailedColor[i]);
+    //                     }
+    //                     catch (Exception e)
+    //                     {
+    //                         LoggerHelper.Error(e);
+    //                     }
+    //
+    //                     RootView.AddLog(HandleStringsWithVariables(tip), brush);
+    //                 }
+    //             }
+    //             break;
+    //         case MaaMsg.Node.Action.Starting:
+    //             if (!string.IsNullOrWhiteSpace(taskModel.FocusToast))
+    //             {
+    //                 ToastNotification.Show(taskModel.FocusToast);
+    //             }
+    //             if (taskModel.FocusTip != null)
+    //             {
+    //                 for (int i = 0; i < taskModel.FocusTip.Count; i++)
+    //                 {
+    //                     IBrush? brush = null;
+    //                     var tip = taskModel.FocusTip[i];
+    //                     try
+    //                     {
+    //                         if (taskModel.FocusTipColor != null && taskModel.FocusTipColor.Count > i)
+    //                         {
+    //                             brush = BrushHelper.ConvertToBrush(taskModel.FocusTipColor[i]);
+    //                         }
+    //                     }
+    //                     catch (Exception e)
+    //                     {
+    //                         LoggerHelper.Error(e);
+    //                     }
+    //                     RootView.AddLog(HandleStringsWithVariables(tip), brush);
+    //                 }
+    //             }
+    //             break;
+    //     }
+    // }
     public static string HandleStringsWithVariables(string content)
     {
         try

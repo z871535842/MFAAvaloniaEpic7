@@ -147,25 +147,27 @@ Use controller[0] to control the default controller.
 - `MFAAvalonia` adds multi-language support for interfaces. After creating `zh-cn.json`,`zh-tw.json` and `en-us.json` in the same directory as `interface.json`, the names of docs and tasks and the names of options can be represented by keys. MFAAvalonia will automatically read the values corresponding to the keys in the files according to the language. If not, it defaults to the key.
 - `MFAAvalonia` reads the `Announcement.md` file in the `Resource` folder as the announcement, and automatically downloads a Changelog to serve as the announcement when updating resources.
 
-**Extended Task Properties in Pipeline**
+**Note: In MFA v1.1.6, the `focus` series fields were removed and replaced with `any focus`. The original fields are no longer available!**
 
-- `focus` : *bool*  
-  [Native field] Whether to enable `focus_tip` `focus_succeeded` `focus_failed` `focus_toast`. Optional, default is false.
-- `focus_toast` : *string*
-  The content that is displayed in the Windows popup window before executing a certain task. Optional, default is empty.
-- `focus_tip`: *string* | *list<string, >*
-  The content output in the MFA right-side log before executing a certain task. Optional, default is empty.
-- `focus_tip_color`: *string* | *list<string, >*
-  The color of the content output in the MFA right-side log before executing a certain task. Optional, default is Gray.
-- `focus_succeeded`: *string* | *list<string, >*
-  The content output in the MFA right-side log after a certain task is successfully executed. Optional, default is empty.
-- `focus_succeeded_color`: *string* | *list<string, >*
-  The color of the content output in the MFA right-side log after a certain task is successfully executed. Optional, default is Gray.
-- `focus_failed`: *string* | *list<string, >*
-  The content output in the MFA right-side log when a certain task fails. Optional, default is empty.
-- `focus_failed_color`: *string* | *list<string, >*
-  The color of the content output in the MFA right-side log when a certain task fails. Optional, default is Gray.
-
+- `focus` : *string* | *object*  
+  Formats:
+  ```
+  "focus": {
+    "start": "Task started",   // Note: *string* | *string[]*    
+    "succeeded": "Task succeeded",   // Note: *string* | *string[]* 
+    "failed": "Task failed",    // Note: *string* | *string[]* 
+    "toast": "Toast notification"   // Note: *string* 
+  }
+  ```
+  ```
+   "focus": "Test"
+  ```
+  Equivalent to:
+  ```
+  "focus": {
+    "start": "Test"
+  }
+    ```
 ## License
 
 **MFAAvalonia** is licensed under **[GPL-3.0 License](./LICENSE)**.

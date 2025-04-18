@@ -572,14 +572,14 @@
                                             TextWrapping="Wrap"
                                             VerticalAlignment="Stretch" />
                                         <TextBlock
-                                            FontSize="12"
+                                            FontSize="12" 
                                             FontWeight="{Binding Weight}"
-                                            Foreground="{Binding Color, Mode=TwoWay}"
+                                            Foreground="{Binding Color}"
+                                            ToolTip.Tip="{Binding Content}" 
                                             Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,5"
+                                            HorizontalAlignment="Stretch" 
+                                            Margin="0,5" TextWrapping="WrapWithOverflow"
                                             Text="{Binding Content}"
-                                            TextWrapping="Wrap"
                                             VerticalAlignment="Stretch" />
                                     </Grid>
                                 </DataTemplate>

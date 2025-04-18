@@ -335,6 +335,7 @@ public class MaaProcessor
                     DisplayFocus(maaNode, args.Message);
                 }
             };
+
             return tasker;
         }
         catch (OperationCanceledException)

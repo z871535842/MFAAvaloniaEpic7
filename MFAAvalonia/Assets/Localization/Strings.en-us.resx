@@ -1070,4 +1070,7 @@
     <data name="ExternalNotificationTest" xml:space="preserve">
         <value>This is a send test</value>
     </data>
+    <data name="GlobalHotkeyServiceError" xml:space="preserve">
+        <value>Global Hotkey Service Failed to Load</value>
+    </data>
 </root>

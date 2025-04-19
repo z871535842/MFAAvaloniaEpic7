@@ -17,11 +17,10 @@ public static class ConfigurationManager
         "config");
     public static readonly MFAConfiguration Maa = new("Maa", "maa_option", new Dictionary<string, object>());
     public static MFAConfiguration Current = new("Default", "config", new Dictionary<string, object>());
-    
+
     public static AvaloniaList<MFAConfiguration> Configs { get; } = LoadConfigurations();
 
     public static string ConfigName { get; set; }
-
     public static string GetCurrentConfiguration() => ConfigName;
 
     public static string GetActualConfiguration()
@@ -42,7 +41,7 @@ public static class ConfigurationManager
             return;
         GlobalConfiguration.SetValue(ConfigurationKeys.DefaultConfig, name);
     }
-    
+
     public static string GetDefaultConfig()
     {
         return GlobalConfiguration.GetValue(ConfigurationKeys.DefaultConfig, "Default");
@@ -52,6 +51,7 @@ public static class ConfigurationManager
     {
         LoggerHelper.Info("Loading Configurations...");
         ConfigName = GetDefaultConfig();
+
         var collection = new AvaloniaList<MFAConfiguration>();
 
         var defaultConfigPath = Path.Combine(_configDir, "config.json");
@@ -72,12 +72,17 @@ public static class ConfigurationManager
         }
 
         Maa.SetConfig(JsonHelper.LoadConfig("maa_option", new Dictionary<string, object>()));
-        
+       
+        if (Program.Args.TryGetValue("c", out var param) && !string.IsNullOrEmpty(param))
+        {
+            if (collection.Any(c => c.Name == param))
+                ConfigName = param;
+        }
         Current = collection.FirstOrDefault(c
                 => !string.IsNullOrWhiteSpace(c.Name)
                 && c.Name.Equals(ConfigName, StringComparison.OrdinalIgnoreCase))
             ?? Current;
-      
+
         return collection;
     }
 

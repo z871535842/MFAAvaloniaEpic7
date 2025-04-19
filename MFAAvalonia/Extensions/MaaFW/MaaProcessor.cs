@@ -348,9 +348,10 @@ public class MaaProcessor
             return null;
         }
     }
-
+#pragma warning disable CS0649 // 
     private class Focus
     {
+
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("start")]
         public List<string>? Start;
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("succeeded")]

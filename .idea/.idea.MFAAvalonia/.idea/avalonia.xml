@@ -75,6 +75,7 @@
         <entry key="SukiUI/Theme/NumericUpDownStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/PathIcon.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/PathIconStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ProgressBar.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ProgressBarStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RadioButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RichTextBoxStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -86,7 +87,9 @@
         <entry key="SukiUI/Theme/TextEraserButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TimePickerStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ToggleButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ToggleButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ToggleSwitch.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ToggleSwitchStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/ToolTipStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TreeViewStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />

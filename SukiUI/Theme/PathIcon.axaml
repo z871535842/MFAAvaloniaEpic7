@@ -12,7 +12,6 @@
             <PathIcon Classes="Information" Data="{StaticResource settings_regular}" />
             <PathIcon Classes="Warning" Data="{StaticResource settings_regular}" />
             <PathIcon Classes="Danger" Data="{StaticResource settings_regular}" />
-            <PathIcon Classes="Eye" Data="{StaticResource settings_regular}" />
         </StackPanel>
     </Design.PreviewWith>
     <ControlTheme x:Key="SukiPathIconStyle" TargetType="PathIcon">
@@ -39,6 +38,10 @@
                 </Border>
             </ControlTemplate>
         </Setter>
+
+        <Style Selector="^:not(.Flippable)">
+            <Setter Property="FlowDirection" Value="LeftToRight" />
+        </Style>
 
         <Style Selector="^.Theme">
             <Setter Property="Foreground" Value="{DynamicResource SukiText}" />

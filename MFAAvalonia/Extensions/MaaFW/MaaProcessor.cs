@@ -985,7 +985,7 @@ public class MaaProcessor
                 if (sameNameTasks.Any())
                 {
                     var firstTask = sameNameTasks.First();
-                    UpdateExistingItem(oldItem, firstTask);
+                    UpdateExistingItem(oldItem, firstTask, tasks.Any(t => t.Name == firstTask.Name));
                     updateList.Add(oldItem);
                 }
                 else
@@ -998,9 +998,11 @@ public class MaaProcessor
         return (updateList, removeList);
     }
 
-    private void UpdateExistingItem(DragItemViewModel oldItem, MaaInterface.MaaInterfaceTask newItem)
+    private void UpdateExistingItem(DragItemViewModel oldItem, MaaInterface.MaaInterfaceTask newItem, bool updateName = false)
     {
         if (oldItem.InterfaceItem == null) return;
+        if (updateName)
+            oldItem.InterfaceItem.Name = newItem.Name;
         oldItem.InterfaceItem.Entry = newItem.Entry;
         oldItem.InterfaceItem.PipelineOverride = newItem.PipelineOverride;
         oldItem.InterfaceItem.Document = newItem.Document;

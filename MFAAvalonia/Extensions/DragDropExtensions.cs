@@ -164,20 +164,41 @@ public class DragDropExtensions
             _ => throw new ArgumentOutOfRangeException($"AnimationDuration must be greater than or equal to 150, but was {value}")
         });
 
-    public static int GetHoldDurationMilliseconds(ListBox element) =>
-        element.GetValue(HoldDurationMillisecondsProperty);
+    // public static int GetHoldDurationMilliseconds(ListBox element) =>
+    //     element.GetValue(HoldDurationMillisecondsProperty);
+    //
+    // public static void SetHoldDurationMilliseconds(ListBox element, int value) =>
+    //     element.SetValue(HoldDurationMillisecondsProperty, value switch
+    //     {
+    //         >= 0 => value,
+    //         _ => throw new ArgumentOutOfRangeException($"HoldDurationMilliseconds must be greater than or equal to 0, but was {value}")
+    //     });
+    // private static DateTime? GetPressedTime(ListBox element) =>
+    //     element.GetValue(PressedTimeProperty);
+    //
+    // private static void SetPressedTime(ListBox element, DateTime? value) =>
+    //     element.SetValue(PressedTimeProperty, value);
+    public static readonly AttachedProperty<Point?> PressedPositionProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, Point?>("PressedPosition", typeof(DragDropExtensions), null);
 
-    public static void SetHoldDurationMilliseconds(ListBox element, int value) =>
-        element.SetValue(HoldDurationMillisecondsProperty, value switch
+    public static readonly AttachedProperty<int> DragStartThresholdProperty =
+        AvaloniaProperty.RegisterAttached<ListBox, int>("DragStartThreshold", typeof(DragDropExtensions), 10); // 默认10像素阈值
+
+    private static Point? GetPressedPosition(ListBox element) =>
+        element.GetValue(PressedPositionProperty);
+
+    private static void SetPressedPosition(ListBox element, Point? value) =>
+        element.SetValue(PressedPositionProperty, value);
+
+    public static int GetDragStartThreshold(ListBox element) =>
+        element.GetValue(DragStartThresholdProperty);
+
+    public static void SetDragStartThreshold(ListBox element, int value) =>
+        element.SetValue(DragStartThresholdProperty, value switch
         {
             >= 0 => value,
-            _ => throw new ArgumentOutOfRangeException($"HoldDurationMilliseconds must be greater than or equal to 0, but was {value}")
+            _ => throw new ArgumentOutOfRangeException($"DragStartThreshold must be non-negative, but was {value}")
         });
-    private static DateTime? GetPressedTime(ListBox element) =>
-        element.GetValue(PressedTimeProperty);
-
-    private static void SetPressedTime(ListBox element, DateTime? value) =>
-        element.SetValue(PressedTimeProperty, value);
 
     private static void EnableDragDrop(ListBox listBox)
     {
@@ -251,11 +272,11 @@ public class DragDropExtensions
     {
         if (sender is ListBox listBox)
         {
-            SetPressedTime(listBox, DateTime.Now);
+            ClearDragState(listBox);
         }
         else if (sender is Control { Parent: ListBox lb })
         {
-            SetPressedTime(lb, DateTime.Now);
+            ClearDragState(lb);
         }
     }
 
@@ -263,33 +284,42 @@ public class DragDropExtensions
     {
         if (sender is ListBox listBox)
         {
-            SetPressedTime(listBox, DateTime.Now);
+            ClearDragState(listBox);
         }
         else if (sender is Control { Parent: ListBox lb })
         {
-            SetPressedTime(lb, DateTime.Now);
+            ClearDragState(lb);
         }
+    }
+
+    private static void ClearDragState(ListBox listBox)
+    {
+        SetPressedPosition(listBox, null);
     }
 
     private static void OnPointerMoved(object? sender, PointerEventArgs e)
     {
         if (sender is not ListBox listBox || !e.GetCurrentPoint(listBox).Properties.IsLeftButtonPressed)
             return;
-        var pressedTime = GetPressedTime(listBox);
-        if (pressedTime == null)
+
+        var pressedPosition = GetPressedPosition(listBox);
+        var currentPosition = e.GetPosition(listBox);
+        if (pressedPosition == null)
         {
-            SetPressedTime(listBox, DateTime.Now);
-            return;
+            SetPressedPosition(listBox, currentPosition);
+            pressedPosition = GetPressedPosition(listBox);
         }
 
-        var duration = (DateTime.Now - pressedTime.Value).TotalMilliseconds;
-        if (duration < GetHoldDurationMilliseconds(listBox))
+        var deltaX = currentPosition.X - pressedPosition.Value.X;
+        var deltaY = currentPosition.Y - pressedPosition.Value.Y;
+        var distanceSquared = deltaX * deltaX + deltaY * deltaY;
+        var threshold = GetDragStartThreshold(listBox);
+        if (distanceSquared < threshold * threshold)
         {
-            SetPressedTime(listBox, DateTime.Now);
             return;
         }
-
-        listBox.SetValue(PressedTimeProperty, DateTime.Now);
+        // 清除按下位置
+        SetPressedPosition(listBox, currentPosition);
         // 获取鼠标点击位置的项目索引
         var position = e.GetPosition(listBox);
         var sourceItem = GetSourceIndex(listBox, position, -1);

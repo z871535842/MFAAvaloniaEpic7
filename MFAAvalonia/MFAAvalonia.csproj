@@ -22,6 +22,9 @@
 
 	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
 		<PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" Version="7.1.3" />
+		<PackageReference Update="Packaging.Targets">
+		  <Version>0.1.232</Version>
+		</PackageReference>
 	</ItemGroup>
 
     <PropertyGroup>
@@ -33,8 +36,8 @@
         <ApplicationRevision>0</ApplicationRevision>
         <ApplicationVersion>1.1.0</ApplicationVersion>
         <Version>1.1</Version>
-        <FileVersion>1.1.9</FileVersion>
-        <AssemblyVersion>1.1.9</AssemblyVersion>
+        <FileVersion>1.2.0</FileVersion>
+        <AssemblyVersion>1.2.0</AssemblyVersion>
         <InformationalVersion>0.0.1</InformationalVersion>
     </PropertyGroup>
 
@@ -57,29 +60,29 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.2.7" />
-        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.7" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.2.7" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.7" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.7" />
-        <PackageReference Include="Avalonia.Themes.Simple" Version="11.2.7" />
+        <PackageReference Include="Avalonia" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.8" />
+        <PackageReference Include="Avalonia.Themes.Simple" Version="11.2.8" />
         <PackageReference Include="AvaloniaEdit.TextMate" Version="11.2.0" />
         <PackageReference Include="AvaloniaExtensions.Axaml" Version="1.0.3" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.2.0.14" />
-		<PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.2.0.14" />
+		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.2.7.1" />
+		<PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.2.7.1" />
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
 		<PackageReference Include="DesktopNotifications.Windows" Version="1.3.1" />
-        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.7" />
+        <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.8" />
         <PackageReference Include="CalcBindingAva" Version="2.5.3" />
 		<PackageReference Include="DesktopNotifications.Apple" Version="1.3.1" />
         <PackageReference Include="DesktopNotifications.Avalonia" Version="1.3.1" />
-        <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.293" />
+        <PackageReference Include="FluentIcons.Avalonia.Fluent" Version="1.1.298-ci" />
         <PackageReference Include="Maa.Framework" Version="4.0.0-preview.25168.1" />
         <PackageReference Include="Maa.Framework.Binding.Extensions" Version="4.0.0-preview.25168.1" />
         <PackageReference Include="Maa.Framework.Binding.Native" Version="4.0.0-preview.25168.1" />
         <PackageReference Include="Maa.Framework.Native" Version="4.0.0-preview.25168.1" />
-        <PackageReference Include="Maa.Framework.Runtimes" Version="4.1.0-alpha.2" />
+        <PackageReference Include="Maa.Framework.Runtimes" Version="4.1.0" />
         <PackageReference Include="MailKit" Version="4.11.0" />
         <PackageReference Include="Markdown.Avalonia" Version="11.0.3-a1" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />
@@ -98,7 +101,7 @@
         <PackageReference Include="Serilog.Sinks.File" Version="7.0.0-dev-02301" />
         <PackageReference Include="SharpHook" Version="5.3.9" />
 		<PackageReference Include="SkiaSharp" Version="3.118.0-preview.2.3" />
-        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0.2" />
+        <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.2" />
         <PackageReference Include="System.Management" Version="10.0.0-preview.2.25163.2" />
 
 		<ProjectReference Include="../LazyStaticGenerator/LazyStaticGenerator.csproj" OutputItemType="Analyzer" ExcludeAssets="runtime;build;native;contentfiles" ReferenceOutputAssembly="false" />

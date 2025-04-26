@@ -20,4 +20,10 @@
 		<InvariantGlobalization>true</InvariantGlobalization> <!-- 移除全球化资源 -->
 		<IncludeNativeLibrariesForSelfExtract>false</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Packaging.Targets">
+	    <Version>0.1.232</Version>
+	  </PackageReference>
+	</ItemGroup>
 </Project>

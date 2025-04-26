@@ -79,9 +79,9 @@ public static class IconElement
                 }
             }
         };
-        if (GetHeight(button) != double.NaN)
+        if (!double.IsNaN(GetHeight(button)))
             pathIcon.Height = GetHeight(button);
-        if (GetWidth(button) != double.NaN)
+        if (!double.IsNaN(GetWidth(button)))
             pathIcon.Width = GetWidth(button);
         button.Content = pathIcon;
     }

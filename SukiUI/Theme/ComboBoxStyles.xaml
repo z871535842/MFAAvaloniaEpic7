@@ -5,7 +5,8 @@
         xmlns:suki="https://github.com/kikipoulet/SukiUI"
         xmlns:system="clr-namespace:System;assembly=netstandard"
         xmlns:theme="clr-namespace:SukiUI.Theme"
-        xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva">
+        xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+        xmlns:animations="clr-namespace:SukiUI.Animations">
 
     <Design.PreviewWith>
         <Border Padding="20" Background="Transparent">
@@ -185,7 +186,7 @@
             <Style.Animations>
                 <Animation FillMode="Forward" Duration="0:0:0.4">
                     <Animation.Easing>
-                        <suki:SukiEaseOutBack />
+                        <animations:SukiEaseOutBack />
                     </Animation.Easing>
                     <KeyFrame Cue="0%">
                         <Setter Property="ScaleTransform.ScaleY" Value="0.72" />
@@ -198,7 +199,7 @@
 
                 <Animation FillMode="Forward" Duration="0:0:0.4">
                     <Animation.Easing>
-                        <suki:SukiEaseOutBack BounceIntensity="Soft" />
+                        <animations:SukiEaseOutBack BounceIntensity="Soft" />
                     </Animation.Easing>
                     <KeyFrame Cue="0%">
  

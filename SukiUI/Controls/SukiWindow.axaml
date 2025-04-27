@@ -121,7 +121,7 @@
                                                         IsAnimated="False"
                                                         IsVisible="{TemplateBinding ShowTitlebarBackground}" />
                                         <suki:GlassCard Name="AlternativeGlassMenuBackground"
-                                                        Margin="10,2,10,10"
+                                                        Margin="12,3,10,3"
                                                         CornerRadius="13" />
                                         <Menu Name="PART_Menu"
                                               IsEnabled="{TemplateBinding IsMenuVisible}"

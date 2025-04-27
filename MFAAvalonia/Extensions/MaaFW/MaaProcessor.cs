@@ -1086,28 +1086,28 @@ public class MaaProcessor
         {
             return;
         }
-        string debugFolderPath = Path.Combine(AppContext.BaseDirectory, "debug");
-        if (!Directory.Exists(debugFolderPath))
-        {
-            Directory.CreateDirectory(debugFolderPath);
-        }
-
-        string logFilePath = Path.Combine(debugFolderPath, "maa.log");
-        string timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
-        string formattedLogMessage =
-            $"[{timeStamp}][INF][Px14600][Tx16498][Parser.cpp][L56][MaaNS::ProjectInterfaceNS::Parser::parse_interface] ";
-        var logMessage = $"MFAAvalonia Version: [mfa.version={Instances.VersionUpdateSettingsUserControlModel.MfaVersion}] "
-            + $"Interface Version: [data.version=v{resourceVersion.Replace("v", "")}] ";
-        LoggerHelper.Info(logMessage);
-
-        try
-        {
-            File.AppendAllText(logFilePath, formattedLogMessage + logMessage);
-        }
-        catch (Exception)
-        {
-            Console.WriteLine("尝试写入失败！");
-        }
+        // string debugFolderPath = Path.Combine(AppContext.BaseDirectory, "debug");
+        // if (!Directory.Exists(debugFolderPath))
+        // {
+        //     Directory.CreateDirectory(debugFolderPath);
+        // }
+        //
+        // string logFilePath = Path.Combine(debugFolderPath, "maa.log");
+        // string timeStamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        // string formattedLogMessage =
+        //     $"[{timeStamp}][INF][Px14600][Tx16498][MaaProcessor.cs][L56][MFA::AppendVersionLog] ";
+        // var logMessage = $"MFAAvalonia Version: [mfa.version={Instances.VersionUpdateSettingsUserControlModel.MfaVersion}] "
+        //     + $"Interface Version: [data.version=v{resourceVersion.Replace("v", "")}] ";
+        // LoggerHelper.Info(logMessage);
+        //
+        // try
+        // {
+        //     File.AppendAllText(logFilePath, formattedLogMessage + logMessage);
+        // }
+        // catch (Exception)
+        // {
+        //     Console.WriteLine("尝试写入失败！");
+        // }
     }
 
     #endregion

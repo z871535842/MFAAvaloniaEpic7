@@ -26,6 +26,7 @@ public partial class GameSettingsUserControlModel : ViewModelBase
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.Recording, value);
         MaaProcessor.Utility.SetOptionRecording(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
+        MaaProcessor.Instance.SetTasker();
     }
 
     partial void OnEnableSaveDrawChanged(bool value)
@@ -33,6 +34,7 @@ public partial class GameSettingsUserControlModel : ViewModelBase
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.SaveDraw, value);
         MaaProcessor.Utility.SetOptionSaveDraw(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
+        MaaProcessor.Instance.SetTasker();
     }
 
     partial void OnShowHitDrawChanged(bool value)
@@ -40,6 +42,7 @@ public partial class GameSettingsUserControlModel : ViewModelBase
         ConfigurationManager.Maa.SetValue(ConfigurationKeys.ShowHitDraw, value);
         MaaProcessor.Utility.SetOptionShowHitDraw(value);
         Instances.RootViewModel.IsDebugMode = EnableSaveDraw || EnableRecording || ShowHitDraw;
+        MaaProcessor.Instance.SetTasker();
     }
 
     partial void OnPrescriptChanged(string value)

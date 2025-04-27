@@ -45,7 +45,12 @@ public class MaaProcessor
 
     public Dictionary<string, MaaNode> NodeDictionary = new();
     public ObservableQueue<MFATask> TaskQueue { get; } = new();
-
+    
+    static MaaProcessor()
+    {
+        Toolkit.Config.InitOption(AppContext.BaseDirectory);
+    }
+    
     public MaaProcessor()
     {
         TaskQueue.CountChanged += (_, args) =>

@@ -24,7 +24,7 @@
                     </ComboBox.Styles>
                     <ComboBox.ItemsSource>
                         <objectModel:ObservableCollection x:TypeArguments="system:String">
-                            <system:String>test</system:String>
+                            <system:String>test11124132431413413413413848318538585844</system:String>
                             <system:String>test 2</system:String>
                         </objectModel:ObservableCollection>
                     </ComboBox.ItemsSource>
@@ -112,8 +112,8 @@
                                             Content="{TemplateBinding SelectionBoxItem}"
                                             ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                             Foreground="{DynamicResource SukiText}" />
-                            <ToggleButton Name="toggle"
-                                          Grid.Column="1" Classes="Basic" Margin="2,0,2,0"
+                            <ToggleButton Name="toggle" 
+                                          Grid.Column="1" Classes="None" Margin="0,0,8,0"
                                           Background="Transparent"
                                           BorderThickness="0" IsHitTestVisible="False"
                                           CornerRadius="{DynamicResource SmallCornerRadius}"

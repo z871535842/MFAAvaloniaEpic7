@@ -679,11 +679,19 @@ public partial class TaskQueueView : UserControl
                 return data;
             }),
             SelectionBoxItemTemplate = new FuncDataTemplate<LocalizationViewModel>((optionCase, b) =>
-                new ContentControl
-                {
-                    Content = optionCase?.Name ?? string.Empty
-                }
-            ),
+            {
+
+                var data =
+                    new TextBlock
+                    {
+                        Text = optionCase?.Name ?? string.Empty,
+                        TextTrimming = TextTrimming.WordEllipsis,
+                        TextWrapping = TextWrapping.NoWrap
+                    };
+                ToolTip.SetTip(data, optionCase?.Name ?? string.Empty);
+                ToolTip.SetShowDelay(data, 100);
+                return data;
+            }),
             SelectedIndex = option.Index ?? 0,
         };
 

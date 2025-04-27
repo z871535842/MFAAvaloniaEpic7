@@ -344,7 +344,14 @@
             </Style>
         </Style>
 
-
+        <Style Selector="^.None">
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Padding" Value="4,4" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        
         <Style Selector="^.Basic">
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="BorderBrush" Value="Transparent" />

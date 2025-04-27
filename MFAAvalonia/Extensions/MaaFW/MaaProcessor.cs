@@ -353,6 +353,7 @@ public class MaaProcessor
             return null;
         }
     }
+    
 #pragma warning disable CS0649 // 
     private class Focus
     {

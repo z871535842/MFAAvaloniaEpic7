@@ -1010,6 +1010,11 @@ public class MaaProcessor
         if (oldItem.InterfaceItem == null) return;
         if (updateName)
             oldItem.InterfaceItem.Name = newItem.Name;
+        else
+        {
+            if (oldItem.InterfaceItem.Name != newItem.Name)
+                return;
+        }
         oldItem.InterfaceItem.Entry = newItem.Entry;
         oldItem.InterfaceItem.PipelineOverride = newItem.PipelineOverride;
         oldItem.InterfaceItem.Document = newItem.Document;

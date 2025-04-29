@@ -44,11 +44,11 @@ public static class VersionChecker
             CheckVersion = ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableCheckVersion, true),
         };
 
-        if (config.AutoUpdateResource)
+        if (config.AutoUpdateResource && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
         {
             AddResourceUpdateTask(config.AutoUpdateMFA);
         }
-        else if (config.CheckVersion)
+        else if (config.CheckVersion && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
         {
             AddResourceCheckTask();
         }
@@ -439,7 +439,7 @@ public static class VersionChecker
 
             settings.Converters.Add(new MaaInterfaceSelectOptionConverter(true));
             settings.Converters.Add(new MaaInterfaceSelectAdvancedConverter(true));
-            
+
             var @interface = JsonConvert.DeserializeObject<MaaInterface>(jsonContent, settings);
             if (@interface != null)
             {
@@ -1251,7 +1251,7 @@ public static class VersionChecker
         try
         {
             var normalizedLatest = ParseAndNormalizeVersion(latestVersion);
-            var normalizedLocal = ParseAndNormalizeVersion(localVersion); 
+            var normalizedLocal = ParseAndNormalizeVersion(localVersion);
             return normalizedLatest.ComparePrecedenceTo(normalizedLocal) > 0;
         }
         catch (Exception ex)
@@ -1271,12 +1271,12 @@ public static class VersionChecker
         var major = match.Groups["major"].Success ? int.Parse(match.Groups["major"].Value) : 0;
         var minor = match.Groups["minor"].Success ? int.Parse(match.Groups["minor"].Value) : 0;
         var patch = match.Groups["patch"].Success ? int.Parse(match.Groups["patch"].Value) : 0;
-        var prerelease = match.Groups["prerelease"].Success 
-            ? match.Groups["prerelease"].Value.Split('.') 
+        var prerelease = match.Groups["prerelease"].Success
+            ? match.Groups["prerelease"].Value.Split('.')
             : null;
 
-        var build = match.Groups["build"].Success 
-            ? match.Groups["build"].Value.Split('.') 
+        var build = match.Groups["build"].Success
+            ? match.Groups["build"].Value.Split('.')
             : null;
 
         return new SemVersion(new BigInteger(major), new BigInteger(minor), new BigInteger(patch), prerelease, build);

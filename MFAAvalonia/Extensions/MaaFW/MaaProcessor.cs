@@ -45,12 +45,12 @@ public class MaaProcessor
 
     public Dictionary<string, MaaNode> NodeDictionary = new();
     public ObservableQueue<MFATask> TaskQueue { get; } = new();
-    
+
     static MaaProcessor()
     {
         Toolkit.Config.InitOption(AppContext.BaseDirectory);
     }
-    
+
     public MaaProcessor()
     {
         TaskQueue.CountChanged += (_, args) =>
@@ -353,11 +353,10 @@ public class MaaProcessor
             return null;
         }
     }
-    
+
 #pragma warning disable CS0649 // 
     private class Focus
     {
-
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("start")]
         public List<string>? Start;
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("succeeded")]
@@ -1618,7 +1617,7 @@ public class MaaProcessor
 
     private void UpdateTaskDictionary(ref Dictionary<string, MaaNode> taskModels,
         List<MaaInterface.MaaInterfaceSelectOption>? options,
-        List<MaaInterface.MaaInterfaceSelectAdvanced> advanceds)
+        List<MaaInterface.MaaInterfaceSelectAdvanced>? advanceds)
     {
         Instance.NodeDictionary = Instance.NodeDictionary.MergeMaaNodes(taskModels);
         if (options != null)
@@ -1674,7 +1673,12 @@ public class MaaProcessor
 
     private NodeAndParam CreateNodeAndParam(DragItemViewModel task)
     {
-        var taskModels = task.InterfaceItem?.PipelineOverride ?? new Dictionary<string, MaaNode>();
+        var taskModels = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(JsonConvert.SerializeObject(task.InterfaceItem?.PipelineOverride ?? new Dictionary<string, MaaNode>(), new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented,
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        }));
         UpdateTaskDictionary(ref taskModels, task.InterfaceItem?.Option, task.InterfaceItem?.Advanced);
 
         var taskParams = SerializeTaskParams(taskModels);

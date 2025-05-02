@@ -84,7 +84,7 @@ public partial class MaaInterface
         [JsonProperty("repeat_count")] public int? RepeatCount;
         [JsonProperty("advanced")] public List<MaaInterfaceSelectAdvanced>? Advanced;
         [JsonProperty("option")] public List<MaaInterfaceSelectOption>? Option;
-
+        
         [JsonProperty("pipeline_override")] public Dictionary<string, MaaNode>? PipelineOverride;
 
         public override string ToString()

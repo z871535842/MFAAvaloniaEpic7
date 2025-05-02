@@ -171,6 +171,8 @@ Use controller[0] to control the default controller.
     "start": "Test"
   }
     ```
+Except for `toast`, all others support using tags like `[color:red]`text content`[/color]` to define text colors.
+
 ## License
 
 **MFAAvalonia** is licensed under **[GPL-3.0 License](./LICENSE)**.

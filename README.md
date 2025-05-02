@@ -168,6 +168,8 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
     "start": "测试"
   }
     ```
+除了`toast`，其他的均支持使用类似`[color:red]`文本内容`[/color]`的标记来定义文本颜色。
+
 ## 许可证
 
 **MFAAvalonia** 使用 **[GPL-3.0 许可证](./LICENSE)** 开源。

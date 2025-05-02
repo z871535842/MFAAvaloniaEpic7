@@ -199,7 +199,7 @@
         <value>确定要退出吗？</value>
     </data>
     <data name="ConfirmExitTitle" xml:space="preserve">
-        <value>MFA 正在运行任务</value>
+        <value>当前正在运行任务</value>
     </data>
     <data name="Connected" xml:space="preserve">
         <value>已连接</value>

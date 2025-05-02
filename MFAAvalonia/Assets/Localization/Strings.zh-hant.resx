@@ -192,7 +192,7 @@
         <value>確定要退出嗎？</value>
     </data>
     <data name="ConfirmExitTitle" xml:space="preserve">
-        <value>MFA 正在執行任務</value>
+        <value>當前正在執行任務</value>
     </data>
     <data name="Connected" xml:space="preserve">
         <value>已連接</value>

@@ -192,7 +192,7 @@
         <value>Are you sure want to exit?</value>
     </data>
     <data name="ConfirmExitTitle" xml:space="preserve">
-        <value>MFA is running tasks</value>
+        <value>The current program is performing tasks</value>
     </data>
     <data name="Connected" xml:space="preserve">
         <value>Connected</value>

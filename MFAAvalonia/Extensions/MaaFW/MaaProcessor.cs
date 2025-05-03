@@ -1952,7 +1952,7 @@ public class MaaProcessor
 
     #region 停止任务
 
-    public void Stop(bool finished = false, bool onlyStart = false)
+    public void Stop(bool finished = false, bool onlyStart = false, Action? action = null)
     {
         try
         {
@@ -1973,7 +1973,7 @@ public class MaaProcessor
             ExecuteStopCore(finished, () =>
             {
                 var stopResult = AbortCurrentTasker();
-                HandleStopResult(finished, stopResult, onlyStart);
+                HandleStopResult(finished, stopResult, onlyStart, action);
             });
 
         }
@@ -2019,11 +2019,11 @@ public class MaaProcessor
         return MaaTasker == null || MaaTasker.Abort().Wait() == MaaJobStatus.Succeeded;
     }
 
-    private void HandleStopResult(bool finished, bool success, bool onlyStart)
+    private void HandleStopResult(bool finished, bool success, bool onlyStart, Action? action = null)
     {
         if (success)
         {
-            DisplayTaskCompletionMessage(finished, onlyStart);
+            DisplayTaskCompletionMessage(finished, onlyStart, action);
         }
         else
         {
@@ -2031,7 +2031,7 @@ public class MaaProcessor
         }
     }
 
-    private void DisplayTaskCompletionMessage(bool finished, bool onlyStart = false)
+    private void DisplayTaskCompletionMessage(bool finished, bool onlyStart = false, Action? action = null)
     {
         if (!finished)
         {
@@ -2064,7 +2064,7 @@ public class MaaProcessor
                 HandleAfterTaskOperation();
             }
         }
-
+        action?.Invoke();
         _startTime = null;
     }
 

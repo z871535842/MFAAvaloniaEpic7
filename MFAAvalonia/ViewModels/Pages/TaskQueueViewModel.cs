@@ -83,12 +83,18 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     public void StartTask()
     {
+        if (Instances.RootViewModel.IsRunning)
+        {
+            ToastHelper.Warn("ConfirmExitTitle".ToLocalization());
+            LoggerHelper.Warning("ConfirmExitTitle".ToLocalization());
+            return;
+        }
         MaaProcessor.Instance.Start();
     }
 
-    public void StopTask()
+    public void StopTask(Action? action = null)
     {
-        MaaProcessor.Instance.Stop();
+        MaaProcessor.Instance.Stop(action: action);
     }
 
     [RelayCommand]

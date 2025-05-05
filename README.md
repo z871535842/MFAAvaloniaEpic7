@@ -9,7 +9,8 @@
 
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable-next-line MD036 -->
-_✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFramework](https://github.com/MaaXYZ/MaaFramework)** 通用 GUI 项目 ✨_
+_✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)**
+的 **[MAAFramework](https://github.com/MaaXYZ/MaaFramework)** 通用 GUI 项目 ✨_
 <!-- prettier-ignore-end -->
 
   <img alt="license" src="https://img.shields.io/github/license/SweetSmellFox/MFAAvalonia">
@@ -124,7 +125,7 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
 
 - `[color:color_name]`：颜色，例如`[color:red]`。
 
--  ~~`[size:font_size]`：字号，例如`[size:20]`。~~
+- ~~`[size:font_size]`：字号，例如`[size:20]`。~~
 
 - `[b]`：粗体。
 
@@ -136,21 +137,62 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
 
 - `[align:left/center/right]`：居左，居中或者居右，只能在一整行中使用。
 
-**注：上面注释内容为文档介绍用，实际运行时不建议写入。**
+### 实验性功能
+
+- `MFAAvalonia` 为interface和interface的task新增了`advanced`字段。
+- `advanced`字段的用法类似于option，其功能类似于支持通过UI输入框让用户自行编辑功能的`pipeline_override`。
+- 下面是使用`advanced`的例子
+
+``` json
+{
+  "task": [
+        {    
+            "name": "测试A",
+            "entry": "任务A",
+            "advanced": ["高级设置A","高级设置B"]
+        }
+  ],
+  "advanced": {
+    "高级设置A": {
+      "field": "ce",
+      "type": "string",
+      "default": "cs.png",
+      "pipeline_override": {
+          "任务A": {
+            "template": "{ce}"
+          }
+      }
+    },
+    "高级设置B": {
+      "field": ["x","y"],
+      "type": ["int", "int"],
+      "default": ["1", "1"],
+      "pipeline_override": {
+          "任务A": {
+            "roi": ["{x}","{y}",3,4]
+          }
+      }
+    }
+  }
+}
+```
+**注：field和type和default支持string | list<string>类型，default默认为空。**
+**注：上面json中注释内容为文档介绍用，实际运行时不能写入。**
 
 - 运行
 
 ## 开发相关
 
 - 欢迎各位大佬贡献代码
-- `MFAAvalonia` 有interface多语言支持,在`interface.json`同目录下新建`lang`文件夹,里面内含`zh-cn.json`,`zh-tw.json`和`en-us.json`后，doc和任务的name和选项的name可以使用key来指代。MFAAvalonia会自动根据语言来读取文件的key对应的value。如果没有则默认为key
+- `MFAAvalonia` 有interface多语言支持,在`interface.json`同目录下新建`lang`文件夹,里面内含`zh-cn.json`,`zh-tw.json`和
+  `en-us.json`后，doc和任务的name和选项的name可以使用key来指代。MFAAvalonia会自动根据语言来读取文件的key对应的value。如果没有则默认为key
 - `MFAAvalonia` 会读取`Resource`文件夹的`Announcement.md`作为公告，更新资源时会自动下载一份Changelog作为公告
 - `MFAAvalonia` 可以通过启动参数`-c 配置名称`来指定以特定配置文件启动，无须后缀名`.json`
 
 **注：在MFA的v1.1.6版本中，移除了focus系列字段，改为any focus，原先的不再可用！**
 
 - `focus` : *string* | *object*  
-格式为
+  格式为
   ```
   "focus": {
     "start": "任务开始",  注：*string* | *string[]*    
@@ -168,6 +210,7 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
     "start": "测试"
   }
     ```
+
 除了`toast`，其他的均支持使用类似`[color:red]`文本内容`[/color]`的标记来定义文本颜色。
 
 ## 许可证
@@ -191,7 +234,8 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
 - **[AvaloniaExtensions.Axaml](https://github.com/dotnet9/AvaloniaExtensions)**\
   为Avalonia UI开发带来便利的语法糖库
 - **[CalcBindingAva](https://github.com/netwww1/CalcBindingAva)**\
-  CalcBinding is an advanced Binding markup extension that allows you to write calculated binding expressions in xaml, without custom converter
+  CalcBinding is an advanced Binding markup extension that allows you to write calculated binding expressions in xaml,
+  without custom converter
 
 ### 开发者
 

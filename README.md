@@ -136,7 +136,47 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
 
 - `[align:left/center/right]`：居左，居中或者居右，只能在一整行中使用。
 
-**注：上面注释内容为文档介绍用，实际运行时不建议写入。**
+### 实验性功能
+
+- `MFAAvalonia` 为interface和interface的task新增了`advanced`字段。
+- `advanced`字段的用法类似于option，其功能类似于支持通过UI输入框让用户自行编辑功能的`pipeline_override`。
+- 下面是使用`advanced`的例子
+
+``` json
+{
+  "task": [
+        {    
+            "name": "测试A",
+            "entry": "任务A",
+            "advanced": ["高级设置A","高级设置B"]
+        }
+  ],
+  "advanced": {
+    "高级设置A": {
+      "field": "ce",
+      "type": "string",
+      "default": "cs.png",
+      "pipeline_override": {
+          "任务A": {
+            "template": "{ce}"
+          }
+      }
+    },
+    "高级设置B": {
+      "field": ["x","y"],
+      "type": ["int", "int"],
+      "default": ["1", "1"],
+      "pipeline_override": {
+          "任务A": {
+            "roi": ["{x}","{y}",3,4]
+          }
+      }
+    }
+  }
+}
+```
+**注：field和type和default支持string | list<string>类型，default默认为空。**
+**注：上面json中注释内容为文档介绍用，实际运行时不能写入。**
 
 - 运行
 

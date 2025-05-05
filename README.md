@@ -176,6 +176,7 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
 }
 ```
 **注：field和type和default支持string | list<string>类型，default默认为空。**
+
 **注：上面json中注释内容为文档介绍用，实际运行时不能写入。**
 
 - 运行

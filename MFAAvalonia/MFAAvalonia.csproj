@@ -36,8 +36,8 @@
         <ApplicationRevision>0</ApplicationRevision>
         <ApplicationVersion>1.1.0</ApplicationVersion>
         <Version>1.1</Version>
-        <FileVersion>1.2.4</FileVersion>
-        <AssemblyVersion>1.2.4</AssemblyVersion>
+        <FileVersion>1.2.5</FileVersion>
+        <AssemblyVersion>1.2.5</AssemblyVersion>
         <InformationalVersion>0.0.1</InformationalVersion>
     </PropertyGroup>
 
@@ -82,7 +82,7 @@
         <PackageReference Include="Maa.Framework.Binding.Extensions" Version="4.0.0-preview.25168.1" />
         <PackageReference Include="Maa.Framework.Binding.Native" Version="4.0.0-preview.25168.1" />
         <PackageReference Include="Maa.Framework.Native" Version="4.0.0-preview.25168.1" />
-        <PackageReference Include="Maa.Framework.Runtimes" Version="4.1.0" />
+        <PackageReference Include="Maa.Framework.Runtimes" Version="4.1.2" />
         <PackageReference Include="MailKit" Version="4.12.0" />
         <PackageReference Include="Markdown.Avalonia" Version="11.0.3-a1" />
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.13.0" />

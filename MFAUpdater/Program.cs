@@ -36,7 +36,7 @@ public class Program
 
     private static void ValidateArguments(string[] args)
     {
-        if (args.Length is not (2 or 4)) // C# 9模式匹配
+        if (args.Length is not (2 or 3 or 4)) // C# 9模式匹配
         {
             Log("""
                 用法: 
@@ -66,7 +66,8 @@ public class Program
 
             if (args.Length == 4)
                 HandleAppRename(source, dest, args[2].Replace("\\\"", "\"").Replace("\"", ""), args[3].Replace("\\\"", "\"").Replace("\"", "")); // 重命名与启动分离
-
+            if (args.Length == 3)
+                StartCrossPlatformProcess(args[2].Replace("\\\"", "\"").Replace("\"", ""));
             HandleDeleteDirectoryTransfer(source);
         }
         catch (Exception ex)

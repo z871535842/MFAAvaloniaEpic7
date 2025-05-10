@@ -680,12 +680,12 @@ public static class VersionChecker
             EscapeArgument(target)
         };
 
-        if (!string.IsNullOrWhiteSpace(oldName) && !string.IsNullOrWhiteSpace(newName))
-        {
+        if (!string.IsNullOrWhiteSpace(oldName))
             args.Add(EscapeArgument(oldName));
+        
+        if (!string.IsNullOrWhiteSpace(newName))
             args.Add(EscapeArgument(newName));
-        }
-
+        
         return string.Join(" ", args);
     }
 
@@ -872,11 +872,11 @@ public static class VersionChecker
             var utf8Bytes = Encoding.UTF8.GetBytes(AppContext.BaseDirectory);
             var utf8BaseDirectory = Encoding.UTF8.GetString(utf8Bytes);
             var sourceBytes = Encoding.UTF8.GetBytes(Path.Combine(extractDir, "bin"));
-            var sourceDirectory = Encoding.UTF8.GetString(utf8Bytes);
+            var sourceDirectory = Encoding.UTF8.GetString(sourceBytes);
             SetProgress(progress, 100);
 
             // 清理与重启（复用ApplySecureUpdate）
-            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory);
+            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, Process.GetCurrentProcess().MainModule.ModuleName);
         }
         finally
         {

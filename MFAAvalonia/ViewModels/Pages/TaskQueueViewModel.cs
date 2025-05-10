@@ -633,6 +633,7 @@ public partial class TaskQueueViewModel : ViewModelBase
         {
             if (!string.IsNullOrWhiteSpace(value))
             {
+                MaaProcessor.Instance.SetTasker();
                 SetNewProperty(ref _currentResource, value);
                 HandlePropertyChanged(ConfigurationKeys.Resource, value);
             }

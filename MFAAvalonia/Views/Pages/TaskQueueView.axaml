@@ -141,7 +141,7 @@
                             <ListBox Classes="Fluent" 
                                      DragDrop.AllowDrop="{Binding Idle,Source={x:Static helper:Instances.RootViewModel}}"
                                      ex:DragDropExtensions.EnableDragDrop="True"
-                                     ex:DragDropExtensions.DragStartThreshold="10"
+                                     ex:DragDropExtensions.DragStartThreshold="2"
                                      ex:DragDropExtensions.EnableAnimation="True"
                                      ItemsSource="{Binding Path=TaskItemViewModels}"
                                      Margin="0,3,0,0"

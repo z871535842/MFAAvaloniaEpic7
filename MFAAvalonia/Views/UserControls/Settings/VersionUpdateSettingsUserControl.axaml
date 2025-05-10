@@ -85,7 +85,7 @@
                 <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==0'}">
                     <suki:PasswordBox
                         DockPanel.Dock="Right" Watermark="{markup:I18n {x:Static helper:LangKeys.Optional}}"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Center" MinHeight="40"
                         Password="{Binding GitHubToken}"
                         Width="215" />
                     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">

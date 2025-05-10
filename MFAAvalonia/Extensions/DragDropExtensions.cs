@@ -481,9 +481,6 @@ public class DragDropExtensions
     private static int GetSourceIndex(ListBox listBox, Point position, int defaultValue)
     {
         // 获取滚动视图和相关项
-        var scrollViewer = listBox.GetVisualDescendants()
-            .OfType<ScrollViewer>()
-            .FirstOrDefault();
         var items = listBox.GetVisualDescendants()
             .OfType<ListBoxItem>()
             .ToList();

@@ -828,8 +828,17 @@ public static class VersionChecker
             var resId = "MaaFramework";
             var currentVersion = MaaProcessor.Utility.Version;
             string downloadUrl = string.Empty, latestVersion = string.Empty;
-            GetDownloadUrlFromMirror(currentVersion, resId, CDK(), out downloadUrl, out latestVersion, "MFA", true);
-
+            try
+            {
+                GetDownloadUrlFromMirror(currentVersion, resId, CDK(), out downloadUrl, out latestVersion, "MFA", true);
+            }
+            catch (Exception ex)
+            {
+                Dismiss(sukiToast);
+                ToastHelper.Warn($"{"FailToGetLatestVersionInfo".ToLocalization()}", ex.Message);
+                LoggerHelper.Error(ex);
+                return;
+            }
             // 版本校验（保持原有逻辑）
             SetProgress(progress, 50);
             if (!IsNewVersionAvailable(latestVersion, currentVersion))

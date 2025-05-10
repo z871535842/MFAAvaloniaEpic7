@@ -265,7 +265,7 @@
                             VerticalAlignment="Center" />
                     </StackPanel>
                 </DockPanel>
-                <DockPanel>
+                <DockPanel IsVisible="{calcBinding:Binding 'DownloadSourceIndex==1'}">
                     <Button
                         BorderBrush="Transparent"
                         BorderThickness="0"

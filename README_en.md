@@ -87,7 +87,7 @@ Modify it as follows:
   "name": "Project Name", // Default is null
   "version":  "Project Version", // Default is null
   "mirrorchyan_rid":  "Project ID (necessary fields downloaded from MirrorChyan)", // Default is null, for example, M9A
-  "mirrorchyan_multiplatform": "Multi-platform flag", // Default: false
+  "mirrorchyan_multiplatform": false, //Multi-platform flag, Default: false
   "url":  "Project URL (currently only supports Github)", // Default is null, for example, https://github.com/{GithubAccount}/{GithubRepo}
   "custom_title": "Custom Title", // Default is null, after using this field, the title bar will only show custom_title and version
   "resource": [

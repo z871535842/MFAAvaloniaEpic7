@@ -113,6 +113,7 @@ public partial class RootView : SukiWindow
         WindowState = WindowState.Normal;
         Activate();
     }
+
 #pragma warning disable CS4014 // 由于此调用不会等待，因此在此调用完成之前将会继续执行当前方法。请考虑将 "await" 运算符应用于调用结果。
     protected override void OnClosing(WindowClosingEventArgs e)
     {
@@ -126,13 +127,16 @@ public partial class RootView : SukiWindow
 
     protected override void OnClosed(EventArgs e)
     {
-        ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, Instances.TaskQueueViewModel.TaskItemViewModels.ToList().Select(model => model.InterfaceItem));
+        if (!GlobalHotkeyService.IsStopped)
+        {
+            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, Instances.TaskQueueViewModel.TaskItemViewModels.ToList().Select(model => model.InterfaceItem));
 
-        // 确保窗口大小被保存
-        SaveWindowSize();
+            // 确保窗口大小被保存
+            SaveWindowSize();
 
-        MaaProcessor.Instance.SetTasker();
-        GlobalHotkeyService.Shutdown();
+            MaaProcessor.Instance.SetTasker();
+            GlobalHotkeyService.Shutdown();
+        }
         base.OnClosed(e);
     }
 
@@ -155,6 +159,8 @@ public partial class RootView : SukiWindow
         {
             try
             {
+                if (Instances.RootViewModel.IsRunning)
+                    MaaProcessor.Instance.Stop();
                 action?.Invoke();
             }
             catch (Exception e)

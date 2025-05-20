@@ -49,7 +49,6 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            
             desktop.ShutdownRequested += OnShutdownRequested;
             var services = new ServiceCollection();
 
@@ -72,18 +71,15 @@ public partial class App : Application
 
         base.OnFrameworkInitializationCompleted();
     }
-    
+
     private void OnShutdownRequested(object sender, ShutdownRequestedEventArgs e)
     {
-        if (!GlobalHotkeyService.IsStopped)
-        {
-            ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, Instances.TaskQueueViewModel.TaskItemViewModels.ToList().Select(model => model.InterfaceItem));
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, Instances.TaskQueueViewModel.TaskItemViewModels.ToList().Select(model => model.InterfaceItem));
 
-            MaaProcessor.Instance.SetTasker();
-            GlobalHotkeyService.Shutdown();
-        }
+        MaaProcessor.Instance.SetTasker();
+        GlobalHotkeyService.Shutdown();
     }
-    
+
     private static ViewsHelper ConfigureViews(ServiceCollection services)
     {
 
@@ -101,7 +97,6 @@ public partial class App : Application
             .AddView<AddTaskDialogView, AddTaskDialogViewModel>(services)
             .AddView<AdbEditorDialogView, AdbEditorDialogViewModel>(services)
             .AddView<CustomThemeDialogView, CustomThemeDialogViewModel>(services)
-            
             .AddView<ConnectSettingsUserControl, ConnectSettingsUserControlModel>(services)
             .AddView<GameSettingsUserControl, GameSettingsUserControlModel>(services)
             .AddView<GuiSettingsUserControl, GuiSettingsUserControlModel>(services)
@@ -110,7 +105,6 @@ public partial class App : Application
             .AddView<TimerSettingsUserControl, TimerSettingsUserControlModel>(services)
             .AddView<PerformanceUserControl, PerformanceUserControlModel>(services)
             .AddView<VersionUpdateSettingsUserControl, VersionUpdateSettingsUserControlModel>(services)
-            
             .AddOnlyViewModel<AnnouncementView, AnnouncementViewModel>(services)
             .AddOnlyView<AboutUserControl, SettingsViewModel>(services)
             .AddOnlyView<HotKeySettingsUserControl, SettingsViewModel>(services)
@@ -173,6 +167,4 @@ public partial class App : Application
 
         e.SetObserved(); //设置该异常已察觉（这样处理后就不会引起程序崩溃）
     }
-    
-    
 }

@@ -96,6 +96,8 @@ public class MaaProcessor
     {
         if (maaTasker == null)
         {
+            if (_agentClient != null)
+                LoggerHelper.Info("退出Agent进程");
             _agentClient?.LinkStop();
             _agentClient?.Dispose();
             _agentClient = null;
@@ -838,7 +840,7 @@ public class MaaProcessor
                                 LoggerHelper.Warning(e);
                             }
                         }
-                        
+
                         taskDictionary = taskDictionary.MergeMaaNodes(taskDictionaryA);
                     }
                 }

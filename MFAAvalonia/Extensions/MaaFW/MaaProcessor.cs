@@ -813,24 +813,32 @@ public class MaaProcessor
                         if (!Path.Exists($"{resourcePath}/pipeline/"))
                             break;
                         var jsonFiles = Directory.GetFiles(Path.GetFullPath($"{resourcePath}/pipeline/"), "*.json", SearchOption.AllDirectories);
+
                         var taskDictionaryA = new Dictionary<string, MaaNode>();
                         foreach (var file in jsonFiles)
                         {
                             var content = File.ReadAllText(file);
-
-                            var taskData = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(content);
-                            if (taskData == null || taskData.Count == 0)
-                                break;
-                            foreach (var task in taskData)
+                            Console.WriteLine($"Loading Pipeline: {file}");
+                            try
                             {
-                                if (!taskDictionaryA.TryAdd(task.Key, task.Value))
+                                var taskData = JsonConvert.DeserializeObject<Dictionary<string, MaaNode>>(content);
+                                if (taskData == null || taskData.Count == 0)
+                                    continue;
+                                foreach (var task in taskData)
                                 {
-                                    ToastHelper.Error("DuplicateTaskError".ToLocalizationFormatted(false, task.Key));
-                                    return false;
+                                    if (!taskDictionaryA.TryAdd(task.Key, task.Value))
+                                    {
+                                        ToastHelper.Error("DuplicateTaskError".ToLocalizationFormatted(false, task.Key));
+                                        return false;
+                                    }
                                 }
                             }
+                            catch (Exception e)
+                            {
+                                LoggerHelper.Warning(e);
+                            }
                         }
-
+                        
                         taskDictionary = taskDictionary.MergeMaaNodes(taskDictionaryA);
                     }
                 }

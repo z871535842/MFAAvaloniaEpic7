@@ -36,7 +36,7 @@ public class MaaProcessor
     public static string Resource => Path.Combine(AppContext.BaseDirectory, "Resource");
     public static string ResourceBase => Path.Combine(Resource, "base");
     public static MaaProcessor Instance { get; } = new();
-    public static MaaToolkit Toolkit { get; } = new();
+    public static MaaToolkit Toolkit { get; } = new(true);
     public static MaaUtility Utility { get; } = new();
 
     private static MaaInterface? _interface;
@@ -45,11 +45,6 @@ public class MaaProcessor
 
     public Dictionary<string, MaaNode> NodeDictionary = new();
     public ObservableQueue<MFATask> TaskQueue { get; } = new();
-
-    static MaaProcessor()
-    {
-        Toolkit.Config.InitOption(AppContext.BaseDirectory);
-    }
 
     public MaaProcessor()
     {
@@ -2088,7 +2083,7 @@ public class MaaProcessor
 
     private bool AbortCurrentTasker()
     {
-        return MaaTasker == null || MaaTasker.Abort().Wait() == MaaJobStatus.Succeeded;
+        return MaaTasker == null || MaaTasker.Stop().Wait() == MaaJobStatus.Succeeded;
     }
 
     private void HandleStopResult(bool finished, bool success, bool onlyStart, Action? action = null)

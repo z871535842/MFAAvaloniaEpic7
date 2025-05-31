@@ -296,10 +296,11 @@ public class MaaProcessor
 
                 var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
                 var identifier = string.IsNullOrWhiteSpace(Interface?.Agent?.Identifier) ? new string(Enumerable.Repeat(chars, 8).Select(c => c[Random.Next(c.Length)]).ToArray()) : Interface.Agent.Identifier;
-                _agentClient = MaaAgentClient.Create(identifier, maaResource);
-
+                LoggerHelper.Info($"Agent Identifier: {identifier}");
                 try
                 {
+                    _agentClient = MaaAgentClient.Create(identifier, maaResource);
+                    LoggerHelper.Info($"Agent Client Hash: {_agentClient?.GetHashCode()}");
                     if (!Directory.Exists($"{AppContext.BaseDirectory}"))
                         Directory.CreateDirectory($"{AppContext.BaseDirectory}");
                     var program = MaaInterface.ReplacePlaceholder(agentConfig.ChildExec, AppContext.BaseDirectory);
@@ -312,6 +313,8 @@ public class MaaProcessor
                         UseShellExecute = false,
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
+                        StandardErrorEncoding = Encoding.UTF8,
+                        StandardOutputEncoding = Encoding.UTF8,
                         WindowStyle = ProcessWindowStyle.Hidden,
                         CreateNoWindow = true
                     };

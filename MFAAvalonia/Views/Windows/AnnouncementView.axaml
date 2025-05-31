@@ -57,7 +57,7 @@
                     <StaticResource ResourceKey="MdXamlPlugin" />
                 </full:MarkdownScrollViewer.Plugins>
                 <full:MarkdownScrollViewer.Styles>
-                    <StaticResource ResourceKey="MdXamlStyle" />
+                    <StyleInclude Source="avares://MFAAvalonia/Assets/Style/MdXamlStyles.axaml" />
                 </full:MarkdownScrollViewer.Styles>
             </full:MarkdownScrollViewer>
         </ScrollViewer>

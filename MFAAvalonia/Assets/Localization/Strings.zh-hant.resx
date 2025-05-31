@@ -1073,4 +1073,7 @@
     <data name="GlobalHotkeyServiceError" xml:space="preserve">
         <value>全域快速鍵服務載入失敗</value>
     </data>
+    <data name="UpcomingChanges" xml:space="preserve">
+        <value>即將發生的變更</value>
+    </data>
 </root>

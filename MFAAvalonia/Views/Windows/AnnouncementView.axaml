@@ -11,10 +11,27 @@
     xmlns:helper="clr-namespace:MFAAvalonia.Helper"
     xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia.Tight"
     xmlns:full="https://github.com/whistyun/Markdown.Avalonia"
-    xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows" WindowStartupLocation="CenterScreen"
+    xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows"
+    xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
+    xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-    x:Class="MFAAvalonia.Views.Windows.AnnouncementView"
-    Title="{markup:I18n {x:Static helper:LangKeys.Announcement}}">
+    x:Class="MFAAvalonia.Views.Windows.AnnouncementView">
+    <suki:SukiWindow.Title>
+        <MultiBinding Converter="{converters:AnnouncementTitleConverter}" Mode="OneWay">
+            <Binding Path="IsReleaseNote" />
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.UpcomingChanges" />
+                </x:Arguments>
+            </markup:I18nBinding>
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.Announcement" />
+                </x:Arguments>
+            </markup:I18nBinding>
+        </MultiBinding>
+    </suki:SukiWindow.Title>
     <suki:SukiWindow.LogoContent>
         <Image
             Height="18"
@@ -32,7 +49,7 @@
             Grid.Row="0"
             HorizontalScrollBarVisibility="Disabled"
             VerticalScrollBarVisibility="Auto">
-            <full:MarkdownScrollViewer 
+            <full:MarkdownScrollViewer
                 Focusable="True"
                 Margin="10,0,10,0"
                 Markdown="{Binding AnnouncementInfo, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
@@ -45,14 +62,14 @@
             </full:MarkdownScrollViewer>
         </ScrollViewer>
 
-        <CheckBox
-            Content="{markup:I18n {x:Static helper:LangKeys.ShowDisclaimerNoMore}}"
-            Grid.Row="1"
-            Height="30"
-            HorizontalAlignment="Center"
-            IsChecked="{Binding DoNotRemindThisAnnouncementAgain}"
-            Margin="6"
-            VerticalContentAlignment="Center" />
+        <CheckBox IsVisible="{calcBinding:Binding Path='!IsReleaseNote' }"
+                  Content="{markup:I18n {x:Static helper:LangKeys.ShowDisclaimerNoMore}}"
+                  Grid.Row="1"
+                  Height="30"
+                  HorizontalAlignment="Center"
+                  IsChecked="{Binding DoNotRemindThisAnnouncementAgain}"
+                  Margin="6"
+                  VerticalContentAlignment="Center" />
 
         <Button
             Click="Close"

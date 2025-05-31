@@ -105,7 +105,6 @@ public partial class App : Application
             .AddView<TimerSettingsUserControl, TimerSettingsUserControlModel>(services)
             .AddView<PerformanceUserControl, PerformanceUserControlModel>(services)
             .AddView<VersionUpdateSettingsUserControl, VersionUpdateSettingsUserControlModel>(services)
-            .AddOnlyViewModel<AnnouncementView, AnnouncementViewModel>(services)
             .AddOnlyView<AboutUserControl, SettingsViewModel>(services)
             .AddOnlyView<HotKeySettingsUserControl, SettingsViewModel>(services)
             .AddOnlyView<ConfigurationMgrUserControl, SettingsViewModel>(services);

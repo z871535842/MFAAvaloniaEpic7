@@ -137,7 +137,7 @@ public static class VersionChecker
 
             string latestVersion = string.Empty;
             if (isGithub)
-                GetLatestVersionAndDownloadUrlFromGithub(out var downloadUrl, out latestVersion, strings[0], strings[1]);
+                GetLatestVersionAndDownloadUrlFromGithub(out var downloadUrl, out latestVersion, strings[0], strings[1], true);
             else
                 GetDownloadUrlFromMirror(resourceVersion, GetResourceID(), CDK(), out _, out latestVersion, onlyCheck: true);
 
@@ -171,6 +171,10 @@ public static class VersionChecker
             else
                 ToastHelper.Error("ErrorWhenCheck".ToLocalizationFormatted(true, "Resource"), ex.Message);
             LoggerHelper.Error(ex);
+        }
+        finally
+        {
+            DispatcherHelper.RunOnMainThread(AnnouncementViewModel.CheckReleaseNote);
         }
     }
 
@@ -682,10 +686,10 @@ public static class VersionChecker
 
         if (!string.IsNullOrWhiteSpace(oldName))
             args.Add(EscapeArgument(oldName));
-        
+
         if (!string.IsNullOrWhiteSpace(newName))
             args.Add(EscapeArgument(newName));
-        
+
         return string.Join(" ", args);
     }
 
@@ -905,7 +909,7 @@ public static class VersionChecker
     }
 
 
-    public static void GetLatestVersionAndDownloadUrlFromGithub(out string url, out string latestVersion, string owner = "SweetSmellFox", string repo = "MFAAvalonia")
+    public static void GetLatestVersionAndDownloadUrlFromGithub(out string url, out string latestVersion, string owner = "SweetSmellFox", string repo = "MFAAvalonia", bool onlyCheck = false)
     {
         url = string.Empty;
         latestVersion = string.Empty;
@@ -953,6 +957,10 @@ public static class VersionChecker
                         latestVersion = tag["tag_name"]?.ToString();
                         if (!string.IsNullOrEmpty(latestVersion))
                         {
+                            if (onlyCheck && repo != "MFAAvalonia")
+                                SaveRelease(tag, "body");
+                            if (!onlyCheck && repo != "MFAAvalonia")
+                                SaveAnnouncement(tag, "body");
                             url = GetDownloadUrlFromGitHubRelease(latestVersion, owner, repo);
                             return;
                         }
@@ -1154,6 +1162,10 @@ public static class VersionChecker
 
             // 成功处理
             var data = responseData["data"]!;
+            if (onlyCheck && !isUI && data != null)
+            {
+                SaveRelease(data, "release_note");
+            }
             if (!onlyCheck && !isUI && data != null)
             {
                 SaveAnnouncement(data, "release_note");
@@ -1499,6 +1511,26 @@ public static class VersionChecker
             DirectoryMerge(subDir.FullName, tempPath);
         }
     }
+    private static void SaveRelease(JToken? releaseData, string from)
+    {
+        try
+        {
+            var bodyContent = releaseData?[from]?.ToString();
+            if (!string.IsNullOrWhiteSpace(bodyContent) && bodyContent != "placeholder")
+            {
+                var resourceDirectory = Path.Combine(AppContext.BaseDirectory, "resource");
+                Directory.CreateDirectory(resourceDirectory);
+                var filePath = Path.Combine(resourceDirectory, AnnouncementViewModel.ReleaseFileName);
+                File.WriteAllText(filePath, bodyContent);
+                LoggerHelper.Info($"{AnnouncementViewModel.ReleaseFileName} saved successfully.");
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"Error saving {AnnouncementViewModel.ReleaseFileName}: {ex.Message}");
+        }
+    }
+
     private static void SaveAnnouncement(JToken? releaseData, string from)
     {
         try

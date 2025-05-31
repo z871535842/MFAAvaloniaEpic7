@@ -10,6 +10,7 @@ namespace MFAAvalonia.ViewModels.Windows;
 public partial class AnnouncementViewModel : ViewModelBase
 {
     public static readonly string AnnouncementFileName = "Announcement.md";
+    public static readonly string ReleaseFileName = "Release.md";
     [ObservableProperty] private string _announcementInfo = string.Empty;
 
     [ObservableProperty] private bool _doNotRemindThisAnnouncementAgain = Convert.ToBoolean(GlobalConfiguration.GetValue(ConfigurationKeys.DoNotShowAgain, bool.FalseString));
@@ -18,10 +19,48 @@ public partial class AnnouncementViewModel : ViewModelBase
         GlobalConfiguration.SetValue(ConfigurationKeys.DoNotShowAgain, value.ToString());
     }
 
+    [ObservableProperty] private bool _isReleaseNote = false;
 
-    public void CheckAnnouncement()
+    public static void CheckReleaseNote()
     {
-        if (DoNotRemindThisAnnouncementAgain) return;
+        var viewModel = new AnnouncementViewModel()
+        {
+            IsReleaseNote = true
+        };
+        try
+        {
+            var resourcePath = Path.Combine(AppContext.BaseDirectory, "resource");
+            var mdPath = Path.Combine(resourcePath, ReleaseFileName);
+
+            if (File.Exists(mdPath))
+            {
+                var content = File.ReadAllText(mdPath);
+                viewModel.AnnouncementInfo = content;
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"读取Release Note文件失败: {ex.Message}");
+            viewModel.AnnouncementInfo = "";
+        }
+        finally
+        {
+
+            if (!string.IsNullOrWhiteSpace(viewModel.AnnouncementInfo) && !viewModel.AnnouncementInfo.Trim().Equals("placeholder", StringComparison.OrdinalIgnoreCase))
+            {
+                var announcementView = new AnnouncementView
+                {
+                    DataContext = viewModel
+                };
+                announcementView.Show();
+            }
+        }
+    }
+
+    public static void CheckAnnouncement()
+    {
+        var viewModel = new AnnouncementViewModel();
+        if (viewModel.DoNotRemindThisAnnouncementAgain) return;
         try
         {
             var resourcePath = Path.Combine(AppContext.BaseDirectory, "resource");
@@ -30,20 +69,23 @@ public partial class AnnouncementViewModel : ViewModelBase
             if (File.Exists(mdPath))
             {
                 var content = File.ReadAllText(mdPath);
-                AnnouncementInfo = content;
+                viewModel.AnnouncementInfo = content;
             }
         }
         catch (Exception ex)
         {
             LoggerHelper.Error($"读取公告文件失败: {ex.Message}");
-            AnnouncementInfo = "";
+            viewModel.AnnouncementInfo = "";
         }
         finally
         {
 
-            if (!string.IsNullOrWhiteSpace(AnnouncementInfo) && !AnnouncementInfo.Trim().Equals("placeholder", StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrWhiteSpace(viewModel.AnnouncementInfo) && !viewModel.AnnouncementInfo.Trim().Equals("placeholder", StringComparison.OrdinalIgnoreCase))
             {
-                var announcementView = new AnnouncementView();
+                var announcementView = new AnnouncementView
+                {
+                    DataContext = viewModel
+                };
                 announcementView.Show();
             }
         }

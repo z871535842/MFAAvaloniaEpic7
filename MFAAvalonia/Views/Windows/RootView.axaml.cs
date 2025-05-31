@@ -11,6 +11,7 @@ using MFAAvalonia.Extensions;
 using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Helper;
 using MFAAvalonia.Helper.ValueType;
+using MFAAvalonia.ViewModels.Windows;
 using MFAAvalonia.Views.UserControls;
 using Newtonsoft.Json;
 using SukiUI.Controls;
@@ -268,7 +269,7 @@ public partial class RootView : SukiWindow
             await Task.Delay(1000);
             DispatcherHelper.RunOnMainThread(() =>
             {
-                Instances.AnnouncementViewModel.CheckAnnouncement();
+                AnnouncementViewModel.CheckAnnouncement();
                 if (ConfigurationManager.Current.GetValue(ConfigurationKeys.AutoMinimize, false))
                 {
                     WindowState = WindowState.Minimized;

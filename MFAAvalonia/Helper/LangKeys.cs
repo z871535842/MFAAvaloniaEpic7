@@ -362,4 +362,7 @@ public static class LangKeys
 	public static readonly string Optional = "Optional";
 	public static readonly string ExternalNotificationEnableCustomNotificationMessage = "ExternalNotificationEnableCustomNotificationMessage";
 	public static readonly string ExternalNotificationCustomNotificationContent = "ExternalNotificationCustomNotificationContent";
+	public static readonly string ExternalNotificationTest = "ExternalNotificationTest";
+	public static readonly string GlobalHotkeyServiceError = "GlobalHotkeyServiceError";
+	public static readonly string UpcomingChanges = "UpcomingChanges";
 }

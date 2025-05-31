@@ -82,6 +82,7 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
     {
         VersionChecker.CheckResourceVersionAsync();
     }
+    
     [RelayCommand]
     private void UpdateMFA()
     {

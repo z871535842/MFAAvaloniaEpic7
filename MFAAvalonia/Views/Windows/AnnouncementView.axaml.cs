@@ -12,7 +12,6 @@ public partial class AnnouncementView : SukiWindow
 {
     public AnnouncementView()
     {
-        DataContext = Instances.AnnouncementViewModel;
         InitializeComponent();
     }
     

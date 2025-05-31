@@ -1080,4 +1080,7 @@
     <data name="GlobalHotkeyServiceError" xml:space="preserve">
         <value>全局热键服务加载失败</value>
     </data>
+    <data name="UpcomingChanges" xml:space="preserve">
+        <value>即将更新</value>
+    </data>
 </root>

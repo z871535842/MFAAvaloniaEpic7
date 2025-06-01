@@ -156,6 +156,7 @@ public static class VersionChecker
                         .WithActionButton("Later".ToLocalization(), _ => { }, true, SukiButtonStyles.Basic)
                         .WithActionButton("Update".ToLocalization(), _ => UpdateResourceAsync(), true).Queue();
                 });
+                DispatcherHelper.RunOnMainThread(AnnouncementViewModel.CheckReleaseNote);
             }
             else
             {
@@ -171,10 +172,6 @@ public static class VersionChecker
             else
                 ToastHelper.Error("ErrorWhenCheck".ToLocalizationFormatted(true, "Resource"), ex.Message);
             LoggerHelper.Error(ex);
-        }
-        finally
-        {
-            DispatcherHelper.RunOnMainThread(AnnouncementViewModel.CheckReleaseNote);
         }
     }
 

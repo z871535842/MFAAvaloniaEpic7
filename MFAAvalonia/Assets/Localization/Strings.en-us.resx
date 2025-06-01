@@ -171,7 +171,7 @@
         <value>Color Theme</value>
     </data>
     <data name="CommonSetting" xml:space="preserve">
-        <value> Common </value>
+        <value>Common</value>
     </data>
     <data name="ConfigAddedSuccessfully" xml:space="preserve">
         <value>Configuration &lt;{0}&gt; added successfully!</value>

@@ -7,6 +7,7 @@ using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Layout;
 using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.MarkupExtensions;
 using Avalonia.Media;
@@ -255,7 +256,7 @@ public partial class TaskQueueView : UserControl
 
     #region 任务选项
 
-    private static readonly ConcurrentDictionary<string, StackPanel> CommonPanelCache = new();
+    private static readonly ConcurrentDictionary<string, Control> CommonPanelCache = new();
     private static readonly ConcurrentDictionary<string, string> IntroductionsCache = new();
     private void SetMarkDown(string markDown)
     {
@@ -293,30 +294,73 @@ public partial class TaskQueueView : UserControl
         });
 
         SetMarkDown(newIntroduction);
-        if (newPanel.Children.Count == 0)
-            CommonPanelCache.Remove(cacheKey, out _);
         newPanel.IsVisible = true;
     }
 
 
     private void GeneratePanelContent(StackPanel panel, DragItemViewModel dragItem)
     {
-        AddRepeatOption(panel, dragItem);
+        if ((dragItem.InterfaceItem?.Advanced == null || dragItem.InterfaceItem.Advanced.Count == 0) || (dragItem.InterfaceItem?.Option == null || dragItem.InterfaceItem.Option.Count == 0))
+        {
+            AddRepeatOption(panel, dragItem);
+
+            if (dragItem.InterfaceItem?.Option != null)
+            {
+                foreach (var option in dragItem.InterfaceItem.Option)
+                {
+                    AddOption(panel, option, dragItem);
+                }
+            }
+
+            if (dragItem.InterfaceItem?.Advanced != null)
+            {
+                foreach (var option in dragItem.InterfaceItem.Advanced)
+                {
+                    AddAdvancedOption(panel, option);
+                }
+            }
+            return;
+        }
+        var commonPanel = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            Margin = new Thickness(0, 0, 0, 5)
+        };
+        var advancedPanel = new StackPanel
+        {
+            Orientation = Orientation.Vertical,
+            Margin = new Thickness(0, 0, 0, 5)
+        };
+        var tab = new TabControl
+        {
+            TabStripPlacement = Dock.Top,
+        };
+        var commonTab = new TabItem();
+        commonTab.Bind(TabItem.HeaderProperty, new I18nBinding("CommonSetting"));
+        var advancedTab = new TabItem();
+        advancedTab.Bind(TabItem.HeaderProperty, new I18nBinding("AdvancedSetting"));
+        commonTab.Content = commonPanel;
+        advancedTab.Content = advancedPanel;
+        AddRepeatOption(commonPanel, dragItem);
 
         if (dragItem.InterfaceItem?.Option != null)
         {
             foreach (var option in dragItem.InterfaceItem.Option)
             {
-                AddOption(panel, option, dragItem);
+                AddOption(commonPanel, option, dragItem);
             }
         }
+
         if (dragItem.InterfaceItem?.Advanced != null)
         {
             foreach (var option in dragItem.InterfaceItem.Advanced)
             {
-                AddAdvancedOption(panel, option);
+                AddAdvancedOption(advancedPanel, option);
             }
         }
+        tab.Items.Add(commonTab);
+        tab.Items.Add(advancedTab);
+        panel.Children.Add(tab);
     }
 
     private void HideCurrentPanel(string key)

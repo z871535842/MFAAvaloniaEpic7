@@ -171,7 +171,7 @@
         <value>顏色主題</value>
     </data>
     <data name="CommonSetting" xml:space="preserve">
-        <value> 常規設定 </value>
+        <value>常規設定</value>
     </data>
     <data name="ConfigAddedSuccessfully" xml:space="preserve">
         <value>配置 &lt;{0}&gt; 新增成功！</value>

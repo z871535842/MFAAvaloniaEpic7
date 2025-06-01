@@ -82,9 +82,11 @@
         <entry key="SukiUI/Theme/ProgressBarStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RadioButtonStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/RichTextBoxStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/ScrollViewerStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/SplitButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/SplitView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TabControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TabControlStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBlock.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBoxStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextEraserButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />

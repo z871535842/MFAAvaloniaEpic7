@@ -46,6 +46,7 @@ using Point = Avalonia.Point;
 using VerticalAlignment = Avalonia.Layout.VerticalAlignment;
 using Avalonia.Threading;
 using MFAAvalonia.ViewModels.Other;
+using SukiUI.Extensions;
 
 namespace MFAAvalonia.Views.Pages;
 
@@ -333,8 +334,9 @@ public partial class TaskQueueView : UserControl
         };
         var tab = new TabControl
         {
-            TabStripPlacement = Dock.Top,
+            TabStripPlacement = Dock.Top
         };
+        TabControlExtensions.SetHeaderHorizontalAlignment(tab, HorizontalAlignment.Center);
         var commonTab = new TabItem();
         commonTab.Bind(TabItem.HeaderProperty, new I18nBinding("CommonSetting"));
         var advancedTab = new TabItem();

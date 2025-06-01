@@ -314,7 +314,6 @@ public class MaaProcessor
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
                         WindowStyle = ProcessWindowStyle.Hidden,
-                        
                         CreateNoWindow = true
                     };
 

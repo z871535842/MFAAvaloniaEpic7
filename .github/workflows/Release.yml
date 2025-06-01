@@ -164,7 +164,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.meta.outputs.tag }}
-          body: ${{ needs.changelog.outputs.release_body }}
+          body: |
+            ${{ needs.changelog.outputs.release_body }}
+            [已有Mirror酱 CDk?前往Mirror酱 高速下载](https://mirrorchyan.com/zh/projects?rid=MFAAvalonia)
           files: |
             artifacts/**/*.zip
           draft: false

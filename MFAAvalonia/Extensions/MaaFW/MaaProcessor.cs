@@ -313,9 +313,8 @@ public class MaaProcessor
                         UseShellExecute = false,
                         RedirectStandardError = true,
                         RedirectStandardOutput = true,
-                        StandardErrorEncoding = Encoding.UTF8,
-                        StandardOutputEncoding = Encoding.UTF8,
                         WindowStyle = ProcessWindowStyle.Hidden,
+                        
                         CreateNoWindow = true
                     };
 

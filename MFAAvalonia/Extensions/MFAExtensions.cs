@@ -61,7 +61,7 @@ public static class MFAExtensions
         return string.Format(format, args);
     }
 
-    public static void AddRange<T>(this ICollection<T> collection, IEnumerable<T> newItems)
+    public static void AddRange<T>(this ICollection<T>? collection, IEnumerable<T> newItems)
     {
         if (collection == null)
             return;

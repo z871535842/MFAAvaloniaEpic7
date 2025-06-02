@@ -1076,4 +1076,7 @@
     <data name="UpcomingChanges" xml:space="preserve">
         <value>即將發生的變更</value>
     </data>
+    <data name="TaskFailed" xml:space="preserve">
+        <value>任務失敗</value>
+    </data>
 </root>

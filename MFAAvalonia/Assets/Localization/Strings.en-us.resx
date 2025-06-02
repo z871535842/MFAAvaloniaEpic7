@@ -1076,4 +1076,7 @@
     <data name="UpcomingChanges" xml:space="preserve">
         <value>Upcoming Changes</value>
     </data>
+    <data name="TaskFailed" xml:space="preserve">
+        <value>Task failed</value>
+    </data>
 </root>

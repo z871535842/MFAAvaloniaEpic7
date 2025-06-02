@@ -94,7 +94,7 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     public void StopTask(Action? action = null)
     {
-        MaaProcessor.Instance.Stop(action: action);
+        MaaProcessor.Instance.Stop(MFATask.MFATaskStatus.STOPPED, action: action);
     }
 
     [RelayCommand]

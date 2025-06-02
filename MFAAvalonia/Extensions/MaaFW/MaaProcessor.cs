@@ -124,6 +124,7 @@ public class MaaProcessor
     private MaaAgentClient? _agentClient;
     private bool _agentStarted;
     private Process? _agentProcess;
+    private MFATask.MFATaskStatus Status = MFATask.MFATaskStatus.NOT_STARTED;
 
     #endregion
 
@@ -423,6 +424,7 @@ public class MaaProcessor
         public List<string>? Failed;
         [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("toast")]
         public List<string>? Toast;
+        [JsonProperty("aborted")] public bool? Aborted;
     }
 
     public static (string Text, string? Color) ParseColorText(string input)
@@ -442,6 +444,8 @@ public class MaaProcessor
 
     private void DisplayFocus(MaaNode taskModel, string message)
     {
+        if (taskModel.Focus == null)
+            return;
         var jToken = JToken.FromObject(taskModel.Focus);
         var focus = new Focus();
         if (jToken.Type == JTokenType.String)
@@ -472,6 +476,10 @@ public class MaaProcessor
                 }
                 break;
             case MaaMsg.Node.Action.Starting:
+                if (focus.Aborted == true)
+                {
+                    Status = MFATask.MFATaskStatus.FAILED;
+                }
                 if (focus.Toast is { Count: > 0 })
                 {
                     var (text, color) = ParseColorText(focus.Toast[0]);
@@ -1651,26 +1659,26 @@ public class MaaProcessor
         AddPostTasksAsync(onlyStart, checkUpdate, token);
         await TaskManager.RunTaskAsync(async () =>
         {
-            var runSuccess = await ExecuteTasks(token);
-            if (runSuccess)
-            {
-                Stop(true, onlyStart);
-            }
+            await ExecuteTasks(token);
+            Stop(Status, true, onlyStart);
         }, token, name: "启动任务");
 
     }
 
-    async private Task<bool> ExecuteTasks(CancellationToken token)
+    async private Task ExecuteTasks(CancellationToken token)
     {
         while (TaskQueue.Count > 0 && !token.IsCancellationRequested)
         {
             var task = TaskQueue.Dequeue();
-            if (!await task.Run(token))
+            var status = await task.Run(token);
+            if (status != MFATask.MFATaskStatus.SUCCEEDED)
             {
-                return false;
+                Status = status;
+                return;
             }
         }
-        return !token.IsCancellationRequested;
+        if (Status == MFATask.MFATaskStatus.NOT_STARTED)
+            Status = !token.IsCancellationRequested ? MFATask.MFATaskStatus.SUCCEEDED : MFATask.MFATaskStatus.STOPPED;
     }
 
     public class NodeAndParam
@@ -1852,7 +1860,7 @@ public class MaaProcessor
         await action();
         if (token.IsCancellationRequested)
         {
-            Stop();
+            Stop(MFATask.MFATaskStatus.STOPPED);
             return false;
         }
         other?.Invoke();
@@ -1873,7 +1881,7 @@ public class MaaProcessor
         RootView.AddLogByKey("ConnectFailed");
         Instances.TaskQueueViewModel.SetConnected(false);
         ToastHelper.Warn("Warning_CannotConnect".ToLocalizationFormatted(true, isAdb ? "Emulator" : "Window"));
-        Stop();
+        Stop(MFATask.MFATaskStatus.STOPPED);
     }
 
     private void AddCoreTasksAsync(List<NodeAndParam> taskAndParams, CancellationToken token)
@@ -1897,7 +1905,7 @@ public class MaaProcessor
         if (maa == null || task == null) return;
 
         var job = maa.AppendTask(task, param ?? "{}");
-        await TaskManager.RunTaskAsync(() => job.Wait().ThrowIfNot(MaaJobStatus.Succeeded), token, catchException: true, shouldLog: false);
+        await TaskManager.RunTaskAsync((Action)(() => job.Wait().ThrowIfNot(MaaJobStatus.Succeeded)), token, (ex) => throw ex, catchException: true, shouldLog: false);
     }
 
     public void RunScript(string str = "Prescript")
@@ -2025,8 +2033,9 @@ public class MaaProcessor
 
     #region 停止任务
 
-    public void Stop(bool finished = false, bool onlyStart = false, Action? action = null)
+    public void Stop(MFATask.MFATaskStatus status, bool finished = false, bool onlyStart = false, Action? action = null)
     {
+        Status = MFATask.MFATaskStatus.NOT_STARTED;
         try
         {
             if (!ShouldProcessStop(finished))
@@ -2043,10 +2052,13 @@ public class MaaProcessor
 
             Instances.RootViewModel.IsRunning = false;
 
+
             ExecuteStopCore(finished, () =>
             {
-                var stopResult = AbortCurrentTasker();
-                HandleStopResult(finished, stopResult, onlyStart, action);
+                var stopResult = true;
+                if (status != MFATask.MFATaskStatus.FAILED)
+                    stopResult = AbortCurrentTasker();
+                HandleStopResult(status, stopResult, onlyStart, action);
             });
 
         }
@@ -2092,11 +2104,11 @@ public class MaaProcessor
         return MaaTasker == null || MaaTasker.Stop().Wait() == MaaJobStatus.Succeeded;
     }
 
-    private void HandleStopResult(bool finished, bool success, bool onlyStart, Action? action = null)
+    private void HandleStopResult(MFATask.MFATaskStatus status, bool success, bool onlyStart, Action? action = null)
     {
         if (success)
         {
-            DisplayTaskCompletionMessage(finished, onlyStart, action);
+            DisplayTaskCompletionMessage(status, onlyStart, action);
         }
         else
         {
@@ -2104,9 +2116,15 @@ public class MaaProcessor
         }
     }
 
-    private void DisplayTaskCompletionMessage(bool finished, bool onlyStart = false, Action? action = null)
+    private void DisplayTaskCompletionMessage(MFATask.MFATaskStatus status, bool onlyStart = false, Action? action = null)
     {
-        if (!finished)
+        if (status == MFATask.MFATaskStatus.FAILED)
+        {
+            ToastHelper.Info("TaskFailed".ToLocalization());
+            RootView.AddLogByKey("TaskFailed");
+            ExternalNotificationHelper.ExternalNotificationAsync("TaskFailed".ToLocalization());
+        }
+        else if (status == MFATask.MFATaskStatus.STOPPED)
         {
             ToastHelper.Info("TaskStopped".ToLocalization());
             RootView.AddLogByKey("TaskAbandoned");

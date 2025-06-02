@@ -8,6 +8,7 @@
         <entry key="MFAAvalonia/Assets/Style/MdXaml.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Style/MdXaml.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Style/MdXamlBaseStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="MFAAvalonia/Assets/Style/MdXamlDocStyle.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Style/MdXamlStyles.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Theme/DarkTheme.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="MFAAvalonia/Assets/Theme/LightTheme.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -39,6 +40,7 @@
         <entry key="SukiUI/ColorTheme/Light.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Experimental/DesktopEnvironment/InternalWindow.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/GlassMorphism/GlassCard.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Controls/GroupBox.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Hosts/SukiDialogHost.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/Hosts/SukiMessageBoxHost.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Controls/InfoBar.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
@@ -87,6 +89,7 @@
         <entry key="SukiUI/Theme/SplitView.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TabControl.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TabControlStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
+        <entry key="SukiUI/Theme/TabItem.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBlock.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextBoxStyles.xaml" value="MFAAvalonia/MFAAvalonia.csproj" />
         <entry key="SukiUI/Theme/TextEraserButton.axaml" value="MFAAvalonia/MFAAvalonia.csproj" />

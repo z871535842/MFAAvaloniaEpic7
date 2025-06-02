@@ -252,13 +252,17 @@ public partial class TaskQueueView : UserControl
             vm.TaskItemViewModels.RemoveAt(index);
             Instances.TaskQueueView.SetOption(taskItemViewModel, false);
             ConfigurationManager.Current.SetValue(ConfigurationKeys.TaskItems, vm.TaskItemViewModels.ToList().Select(model => model.InterfaceItem));
+            vm.ShowSettings = false;
         }
     }
 
     #region 任务选项
 
     private static readonly ConcurrentDictionary<string, Control> CommonPanelCache = new();
+    private static readonly ConcurrentDictionary<string, Control> AdvancedPanelCache = new();
     private static readonly ConcurrentDictionary<string, string> IntroductionsCache = new();
+    private static readonly ConcurrentDictionary<string, bool> ShowCache = new();
+
     private void SetMarkDown(string markDown)
     {
         Introduction.Markdown = markDown;
@@ -266,20 +270,50 @@ public partial class TaskQueueView : UserControl
 
     public void SetOption(DragItemViewModel dragItem, bool value)
     {
+        Instances.TaskQueueViewModel.IsCommon = true;
         var cacheKey = $"{dragItem.Name}_{dragItem.InterfaceItem.GetHashCode()}";
+
         if (!value)
         {
             HideCurrentPanel(cacheKey);
             return;
         }
+
         HideAllPanels();
-        var newPanel = CommonPanelCache.GetOrAdd(cacheKey, key =>
+        var juggle = (dragItem.InterfaceItem?.Advanced == null || dragItem.InterfaceItem.Advanced.Count == 0) || (dragItem.InterfaceItem?.Option == null || dragItem.InterfaceItem.Option.Count == 0);
+        Instances.TaskQueueViewModel.ShowSettings = ShowCache.GetOrAdd(cacheKey,
+            !juggle);
+        if (juggle)
         {
-            var p = new StackPanel();
-            GeneratePanelContent(p, dragItem);
-            CommonOptionSettings.Children.Add(p);
-            return p;
-        });
+            var newPanel = CommonPanelCache.GetOrAdd(cacheKey, key =>
+            {
+                var p = new StackPanel();
+                GeneratePanelContent(p, dragItem);
+                CommonOptionSettings.Children.Add(p);
+                return p;
+            });
+            newPanel.IsVisible = true;
+        }
+        else
+        {
+            var commonPanel = CommonPanelCache.GetOrAdd(cacheKey, key =>
+            {
+                var p = new StackPanel();
+                GenerateCommonPanelContent(p, dragItem);
+                CommonOptionSettings.Children.Add(p);
+                return p;
+            });
+            commonPanel.IsVisible = true;
+
+            var advancedPanel = AdvancedPanelCache.GetOrAdd(cacheKey, key =>
+            {
+                var p = new StackPanel();
+                GenerateAdvancedPanelContent(p, dragItem);
+                AdvancedOptionSettings.Children.Add(p);
+                return p;
+            });
+            advancedPanel.IsVisible = true;
+        }
 
         var newIntroduction = IntroductionsCache.GetOrAdd(cacheKey, key =>
         {
@@ -295,61 +329,20 @@ public partial class TaskQueueView : UserControl
         });
 
         SetMarkDown(newIntroduction);
-        newPanel.IsVisible = true;
+
     }
 
 
     private void GeneratePanelContent(StackPanel panel, DragItemViewModel dragItem)
     {
-        if ((dragItem.InterfaceItem?.Advanced == null || dragItem.InterfaceItem.Advanced.Count == 0) || (dragItem.InterfaceItem?.Option == null || dragItem.InterfaceItem.Option.Count == 0))
-        {
-            AddRepeatOption(panel, dragItem);
 
-            if (dragItem.InterfaceItem?.Option != null)
-            {
-                foreach (var option in dragItem.InterfaceItem.Option)
-                {
-                    AddOption(panel, option, dragItem);
-                }
-            }
-
-            if (dragItem.InterfaceItem?.Advanced != null)
-            {
-                foreach (var option in dragItem.InterfaceItem.Advanced)
-                {
-                    AddAdvancedOption(panel, option);
-                }
-            }
-            return;
-        }
-        var commonPanel = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-            Margin = new Thickness(0, 0, 0, 5)
-        };
-        var advancedPanel = new StackPanel
-        {
-            Orientation = Orientation.Vertical,
-            Margin = new Thickness(0, 0, 0, 5)
-        };
-        var tab = new TabControl
-        {
-            TabStripPlacement = Dock.Top
-        };
-        TabControlExtensions.SetHeaderHorizontalAlignment(tab, HorizontalAlignment.Center);
-        var commonTab = new TabItem();
-        commonTab.Bind(TabItem.HeaderProperty, new I18nBinding("CommonSetting"));
-        var advancedTab = new TabItem();
-        advancedTab.Bind(TabItem.HeaderProperty, new I18nBinding("AdvancedSetting"));
-        commonTab.Content = commonPanel;
-        advancedTab.Content = advancedPanel;
-        AddRepeatOption(commonPanel, dragItem);
+        AddRepeatOption(panel, dragItem);
 
         if (dragItem.InterfaceItem?.Option != null)
         {
             foreach (var option in dragItem.InterfaceItem.Option)
             {
-                AddOption(commonPanel, option, dragItem);
+                AddOption(panel, option, dragItem);
             }
         }
 
@@ -357,12 +350,34 @@ public partial class TaskQueueView : UserControl
         {
             foreach (var option in dragItem.InterfaceItem.Advanced)
             {
-                AddAdvancedOption(advancedPanel, option);
+                AddAdvancedOption(panel, option);
             }
         }
-        tab.Items.Add(commonTab);
-        tab.Items.Add(advancedTab);
-        panel.Children.Add(tab);
+
+    }
+
+    private void GenerateCommonPanelContent(StackPanel panel, DragItemViewModel dragItem)
+    {
+        AddRepeatOption(panel, dragItem);
+
+        if (dragItem.InterfaceItem?.Option != null)
+        {
+            foreach (var option in dragItem.InterfaceItem.Option)
+            {
+                AddOption(panel, option, dragItem);
+            }
+        }
+    }
+
+    private void GenerateAdvancedPanelContent(StackPanel panel, DragItemViewModel dragItem)
+    {
+        if (dragItem.InterfaceItem?.Advanced != null)
+        {
+            foreach (var option in dragItem.InterfaceItem.Advanced)
+            {
+                AddAdvancedOption(panel, option);
+            }
+        }
     }
 
     private void HideCurrentPanel(string key)
@@ -370,6 +385,10 @@ public partial class TaskQueueView : UserControl
         if (CommonPanelCache.TryGetValue(key, out var oldPanel))
         {
             oldPanel.IsVisible = false;
+        }
+        if (AdvancedPanelCache.TryGetValue(key, out var oldaPanel))
+        {
+            oldaPanel.IsVisible = false;
         }
 
         Introduction.Markdown = "";

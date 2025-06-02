@@ -65,6 +65,10 @@ public partial class TaskQueueViewModel : ViewModelBase
 
     #region 任务
 
+    [ObservableProperty] private bool _isCommon = true;
+    [ObservableProperty] private bool _showSettings;
+
+
     [ObservableProperty] private ObservableCollection<DragItemViewModel> _taskItemViewModels = [];
 
     partial void OnTaskItemViewModelsChanged(ObservableCollection<DragItemViewModel> value)

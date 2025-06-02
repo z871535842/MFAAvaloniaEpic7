@@ -58,7 +58,7 @@
         <value>添加任务</value>
     </data>
     <data name="AdvancedSetting" xml:space="preserve">
-        <value>高级设置</value>
+        <value>高级</value>
     </data>
     <data name="AfterTaskOption" xml:space="preserve">
         <value>结束后操作</value>
@@ -178,7 +178,7 @@
         <value>颜色主题</value>
     </data>
     <data name="CommonSetting" xml:space="preserve">
-        <value>常规设置</value>
+        <value>常规</value>
     </data>
     <data name="ConfigAddedSuccessfully" xml:space="preserve">
         <value>配置 &lt;{0}&gt; 添加成功！</value>

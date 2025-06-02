@@ -1084,6 +1084,12 @@
         <value>即将更新</value>
     </data>
     <data name="TaskFailed" xml:space="preserve">
-        <value>任务失败</value>
+        <value>任务运行失败！</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContentFailure" xml:space="preserve">
+        <value>自定义失败通知内容</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContentSuccess" xml:space="preserve">
+        <value>自定义成功通知内容</value>
     </data>
 </root>

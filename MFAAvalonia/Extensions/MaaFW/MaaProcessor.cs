@@ -2122,7 +2122,9 @@ public class MaaProcessor
         {
             ToastHelper.Info("TaskFailed".ToLocalization());
             RootView.AddLogByKey("TaskFailed");
-            ExternalNotificationHelper.ExternalNotificationAsync("TaskFailed".ToLocalization());
+            ExternalNotificationHelper.ExternalNotificationAsync(Instances.ExternalNotificationSettingsUserControlModel.EnabledCustom
+                ? Instances.ExternalNotificationSettingsUserControlModel.CustomFailureText
+                : "TaskFailed".ToLocalization());
         }
         else if (status == MFATask.MFATaskStatus.STOPPED)
         {
@@ -2150,7 +2152,7 @@ public class MaaProcessor
             if (!onlyStart)
             {
                 ExternalNotificationHelper.ExternalNotificationAsync(Instances.ExternalNotificationSettingsUserControlModel.EnabledCustom
-                    ? Instances.ExternalNotificationSettingsUserControlModel.CustomText
+                    ? Instances.ExternalNotificationSettingsUserControlModel.CustomSuccessText
                     : "TaskAllCompleted".ToLocalization());
                 HandleAfterTaskOperation();
             }

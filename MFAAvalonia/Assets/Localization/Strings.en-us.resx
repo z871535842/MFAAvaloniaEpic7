@@ -1077,6 +1077,12 @@
         <value>Upcoming Changes</value>
     </data>
     <data name="TaskFailed" xml:space="preserve">
-        <value>Task failed</value>
+        <value>Task execution failed!</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContentSuccess" xml:space="preserve">
+        <value>Customize success notification content</value>
+    </data>
+    <data name="ExternalNotificationCustomNotificationContentFailure" xml:space="preserve">
+        <value>Customize failure notification content</value>
     </data>
 </root>

@@ -365,4 +365,7 @@ public static class LangKeys
 	public static readonly string ExternalNotificationTest = "ExternalNotificationTest";
 	public static readonly string GlobalHotkeyServiceError = "GlobalHotkeyServiceError";
 	public static readonly string UpcomingChanges = "UpcomingChanges";
+	public static readonly string TaskFailed = "TaskFailed";
+	public static readonly string ExternalNotificationCustomNotificationContentFailure = "ExternalNotificationCustomNotificationContentFailure";
+	public static readonly string ExternalNotificationCustomNotificationContentSuccess = "ExternalNotificationCustomNotificationContentSuccess";
 }

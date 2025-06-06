@@ -44,6 +44,11 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
     ];
     [ObservableProperty] private int _updateChannelIndex = ConfigurationManager.Current.GetValue(ConfigurationKeys.UpdateChannelIndex, 1);
 
+    partial void OnUpdateChannelIndexChanged(int value)
+    {
+        ConfigurationManager.Current.SetValue(ConfigurationKeys.UpdateChannelIndex, value);
+    }
+    
     [ObservableProperty] private string _gitHubToken = SimpleEncryptionHelper.Decrypt(ConfigurationManager.Current.GetValue(ConfigurationKeys.GitHubToken, string.Empty));
 
     partial void OnGitHubTokenChanged(string value)

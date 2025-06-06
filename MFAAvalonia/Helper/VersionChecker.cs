@@ -946,7 +946,7 @@ public static class VersionChecker
                     }
                     foreach (var tag in tags)
                     {
-                        if ((bool)tag["prerelease"])
+                        if ((bool)tag["prerelease"] && !AllowBetaVersion())
                         {
                             continue;
                         }
@@ -1127,11 +1127,11 @@ public static class VersionChecker
             Architecture.Arm64 => "arm64",
             _ => "unknown"
         };
-
+        var channel = AllowBetaVersion() ? "beta" : "stable";
         var multiplatformString = multiplatform ? $"os={os}&arch={arch}&" : "";
         var releaseUrl = isUI
-            ? $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}os={os}&arch={arch}"
-            : $"https://mirrorchyan.com/api/resources/{resId}/latest?current_version={version}&{cdkD}{multiplatformString}user_agent={userAgent}";
+            ? $"https://mirrorchyan.com/api/resources/{resId}/latest?channel={channel}&current_version={version}&{cdkD}os={os}&arch={arch}"
+            : $"https://mirrorchyan.com/api/resources/{resId}/latest?channel={channel}&current_version={version}&{cdkD}{multiplatformString}user_agent={userAgent}";
         using var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("request");
         httpClient.DefaultRequestHeaders.Accept.TryParseAdd("application/json");
@@ -1546,5 +1546,10 @@ public static class VersionChecker
         {
             LoggerHelper.Error($"Error saving {AnnouncementViewModel.AnnouncementFileName}: {ex.Message}");
         }
+    }
+
+    public static bool AllowBetaVersion()
+    {
+        return Instances.VersionUpdateSettingsUserControlModel.UpdateChannelIndex == 0;
     }
 }

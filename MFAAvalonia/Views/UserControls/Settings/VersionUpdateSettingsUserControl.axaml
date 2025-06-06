@@ -67,7 +67,22 @@
             <StackPanel Spacing="10">
                 <DockPanel>
                     <ComboBox
-                        Classes="Switch"
+                        DockPanel.Dock="Right"
+                        ItemsSource="{Binding UpdateChannelList}"
+                        DisplayMemberBinding="{Binding Name}" Width="215"
+                        SelectedIndex="{Binding UpdateChannelIndex}"
+                        IsEnabled="{Binding !IsUpdating, Source={x:Static helper:Instances.RootViewModel}}"
+                        VerticalAlignment="Top" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <TextBlock
+                            FontSize="16"
+                            FontWeight="SemiBold"
+                            Text="{markup:I18n {x:Static helper:LangKeys.UpdateChannel}}"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel>
+                    <ComboBox
                         DockPanel.Dock="Right"
                         ItemsSource="{Binding DownloadSourceList}"
                         DisplayMemberBinding="{Binding Name}" Width="215"

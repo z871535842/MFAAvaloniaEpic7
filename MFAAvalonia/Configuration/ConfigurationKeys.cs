@@ -119,6 +119,7 @@ public static class ConfigurationKeys
 
     #region 更新
 
+    public const string UpdateChannelIndex = "UpdateChannelIndex";
     public const string DownloadSourceIndex = "DownloadSourceIndex";
     public const string EnableAutoUpdateResource = "EnableAutoUpdateResource";
     public const string EnableAutoUpdateMFA = "EnableAutoUpdateMFA";

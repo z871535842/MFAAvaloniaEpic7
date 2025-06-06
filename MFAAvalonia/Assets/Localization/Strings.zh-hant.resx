@@ -1085,4 +1085,13 @@
     <data name="ExternalNotificationCustomNotificationContentFailure" xml:space="preserve">
         <value>自訂失敗通知內容</value>
     </data>
+    <data name="BetaVersion" xml:space="preserve">
+        <value>測試版</value>
+    </data>
+    <data name="StableVersion" xml:space="preserve">
+        <value>正式版</value>
+    </data>
+    <data name="UpdateChannel" xml:space="preserve">
+        <value>更新渠道</value>
+    </data>
 </root>

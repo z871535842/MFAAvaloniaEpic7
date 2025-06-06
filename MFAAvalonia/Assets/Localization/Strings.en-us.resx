@@ -1085,4 +1085,13 @@
     <data name="ExternalNotificationCustomNotificationContentFailure" xml:space="preserve">
         <value>Customize failure notification content</value>
     </data>
+    <data name="BetaVersion" xml:space="preserve">
+        <value>Beta</value>
+    </data>
+    <data name="StableVersion" xml:space="preserve">
+        <value>Stable</value>
+    </data>
+    <data name="UpdateChannel" xml:space="preserve">
+        <value>Update Channel</value>
+    </data>
 </root>

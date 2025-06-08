@@ -43,7 +43,7 @@ public static class VersionChecker
             AutoUpdateMFA = ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableAutoUpdateMFA, false),
             CheckVersion = ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableCheckVersion, true),
         };
-        
+
         if (config.AutoUpdateMFA)
         {
             AddMFAUpdateTask();
@@ -643,7 +643,8 @@ public static class VersionChecker
             }
             SetProgress(progress, 100);
 
-            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}.exe", Process.GetCurrentProcess().MainModule.ModuleName);
+            await ApplySecureUpdate(sourceDirectory, utf8BaseDirectory, $"{Assembly.GetEntryAssembly().GetName().Name}{(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : "")}",
+                Process.GetCurrentProcess().MainModule.ModuleName);
 
             Thread.Sleep(500);
         }

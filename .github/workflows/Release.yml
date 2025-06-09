@@ -166,13 +166,12 @@ jobs:
           tag_name: ${{ needs.meta.outputs.tag }}
           body: |
             ${{ needs.changelog.outputs.release_body }}
-            [已有Mirror酱 CDk?前往Mirror酱 高速下载](https://mirrorchyan.com/zh/projects?rid=MFAAvalonia)
+            [已有Mirror酱 CDk?前往Mirror酱 高速下载](https://mirrorchyan.com/zh/projects?rid=MFAAvalonia&source=mfaagh-release)
           files: |
             artifacts/**/*.zip
           draft: false
           prerelease: ${{ contains(needs.meta.outputs.tag, '-') }}
           generate_release_notes: true
-          replace_existing: true
         env:
           TOKEN: ${{ secrets.MFA_TOKEN }}
 

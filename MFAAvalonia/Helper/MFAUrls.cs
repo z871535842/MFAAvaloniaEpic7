@@ -14,5 +14,5 @@ public class MFAUrls
 
     public const string NewIssueUri = $"{GitHubIssues}/new?assignees=&labels=bug&template=cn-bug-report.yaml";
 
-    public const string PurchaseLink = "https://mirrorchyan.com";
+    public const string PurchaseLink = "https://mirrorchyan.com?rid=MFAAvalonia&source=mfaa-software";
 }

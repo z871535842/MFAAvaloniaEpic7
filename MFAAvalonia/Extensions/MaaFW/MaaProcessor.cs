@@ -33,7 +33,7 @@ public class MaaProcessor
     #region 属性
 
     private static Random Random = new();
-    public static string Resource => Path.Combine(AppContext.BaseDirectory, "Resource");
+    public static string Resource => Path.Combine(AppContext.BaseDirectory, "resource");
     public static string ResourceBase => Path.Combine(Resource, "base");
     public static MaaProcessor Instance { get; } = new();
     public static MaaToolkit Toolkit { get; } = new(true);

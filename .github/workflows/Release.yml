@@ -159,10 +159,12 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-
-      - name: Checkout
-        uses: actions/checkout@v4
         
+      - name: Validate Artifacts
+        run: |
+          ls -R artifacts
+          echo "Total files: $(find artifacts -type f | wc -l)"
+          
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:

@@ -1126,7 +1126,8 @@ public class MaaProcessor
             {
                 if (tempDict.TryGetValue(opt.Name ?? string.Empty, out var existing))
                 {
-                    opt.Index = existing.Index;
+                    if ((Interface?.Option?.TryGetValue(opt.Name ?? string.Empty, out var interfaceOption) ?? false) && interfaceOption.Cases is { Count: > 0 })
+                        opt.Index = Math.Min(existing.Index ?? 0, interfaceOption.Cases.Count - 1);
                 }
                 else
                 {

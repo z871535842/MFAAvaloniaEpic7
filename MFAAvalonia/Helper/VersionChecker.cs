@@ -397,6 +397,17 @@ public static class VersionChecker
                             File.Delete(delPath);
                         }
                     }
+                    if (changesJson?.Modified != null)
+                    {
+                        var delPaths = changesJson.Modified
+                            .Select(del => Path.Combine(AppContext.BaseDirectory, del))
+                            .Where(File.Exists);
+
+                        foreach (var delPath in delPaths)
+                        {
+                            File.Delete(delPath);
+                        }
+                    }
                 }
                 catch (Exception e)
                 {

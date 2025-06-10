@@ -160,6 +160,9 @@ jobs:
         with:
           path: artifacts
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -172,7 +175,6 @@ jobs:
           draft: false
           prerelease: ${{ contains(needs.meta.outputs.tag, '-') }}
           generate_release_notes: true
-          replace_existing: true
         env:
           TOKEN: ${{ secrets.MFA_TOKEN }}
 

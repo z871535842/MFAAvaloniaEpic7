@@ -269,6 +269,7 @@ public partial class RootView : SukiWindow
             await Task.Delay(1000);
             DispatcherHelper.RunOnMainThread(() =>
             {
+                AnnouncementViewModel.CheckChangelog();
                 AnnouncementViewModel.CheckAnnouncement();
                 if (ConfigurationManager.Current.GetValue(ConfigurationKeys.AutoMinimize, false))
                 {

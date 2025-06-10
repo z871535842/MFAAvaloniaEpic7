@@ -362,7 +362,7 @@ public static class VersionChecker
                 foreach (var rfile in Directory.EnumerateFiles(resourcePath, "*", SearchOption.AllDirectories))
                 {
                     var fileName = Path.GetFileName(rfile);
-                    if (fileName.Equals(AnnouncementViewModel.AnnouncementFileName, StringComparison.OrdinalIgnoreCase))
+                    if (fileName.Equals(AnnouncementViewModel.ChangelogFileName, StringComparison.OrdinalIgnoreCase))
                         continue;
 
                     try
@@ -1537,15 +1537,15 @@ public static class VersionChecker
             {
                 var resourceDirectory = Path.Combine(AppContext.BaseDirectory, "resource");
                 Directory.CreateDirectory(resourceDirectory);
-                var filePath = Path.Combine(resourceDirectory, AnnouncementViewModel.AnnouncementFileName);
+                var filePath = Path.Combine(resourceDirectory, AnnouncementViewModel.ChangelogFileName);
                 File.WriteAllText(filePath, bodyContent);
-                LoggerHelper.Info($"{AnnouncementViewModel.AnnouncementFileName} saved successfully.");
-                GlobalConfiguration.SetValue(ConfigurationKeys.DoNotShowAgain, bool.FalseString);
+                LoggerHelper.Info($"{AnnouncementViewModel.ChangelogFileName} saved successfully.");
+                GlobalConfiguration.SetValue(ConfigurationKeys.DoNotShowChangelogAgain, bool.FalseString);
             }
         }
         catch (Exception ex)
         {
-            LoggerHelper.Error($"Error saving {AnnouncementViewModel.AnnouncementFileName}: {ex.Message}");
+            LoggerHelper.Error($"Error saving {AnnouncementViewModel.ChangelogFileName}: {ex.Message}");
         }
     }
 

@@ -13,13 +13,14 @@
     xmlns:full="https://github.com/whistyun/Markdown.Avalonia"
     xmlns:windows="clr-namespace:MFAAvalonia.ViewModels.Windows"
     xmlns:converters="clr-namespace:MFAAvalonia.Helper.Converters"
+    xmlns:type="clr-namespace:MFAAvalonia.Helper.ValueType"
     xmlns:calcBinding="clr-namespace:CalcBinding;assembly=CalcBindingAva"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="MFAAvalonia.Views.Windows.AnnouncementView">
     <suki:SukiWindow.Title>
         <MultiBinding Converter="{converters:AnnouncementTitleConverter}" Mode="OneWay">
-            <Binding Path="IsReleaseNote" />
+            <Binding Path='Type' />
             <markup:I18nBinding>
                 <x:Arguments>
                     <x:Static Member="helper:LangKeys.UpcomingChanges" />
@@ -28,6 +29,11 @@
             <markup:I18nBinding>
                 <x:Arguments>
                     <x:Static Member="helper:LangKeys.Announcement" />
+                </x:Arguments>
+            </markup:I18nBinding>
+            <markup:I18nBinding>
+                <x:Arguments>
+                    <x:Static Member="helper:LangKeys.UpdateLog" />
                 </x:Arguments>
             </markup:I18nBinding>
         </MultiBinding>
@@ -62,7 +68,8 @@
             </full:MarkdownScrollViewer>
         </ScrollViewer>
 
-        <CheckBox IsVisible="{calcBinding:Binding Path='!IsReleaseNote' }"
+        <CheckBox IsVisible="{Binding Converter='{converters:UniversalEqualityConverter}',
+            Path='Type', ConverterParameter='{x:Static type:AnnouncementType.Announcement}'}"
                   Content="{markup:I18n {x:Static helper:LangKeys.ShowDisclaimerNoMore}}"
                   Grid.Row="1"
                   Height="30"
@@ -70,7 +77,16 @@
                   IsChecked="{Binding DoNotRemindThisAnnouncementAgain}"
                   Margin="6"
                   VerticalContentAlignment="Center" />
-
+        <CheckBox
+            IsVisible="{Binding Converter='{converters:UniversalEqualityConverter}',
+            Path='Type', ConverterParameter='{x:Static type:AnnouncementType.Changelog}'}"
+            Content="{markup:I18n {x:Static helper:LangKeys.ShowDisclaimerNoMore}}"
+            Grid.Row="1"
+            Height="30"
+            HorizontalAlignment="Center"
+            IsChecked="{Binding DoNotRemindThisChangelogAgain}"
+            Margin="6"
+            VerticalContentAlignment="Center" />
         <Button
             Click="Close"
             Content="{markup:I18n {x:Static helper:LangKeys.Confirm}}"

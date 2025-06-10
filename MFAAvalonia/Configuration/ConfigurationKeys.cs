@@ -7,7 +7,8 @@ public static class ConfigurationKeys
     public const string DefaultConfig = "DefaultConfig";
     public const string ShowGui = "ShowGui";
     public const string LinkStart = "LinkStart";
-    public const string DoNotShowAgain = "AnnouncementInfo.DoNotShowAgain";
+    public const string DoNotShowAnnouncementAgain = "AnnouncementInfo.DoNotShowAgain";
+    public const string DoNotShowChangelogAgain = "Changelog.DoNotShowAgain";
     public const string ForceScheduledStart = "ForceScheduledStart";
     public const string CustomConfig = "CustomConfig";
     public const string NoAutoStart = "NoAutoStart";

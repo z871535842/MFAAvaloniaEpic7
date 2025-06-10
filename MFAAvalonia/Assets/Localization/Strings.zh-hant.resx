@@ -1094,4 +1094,7 @@
     <data name="UpdateChannel" xml:space="preserve">
         <value>更新渠道</value>
     </data>
+    <data name="UpdateLog" xml:space="preserve">
+        <value>​更新日誌</value>
+    </data>
 </root>

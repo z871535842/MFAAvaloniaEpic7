@@ -371,4 +371,5 @@ public static class LangKeys
 	public static readonly string BetaVersion = "BetaVersion";
 	public static readonly string StableVersion = "StableVersion";
 	public static readonly string UpdateChannel = "UpdateChannel";
+	public static readonly string UpdateLog = "UpdateLog";
 }

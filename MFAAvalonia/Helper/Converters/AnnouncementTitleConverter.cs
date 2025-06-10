@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
+using MFAAvalonia.Helper.ValueType;
+using MFAAvalonia.ViewModels.Windows;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,12 +16,21 @@ public class AnnouncementTitleConverter : MarkupExtension, IMultiValueConverter
     public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
     {
         // 安全解包参数（处理 UnsetValue 和 null）
-        var isReleaseNote = SafeGetValue<bool>(values, 0);
+        var type = SafeGetValue<AnnouncementType>(values, 0);
         var titleA = SafeGetValue<string>(values, 1);
         var titleB = SafeGetValue<string>(values, 2);
-        var result = isReleaseNote ? titleA : titleB;
-
-        return result;
+        var titleC = SafeGetValue<string>(values, 3);
+        switch (type)
+        {
+            case AnnouncementType.Release:
+                return titleA;
+            case AnnouncementType.Announcement:
+                return titleB;
+            case AnnouncementType.Changelog:
+                return titleC;
+            default:
+                return titleC;
+        }
     }
 
     public object[] ConvertBack(object? value, Type[] targetTypes, object? parameter, CultureInfo culture)

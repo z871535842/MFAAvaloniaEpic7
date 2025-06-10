@@ -1094,4 +1094,7 @@
     <data name="UpdateChannel" xml:space="preserve">
         <value>Update Channel</value>
     </data>
+    <data name="UpdateLog" xml:space="preserve">
+        <value>Update Log</value>
+    </data>
 </root>

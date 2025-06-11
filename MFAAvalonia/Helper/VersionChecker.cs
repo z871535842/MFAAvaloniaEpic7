@@ -405,7 +405,8 @@ public static class VersionChecker
 
                         foreach (var delPath in delPaths)
                         {
-                            File.Delete(delPath);
+                            if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                                File.Delete(delPath);
                         }
                     }
                 }
@@ -1490,7 +1491,7 @@ public static class VersionChecker
 // 修改 DirectoryMerge 方法中的文件复制逻辑
     private static void DirectoryMerge(string sourceDirName, string destDirName)
     {
-        DirectoryInfo dir = new DirectoryInfo(sourceDirName);
+        var dir = new DirectoryInfo(sourceDirName);
         DirectoryInfo[] dirs = dir.GetDirectories();
 
         if (!dir.Exists)
@@ -1502,15 +1503,16 @@ public static class VersionChecker
         {
             Directory.CreateDirectory(destDirName);
         }
-        foreach (FileInfo file in dir.GetFiles())
+        foreach (var file in dir.GetFiles())
         {
-            string tempPath = Path.Combine(destDirName, file.Name);
+            var tempPath = Path.Combine(destDirName, file.Name);
             try
             {
                 file.CopyTo(tempPath, true);
             }
-            catch (IOException)
+            catch (IOException exception)
             {
+                LoggerHelper.Error(exception);
             }
         }
         foreach (DirectoryInfo subDir in dirs)

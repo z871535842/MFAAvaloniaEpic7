@@ -368,11 +368,12 @@ public static class VersionChecker
                     try
                     {
                         File.SetAttributes(rfile, FileAttributes.Normal);
+                        LoggerHelper.Info("Deleting file: " + rfile);
                         File.Delete(rfile);
                     }
                     catch (Exception ex)
                     {
-                        LoggerHelper.Warning($"文件删除失败: {rfile} - {ex.Message}");
+                        LoggerHelper.Error($"文件删除失败: {rfile}", ex);
                     }
                 }
             }
@@ -394,7 +395,15 @@ public static class VersionChecker
 
                         foreach (var delPath in delPaths)
                         {
-                            File.Delete(delPath);
+                            try
+                            {
+                                LoggerHelper.Info("Deleting file: " + delPath);
+                                File.Delete(delPath);
+                            }
+                            catch (Exception e)
+                            {
+                                LoggerHelper.Error("Failed to delete the file: " + e);
+                            }
                         }
                     }
                     if (changesJson?.Modified != null)
@@ -405,8 +414,19 @@ public static class VersionChecker
 
                         foreach (var delPath in delPaths)
                         {
-                            if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
-                                File.Delete(delPath);
+                            try
+                            {
+                                if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                                {
+                                    LoggerHelper.Info("Deleting file: " + delPath);
+                                    File.Delete(delPath);
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                LoggerHelper.Error("Failed to delete the file: " + e);
+                            }
+
                         }
                     }
                 }
@@ -1492,7 +1512,7 @@ public static class VersionChecker
     private static void DirectoryMerge(string sourceDirName, string destDirName)
     {
         var dir = new DirectoryInfo(sourceDirName);
-        DirectoryInfo[] dirs = dir.GetDirectories();
+        var dirs = dir.GetDirectories();
 
         if (!dir.Exists)
         {
@@ -1503,19 +1523,25 @@ public static class VersionChecker
         {
             Directory.CreateDirectory(destDirName);
         }
+        
         foreach (var file in dir.GetFiles())
         {
             var tempPath = Path.Combine(destDirName, file.Name);
             try
             {
+                LoggerHelper.Info("Copying file: " + tempPath);
                 file.CopyTo(tempPath, true);
             }
             catch (IOException exception)
             {
                 LoggerHelper.Error(exception);
             }
+            catch (Exception exception)
+            {
+                LoggerHelper.Error(exception);
+            }
         }
-        foreach (DirectoryInfo subDir in dirs)
+        foreach (var subDir in dirs)
         {
             string tempPath = Path.Combine(destDirName, subDir.Name);
             DirectoryMerge(subDir.FullName, tempPath);

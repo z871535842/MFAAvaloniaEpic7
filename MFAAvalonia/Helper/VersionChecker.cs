@@ -433,7 +433,7 @@ public static class VersionChecker
                         {
                             try
                             {
-                                if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                                if (!Path.GetFileName(tempPath).Contains("MFAUpdater") && !Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
                                 {
                                     LoggerHelper.Info("Deleting file: " + delPath);
                                     File.Delete(delPath);
@@ -1559,7 +1559,8 @@ public static class VersionChecker
             var tempPath = Path.Combine(destDirName, file.Name);
             try
             {
-                if (overwriteMFA || !Path.GetFileName(tempPath).Contains("MFAAvalonia") && !Path.GetFileName(tempPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                if (overwriteMFA
+                    || !Path.GetFileName(tempPath).Contains("MFAUpdater") && !Path.GetFileName(tempPath).Contains("MFAAvalonia") && !Path.GetFileName(tempPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
                 {
                     LoggerHelper.Info("Copying file: " + tempPath);
                     file.CopyTo(tempPath, true);

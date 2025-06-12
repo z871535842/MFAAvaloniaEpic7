@@ -1110,4 +1110,7 @@
     <data name="UiVersionBelowResourceRequirement" xml:space="preserve">
         <value>当前界面版本 {0} 低于资源要求的最低版本 {1} ，部分功能将无法正常使用，建议更新软件。</value>
     </data>
+    <data name="AboutToken" xml:space="preserve">
+        <value>关于Token</value>
+    </data>
 </root>

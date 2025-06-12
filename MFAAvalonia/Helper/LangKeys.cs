@@ -373,4 +373,6 @@ public static class LangKeys
 	public static readonly string UpdateChannel = "UpdateChannel";
 	public static readonly string UpdateLog = "UpdateLog";
 	public static readonly string ProxySettings = "ProxySettings";
+	public static readonly string UiVersionBelowResourceRequirement = "UiVersionBelowResourceRequirement";
+	public static readonly string AboutToken = "AboutToken";
 }

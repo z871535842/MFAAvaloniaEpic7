@@ -99,11 +99,26 @@
                 </DockPanel>
                 <StackPanel Spacing="10" IsVisible="{calcBinding:Binding 'DownloadSourceIndex==0'}">
                     <DockPanel>
-                        <suki:PasswordBox
-                            DockPanel.Dock="Right" Watermark="{markup:I18n {x:Static helper:LangKeys.Optional}}"
-                            HorizontalAlignment="Center" MinHeight="40"
-                            Password="{Binding GitHubToken}"
-                            Width="215" />
+ 
+                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
+                            <Button 
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    Command="{x:Static utilities:UrlUtilities.OpenLink}"
+                                    CommandParameter="{x:Static helper:MFAUrls.GitHubToken}"
+                                    Height="40"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,4,0">
+                                <TextBlock
+                                    FontSize="14" Foreground="{DynamicResource SukiPrimaryColor}"
+                                    Text="{markup:I18n {x:Static helper:LangKeys.AboutToken}}" />
+                            </Button>
+                            <suki:PasswordBox
+                                DockPanel.Dock="Right" Watermark="{markup:I18n {x:Static helper:LangKeys.Optional}}"
+                                HorizontalAlignment="Center" MinHeight="40"
+                                Password="{Binding GitHubToken}"
+                                Width="215" />
+                        </StackPanel>
                         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center">
                             <TextBlock
                                 FontSize="16"

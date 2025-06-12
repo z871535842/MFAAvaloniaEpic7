@@ -397,8 +397,11 @@ public static class VersionChecker
                         {
                             try
                             {
-                                LoggerHelper.Info("Deleting file: " + delPath);
-                                File.Delete(delPath);
+                                if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                                {
+                                    LoggerHelper.Info("Deleting file: " + delPath);
+                                    File.Delete(delPath);
+                                }
                             }
                             catch (Exception e)
                             {
@@ -446,10 +449,10 @@ public static class VersionChecker
 
         SetProgress(progress, 60);
 
-        var di = new DirectoryInfo(resourceDirPath);
+        var di = new DirectoryInfo(originPath);
         if (di.Exists)
         {
-            DirectoryMerge(originPath, wpfDir);
+            DirectoryMerge(originPath, wpfDir, false);
         }
 
         SetProgress(progress, 70);
@@ -1509,7 +1512,7 @@ public static class VersionChecker
         }
     }
 // 修改 DirectoryMerge 方法中的文件复制逻辑
-    private static void DirectoryMerge(string sourceDirName, string destDirName)
+    private static void DirectoryMerge(string sourceDirName, string destDirName, bool overwriteMFA = true)
     {
         var dir = new DirectoryInfo(sourceDirName);
         var dirs = dir.GetDirectories();
@@ -1523,14 +1526,17 @@ public static class VersionChecker
         {
             Directory.CreateDirectory(destDirName);
         }
-        
+
         foreach (var file in dir.GetFiles())
         {
             var tempPath = Path.Combine(destDirName, file.Name);
             try
             {
-                LoggerHelper.Info("Copying file: " + tempPath);
-                file.CopyTo(tempPath, true);
+                if (overwriteMFA || !Path.GetFileName(tempPath).Contains("MFAAvalonia") && !Path.GetFileName(tempPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                {
+                    LoggerHelper.Info("Copying file: " + tempPath);
+                    file.CopyTo(tempPath, true);
+                }
             }
             catch (IOException exception)
             {

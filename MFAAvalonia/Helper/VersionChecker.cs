@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using MailKit.Net.Proxy;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
@@ -112,6 +113,15 @@ public static class VersionChecker
         });
     }
 
+    public static void CheckMinVersion()
+    {
+        if (IsNewVersionAvailable(GetMinVersion(), GetLocalVersion()))
+        {
+            Instances.DialogManager.CreateDialog().OfType(NotificationType.Warning).WithContent("UiVersionBelowResourceRequirement".ToLocalizationFormatted(false, GetLocalVersion(), GetMinVersion()))
+                .WithActionButton("Ok".ToLocalization(), dialog => { }, true).TryShow();
+        }
+    }
+
     public static void CheckForResourceUpdates(bool isGithub = true)
     {
         Instances.RootViewModel.SetUpdating(true);
@@ -188,7 +198,8 @@ public static class VersionChecker
                 GetLatestVersionAndDownloadUrlFromGithub(out var downloadUrl, out latestVersion);
             else
                 GetDownloadUrlFromMirror(localVersion, "MFAAvalonia", CDK(), out _, out latestVersion, isUI: true, onlyCheck: true);
-
+            if (IsNewVersionAvailable(latestVersion, GetMaxVersion()))
+                latestVersion = GetMaxVersion();
             if (IsNewVersionAvailable(latestVersion, localVersion))
             {
                 DispatcherHelper.RunOnMainThread(() =>
@@ -570,7 +581,9 @@ public static class VersionChecker
 
             // 版本验证
             SetProgress(progress, 50);
-            if (string.IsNullOrWhiteSpace(latestVersion) || !IsNewVersionAvailable(latestVersion, GetLocalVersion()))
+            if (IsNewVersionAvailable(latestVersion, GetMaxVersion()))
+                latestVersion = GetMaxVersion();
+            if (!IsNewVersionAvailable(latestVersion, GetLocalVersion()))
             {
                 Dismiss(sukiToast);
                 ToastHelper.Info("MFAIsLatestVersion".ToLocalization());
@@ -1302,8 +1315,19 @@ public static class VersionChecker
         return MaaProcessor.Interface?.RID ?? string.Empty;
     }
 
+    private static string GetMaxVersion()
+    {
+        return MaaProcessor.Interface?.MFAMaxVersion ?? string.Empty;
+    }
+    private static string GetMinVersion()
+    {
+        return MaaProcessor.Interface?.MFAMinVersion ?? string.Empty;
+    }
+
     private static bool IsNewVersionAvailable(string latestVersion, string localVersion)
     {
+        if (string.IsNullOrEmpty(latestVersion) || string.IsNullOrEmpty(localVersion))
+            return false;
         try
         {
             var normalizedLatest = ParseAndNormalizeVersion(latestVersion);
@@ -1641,7 +1665,7 @@ public static class VersionChecker
             return new HttpClient();
         }
     }
-    
+
     private class Socks5HttpClientHandler : HttpClientHandler
     {
         private readonly Socks5Client _socks5Client;
@@ -1661,7 +1685,7 @@ public static class VersionChecker
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(Socks5HttpClientHandler));
-            
+
             await _connectionLock.WaitAsync(cancellationToken).ConfigureAwait(false);
             try
             {
@@ -1672,7 +1696,7 @@ public static class VersionChecker
                         request.RequestUri.Port,
                         cancellationToken).ConfigureAwait(false);
                 }
-                
+
                 var streamClient = new HttpClient(new StreamBasedHandler(_proxyStream));
                 return await streamClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
@@ -1745,10 +1769,10 @@ public static class VersionChecker
                 await request.Content.CopyToAsync(_stream, cancellationToken).ConfigureAwait(false);
                 await _stream.FlushAsync(cancellationToken);
             }
-            
+
             var response = new HttpResponseMessage();
             response.Content = new StreamContent(_stream);
-            
+
             response.StatusCode = HttpStatusCode.OK;
 
             return response;

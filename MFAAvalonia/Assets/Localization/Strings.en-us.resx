@@ -1100,4 +1100,7 @@
     <data name="ProxySettings" xml:space="preserve">
         <value>Proxy Settings</value>
     </data>
+    <data name="UiVersionBelowResourceRequirement" xml:space="preserve">
+        <value>The current UI version {0} is lower than the minimum required version {1} for the resource. Some functions may not work properly. Please update the software.</value>
+    </data>
 </root>

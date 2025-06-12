@@ -191,6 +191,12 @@ public partial class MaaInterface
 
     [JsonProperty("version")]
     public string? Version { get; set; }
+    
+    [JsonProperty("mfa_max_version")]
+    public string? MFAMaxVersion { get; set; }
+    
+    [JsonProperty("mfa_min_version")]
+    public string? MFAMinVersion { get; set; }
 
     [JsonProperty("message")]
     public string? Message { get; set; }

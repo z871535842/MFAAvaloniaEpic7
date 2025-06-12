@@ -12,10 +12,17 @@ namespace MFAAvalonia.ViewModels.UsersControls.Settings;
 
 public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
 {
+    public enum UpdateProxyType
+    {
+        Http,
+        Socks5
+    }
+
     [ObservableProperty] private string _maaFwVersion = MaaProcessor.Utility.Version;
     [ObservableProperty] private string _mfaVersion = RootViewModel.Version;
     [ObservableProperty] private string _resourceVersion = string.Empty;
     [ObservableProperty] private bool _showResourceVersion;
+
     partial void OnResourceVersionChanged(string value)
     {
         ShowResourceVersion = !string.IsNullOrWhiteSpace(value);
@@ -48,7 +55,7 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
     {
         ConfigurationManager.Current.SetValue(ConfigurationKeys.UpdateChannelIndex, value);
     }
-    
+
     [ObservableProperty] private string _gitHubToken = SimpleEncryptionHelper.Decrypt(ConfigurationManager.Current.GetValue(ConfigurationKeys.GitHubToken, string.Empty));
 
     partial void OnGitHubTokenChanged(string value)
@@ -83,6 +90,23 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
     {
         ConfigurationManager.Current.SetValue(ConfigurationKeys.EnableAutoUpdateMFA, value);
     }
+    [ObservableProperty] private string _proxyAddress = ConfigurationManager.Current.GetValue(ConfigurationKeys.ProxyAddress, string.Empty);
+    [ObservableProperty] private UpdateProxyType _proxyType = ConfigurationManager.Current.GetValue(ConfigurationKeys.ProxyType, UpdateProxyType.Http);
+    public ObservableCollection<LocalizationViewModel> ProxyTypeList =>
+    [
+        new("HTTP Proxy")
+        {
+            Other = UpdateProxyType.Http
+        },
+        new("SOCKS5 Proxy")
+        {
+            Other = UpdateProxyType.Socks5
+        },
+    ];
+
+    partial void OnProxyAddressChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ProxyAddress, value);
+
+    partial void OnProxyTypeChanged(UpdateProxyType value) => HandlePropertyChanged(ConfigurationKeys.ProxyType, value);
 
     [RelayCommand]
     private void UpdateResource()

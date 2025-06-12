@@ -1097,4 +1097,7 @@
     <data name="UpdateLog" xml:space="preserve">
         <value>Update Log</value>
     </data>
+    <data name="ProxySettings" xml:space="preserve">
+        <value>Proxy Settings</value>
+    </data>
 </root>

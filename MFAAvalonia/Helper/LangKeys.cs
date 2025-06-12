@@ -372,4 +372,5 @@ public static class LangKeys
 	public static readonly string StableVersion = "StableVersion";
 	public static readonly string UpdateChannel = "UpdateChannel";
 	public static readonly string UpdateLog = "UpdateLog";
+	public static readonly string ProxySettings = "ProxySettings";
 }

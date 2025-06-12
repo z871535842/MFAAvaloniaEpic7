@@ -1,8 +1,10 @@
 ﻿using Avalonia.Controls;
+using MailKit.Net.Proxy;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions;
 using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Helper.Converters;
+using MFAAvalonia.ViewModels.UsersControls.Settings;
 using MFAAvalonia.ViewModels.Windows;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -20,6 +22,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -952,7 +955,7 @@ public static class VersionChecker
         var releaseUrl = $"https://api.github.com/repos/{owner}/{repo}/releases";
         int page = 1;
         const int perPage = 5;
-        using var httpClient = new HttpClient();
+        using var httpClient = CreateHttpClientWithProxy();
 
         if (!string.IsNullOrWhiteSpace(Instances.VersionUpdateSettingsUserControlModel.GitHubToken))
         {
@@ -1025,7 +1028,7 @@ public static class VersionChecker
         var cpuArch = GetNormalizedArchitecture();
 
         var releaseUrl = $"https://api.github.com/repos/{owner}/{repo}/releases/tags/{version}";
-        using var httpClient = new HttpClient();
+        using var httpClient = CreateHttpClientWithProxy();
         httpClient.DefaultRequestHeaders.UserAgent.TryParseAdd("MFAComponentUpdater/1.0");
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
 
@@ -1597,5 +1600,158 @@ public static class VersionChecker
     public static bool AllowBetaVersion()
     {
         return Instances.VersionUpdateSettingsUserControlModel.UpdateChannelIndex == 0;
+    }
+
+    private static HttpClient CreateHttpClientWithProxy()
+    {
+        var _proxyAddress = Instances.VersionUpdateSettingsUserControlModel.ProxyAddress;
+        if (string.IsNullOrWhiteSpace(_proxyAddress))
+            return new HttpClient();
+
+        try
+        {
+            string[] parts = _proxyAddress.Split(':');
+            if (parts.Length != 2)
+                throw new FormatException("代理地址格式应为 '主机:端口'");
+
+            string host = parts[0];
+            int port = int.Parse(parts[1]);
+            switch (Instances.VersionUpdateSettingsUserControlModel.ProxyType)
+            {
+                case VersionUpdateSettingsUserControlModel.UpdateProxyType.Socks5:
+                    var socks5Client = new Socks5Client(host, port);
+
+                    // 使用自定义的Socks5处理程序
+                    return new HttpClient(new Socks5HttpClientHandler(socks5Client));
+                default:
+                    var proxyUri = new Uri($"http://{_proxyAddress}");
+                    var handler = new HttpClientHandler
+                    {
+                        Proxy = new WebProxy(proxyUri),
+                        UseProxy = true,
+                        ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+                    };
+
+                    return new HttpClient(handler);
+            }
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.Error($"代理初始化失败: {ex.Message}");
+            return new HttpClient();
+        }
+    }
+    
+    private class Socks5HttpClientHandler : HttpClientHandler
+    {
+        private readonly Socks5Client _socks5Client;
+        private readonly SemaphoreSlim _connectionLock = new(1, 1);
+        private Stream? _proxyStream;
+        private bool _disposed;
+
+        public Socks5HttpClientHandler(Socks5Client socks5Client)
+        {
+            _socks5Client = socks5Client;
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+        }
+
+        async protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            if (_disposed)
+                throw new ObjectDisposedException(nameof(Socks5HttpClientHandler));
+            
+            await _connectionLock.WaitAsync(cancellationToken).ConfigureAwait(false);
+            try
+            {
+                if (_proxyStream == null)
+                {
+                    _proxyStream = await _socks5Client.ConnectAsync(
+                        request.RequestUri.Host,
+                        request.RequestUri.Port,
+                        cancellationToken).ConfigureAwait(false);
+                }
+                
+                var streamClient = new HttpClient(new StreamBasedHandler(_proxyStream));
+                return await streamClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+            }
+            finally
+            {
+                _connectionLock.Release();
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                _disposed = true;
+                _connectionLock.Dispose();
+                _proxyStream?.Dispose();
+                _proxyStream = null;
+            }
+            base.Dispose(disposing);
+        }
+    }
+
+    // 基于流的HTTP处理程序
+    private class StreamBasedHandler : HttpClientHandler
+    {
+        private readonly Stream _stream;
+        private readonly NetworkStream _networkStream;
+
+        public StreamBasedHandler(Stream stream)
+        {
+            _stream = stream;
+            _networkStream = stream as NetworkStream;
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            var client = new HttpClient(new StreamTransportHandler(_stream, _networkStream?.Socket))
+            {
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+            return client.SendAsync(request, cancellationToken);
+        }
+    }
+
+    // 自定义流传输处理程序
+    private class StreamTransportHandler : DelegatingHandler
+    {
+        private readonly Stream _stream;
+        private readonly Socket _socket;
+
+        public StreamTransportHandler(Stream stream, Socket socket)
+        {
+            _stream = stream;
+            _socket = socket;
+            InnerHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+            };
+        }
+
+        async protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken)
+        {
+            if (request.Content != null)
+            {
+                await request.Content.CopyToAsync(_stream, cancellationToken).ConfigureAwait(false);
+                await _stream.FlushAsync(cancellationToken);
+            }
+            
+            var response = new HttpResponseMessage();
+            response.Content = new StreamContent(_stream);
+            
+            response.StatusCode = HttpStatusCode.OK;
+
+            return response;
+        }
     }
 }

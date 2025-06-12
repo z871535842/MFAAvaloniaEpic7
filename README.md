@@ -151,7 +151,7 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
             "advanced": ["高级设置A","高级设置B"]
         }
   ],
-  "advanced": {
+  "advanced": [
     "高级设置A": {
       "field": "ce",
       "type": "string",
@@ -172,7 +172,7 @@ _✨ 基于 **[Avalonia](https://github.com/AvaloniaUI/Avalonia)** 的 **[MAAFra
           }
       }
     }
-  }
+  ]
 }
 ```
 **注：field和type和default支持string | list<string>类型，default默认为空。**

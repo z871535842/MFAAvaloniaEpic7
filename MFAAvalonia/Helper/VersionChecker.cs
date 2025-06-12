@@ -446,7 +446,7 @@ public static class VersionChecker
 
         SetProgress(progress, 60);
 
-        var di = new DirectoryInfo(resourceDirPath);
+        var di = new DirectoryInfo(originPath);
         if (di.Exists)
         {
             DirectoryMerge(originPath, wpfDir);
@@ -1523,7 +1523,7 @@ public static class VersionChecker
         {
             Directory.CreateDirectory(destDirName);
         }
-        
+
         foreach (var file in dir.GetFiles())
         {
             var tempPath = Path.Combine(destDirName, file.Name);

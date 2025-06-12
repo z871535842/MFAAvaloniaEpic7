@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using MFAAvalonia.Configuration;
 using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Helper;
+using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.ViewModels.Other;
 using MFAAvalonia.ViewModels.Windows;
-using MFAAvalonia.Views.Windows;
 using System.Collections.ObjectModel;
 
 namespace MFAAvalonia.ViewModels.UsersControls.Settings;
@@ -91,7 +91,7 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
         ConfigurationManager.Current.SetValue(ConfigurationKeys.EnableAutoUpdateMFA, value);
     }
     [ObservableProperty] private string _proxyAddress = ConfigurationManager.Current.GetValue(ConfigurationKeys.ProxyAddress, string.Empty);
-    [ObservableProperty] private UpdateProxyType _proxyType = ConfigurationManager.Current.GetValue(ConfigurationKeys.ProxyType, UpdateProxyType.Http);
+    [ObservableProperty] private UpdateProxyType _proxyType = ConfigurationManager.Current.GetValue(ConfigurationKeys.ProxyType, UpdateProxyType.Http, UpdateProxyType.Http, new UniversalEnumConverter<UpdateProxyType>());
     public ObservableCollection<LocalizationViewModel> ProxyTypeList =>
     [
         new("HTTP Proxy")
@@ -106,7 +106,7 @@ public partial class VersionUpdateSettingsUserControlModel : ViewModelBase
 
     partial void OnProxyAddressChanged(string value) => HandlePropertyChanged(ConfigurationKeys.ProxyAddress, value);
 
-    partial void OnProxyTypeChanged(UpdateProxyType value) => HandlePropertyChanged(ConfigurationKeys.ProxyType, value);
+    partial void OnProxyTypeChanged(UpdateProxyType value) => HandlePropertyChanged(ConfigurationKeys.ProxyType, value.ToString());
 
     [RelayCommand]
     private void UpdateResource()

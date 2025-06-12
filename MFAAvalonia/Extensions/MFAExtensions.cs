@@ -1,24 +1,13 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
-using Avalonia.Markup.Xaml.MarkupExtensions;
-using Avalonia.Threading;
-using AvaloniaExtensions.Axaml.Markup;
+﻿using AvaloniaExtensions.Axaml.Markup;
 using MFAAvalonia.Extensions.MaaFW;
-using MFAAvalonia.Helper;
 using MFAAvalonia.ViewModels.Other;
-using Microsoft.Extensions.DependencyInjection;
-using SukiUI.Controls;
-using SukiUI.Dialogs;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace MFAAvalonia.Extensions;
 
@@ -30,7 +19,7 @@ public static class MFAExtensions
             ? "cmd.exe"
             : "/bin/bash";
     }
-    
+
     public static Dictionary<TKey, MaaNode> MergeMaaNodes<TKey>(
         this IEnumerable<KeyValuePair<TKey, MaaNode>>? taskModels,
         IEnumerable<KeyValuePair<TKey, MaaNode>>? additionalModels) where TKey : notnull
@@ -162,9 +151,9 @@ public static class MFAExtensions
         if (sourceIndex == targetIndex) return;
 
         var item = list[sourceIndex];
-        
+
         list.RemoveAt(sourceIndex);
-        
+
         list.Insert(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, item);
     }
 
@@ -182,7 +171,7 @@ public static class MFAExtensions
 
         list.Insert(targetIndex > sourceIndex ? targetIndex - 1 : targetIndex, item);
     }
-    
+
     // 扩展方法：范围判断
     public static bool Between(this double value, double min, double max)
         => value >= min && value <= max;

@@ -17,7 +17,7 @@ public class MaaInterfaceAdvancedOption
     [JsonConverter(typeof(GenericSingleOrListConverter<string>))] [JsonProperty("default")]
     public List<string>? Default;
     [JsonProperty("pipeline_override")] public Dictionary<string, Dictionary<string, JToken>>? PipelineOverride;
-    
+
     private Dictionary<string, Type> GetTypeMap()
     {
         var typeMap = new Dictionary<string, Type>();
@@ -44,12 +44,12 @@ public class MaaInterfaceAdvancedOption
     {
         if (PipelineOverride == null) return "{}";
 
-        // 深拷贝原始数据（关键步骤）
+        // 深拷贝原始数据
         var cloned = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, JToken>>>(
             JsonConvert.SerializeObject(PipelineOverride)
         );
 
-        var typeMap = GetTypeMap(); // 获取类型映射
+        var typeMap = GetTypeMap();
         var regex = new Regex(@"\{(\w+)\}", RegexOptions.Compiled);
 
         foreach (var preset in cloned.Values)
@@ -61,17 +61,62 @@ public class MaaInterfaceAdvancedOption
                 {
                     for (int i = 0; i < jToken.Count(); i++)
                     {
-                        ReplaceToken(jToken[i], regex, inputValues, typeMap);
+                        var token = jToken[i];
+                        if (token == null) continue;
+                        ReplaceToken(token, regex, inputValues, typeMap);
                     }
                 }
                 else
                 {
-                    var newToken = ProcessTokenValue(jToken, regex, inputValues, typeMap);
-                    preset[key] = newToken;
+                    if (jToken.Type == JTokenType.Object && (key.Equals("custom_recognition_param", StringComparison.OrdinalIgnoreCase) || key.Equals("custom_action_param", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        var obj = jToken.ToObject<Dictionary<string, JToken>>();
+                        if (obj != null)
+                        {
+                            var processedObj = new Dictionary<string, JToken>();
+                            foreach (var innerKey in obj.Keys)
+                            {
+                                var innerValue = obj[innerKey];
+                                if (innerValue.Type == JTokenType.String)
+                                {
+                                    processedObj[innerKey] = ProcessTokenValue(innerValue, regex, inputValues, typeMap);
+                                }
+                                else if (innerValue.Type == JTokenType.Array)
+                                {
+                                    var newArray = new JArray();
+                                    foreach (var item in innerValue)
+                                    {
+                                        if (item.Type == JTokenType.String)
+                                        {
+                                            newArray.Add(ProcessTokenValue(item, regex, inputValues, typeMap));
+                                        }
+                                        else
+                                        {
+                                            newArray.Add(item.DeepClone());
+                                        }
+                                    }
+                                    processedObj[innerKey] = newArray;
+                                }
+                                else
+                                {
+                                    processedObj[innerKey] = innerValue.DeepClone();
+                                }
+                            }
+                            preset[key] = JToken.FromObject(processedObj);
+                        }
+                    }
+                    else
+                    {
+                        var newToken = ProcessTokenValue(jToken, regex, inputValues, typeMap);
+                        preset[key] = newToken;
+                    }
                 }
             }
         }
-        return JsonConvert.SerializeObject(cloned, Formatting.Indented);
+
+        var result = JsonConvert.SerializeObject(cloned, Formatting.Indented);
+        Console.WriteLine(result);
+        return result;
     }
 
     private JToken ProcessTokenValue(JToken token,
@@ -136,7 +181,7 @@ public class MaaInterfaceAdvancedOption
             arr.Replace(tempArr); // 批量替换保持父节点
         }
     }
-    
+
     private void HandleStringValue(JToken token,
         Regex regex,
         Dictionary<string, string> inputValues,

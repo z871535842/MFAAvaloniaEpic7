@@ -6,7 +6,6 @@ using MFAAvalonia.Extensions.MaaFW;
 using MFAAvalonia.Helper.Converters;
 using MFAAvalonia.ViewModels.UsersControls.Settings;
 using MFAAvalonia.ViewModels.Windows;
-using MihaZupan;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Semver;
@@ -1633,14 +1632,35 @@ public static class VersionChecker
     private static HttpClient CreateHttpClientWithProxy()
     {
         var _proxyAddress = Instances.VersionUpdateSettingsUserControlModel.ProxyAddress;
+        NetworkCredential? credentials = null;
         if (string.IsNullOrWhiteSpace(_proxyAddress))
             return new HttpClient();
 
         try
         {
-            string[] parts = _proxyAddress.Split(':');
-            if (parts.Length != 2)
-                throw new FormatException("代理地址格式应为 '主机:端口'");
+            string[] userHostParts = _proxyAddress.Split('@');
+            string? credentialsPart = null;
+            string endpointPart;
+            if (userHostParts.Length == 2)
+            {
+                credentialsPart = userHostParts[0];
+                endpointPart = userHostParts[1];
+                var creds = credentialsPart.Split(':');
+                if (creds.Length != 2)
+                    throw new FormatException("认证信息格式错误，应为 '<username>:<password>'");
+                credentials = new NetworkCredential(creds[0], creds[1]);
+            }
+            else if (userHostParts.Length == 1)
+            {
+                endpointPart = userHostParts[0];
+            }
+            else
+            {
+                throw new FormatException("代理地址格式错误，应为 '[<username>:<password>@]<host>:<port>'");
+            }
+            string[] hostParts = endpointPart.Split(':');
+            if (hostParts.Length != 2)
+                throw new FormatException("主机部分格式错误，应为 '<host>:<port>'");
 
             var handler = new HttpClientHandler
             {
@@ -1648,17 +1668,21 @@ public static class VersionChecker
                 UseCookies = false
             };
 
-            var host = parts[0];
-            var port = int.Parse(parts[1]);
+            var host = hostParts[0];
+            var port = int.Parse(hostParts[1]);
 
             switch (Instances.VersionUpdateSettingsUserControlModel.ProxyType)
             {
                 case VersionUpdateSettingsUserControlModel.UpdateProxyType.Socks5:
-                    var proxy = new HttpToSocks5Proxy(host, port);
-                    var proxyClientHandler = new HttpClientHandler { Proxy = proxy };
-                    return new HttpClient(proxyClientHandler);
+                    handler.Proxy = new WebProxy($"socks5://{_proxyAddress}", false, null, credentials);
+                    handler.UseProxy = true;
+                    return new HttpClient(handler)
+                    {
+                        Timeout = TimeSpan.FromSeconds(30),
+                        DefaultRequestVersion = HttpVersion.Version11
+                    };
                 default:
-                    handler.Proxy = new WebProxy($"http://{_proxyAddress}");
+                    handler.Proxy = new WebProxy($"http://{_proxyAddress}", false, null, credentials);
                     handler.UseProxy = true;
                     return new HttpClient(handler)
                     {

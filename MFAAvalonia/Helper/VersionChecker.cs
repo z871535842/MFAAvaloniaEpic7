@@ -1638,12 +1638,12 @@ public static class VersionChecker
 
         try
         {
-            string[] userHostParts = _proxyAddress.Split('@');
-            string? credentialsPart = null;
+            var userHostParts = _proxyAddress.Split('@');
             string endpointPart;
             if (userHostParts.Length == 2)
             {
-                credentialsPart = userHostParts[0];
+                
+                var credentialsPart = userHostParts[0];
                 endpointPart = userHostParts[1];
                 var creds = credentialsPart.Split(':');
                 if (creds.Length != 2)
@@ -1667,9 +1667,6 @@ public static class VersionChecker
                 ServerCertificateCustomValidationCallback = (_, _, _, _) => true,
                 UseCookies = false
             };
-
-            var host = hostParts[0];
-            var port = int.Parse(hostParts[1]);
 
             switch (Instances.VersionUpdateSettingsUserControlModel.ProxyType)
             {

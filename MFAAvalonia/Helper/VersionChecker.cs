@@ -1367,7 +1367,7 @@ public static class VersionChecker
     {
         try
         {
-            using var httpClient = new HttpClient();
+            using var httpClient = CreateHttpClientWithProxy();
             httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("request");
             httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/json");
 

@@ -55,7 +55,7 @@ public static class VersionChecker
         {
             AddResourceCheckTask();
         }
-        
+
         if (config.AutoUpdateMFA)
         {
             AddMFAUpdateTask();
@@ -198,6 +198,7 @@ public static class VersionChecker
                 GetLatestVersionAndDownloadUrlFromGithub(out var downloadUrl, out latestVersion);
             else
                 GetDownloadUrlFromMirror(localVersion, "MFAAvalonia", CDK(), out _, out latestVersion, isUI: true, onlyCheck: true);
+
             if (IsNewVersionAvailable(latestVersion, GetMaxVersion()))
                 latestVersion = GetMaxVersion();
             if (IsNewVersionAvailable(latestVersion, localVersion))
@@ -568,6 +569,7 @@ public static class VersionChecker
             string downloadUrl, latestVersion;
             try
             {
+
                 if (isGithub)
                     GetLatestVersionAndDownloadUrlFromGithub(out downloadUrl, out latestVersion);
                 else
@@ -584,7 +586,12 @@ public static class VersionChecker
             // 版本验证
             SetProgress(progress, 50);
             if (IsNewVersionAvailable(latestVersion, GetMaxVersion()))
+            {
                 latestVersion = GetMaxVersion();
+                if (isGithub)
+                    GetLatestVersionAndDownloadUrlFromGithub(out downloadUrl, out _, targetVersion: latestVersion);
+            }
+            
             if (!IsNewVersionAvailable(latestVersion, GetLocalVersion()))
             {
                 Dismiss(sukiToast);
@@ -959,7 +966,7 @@ public static class VersionChecker
     }
 
 
-    public static void GetLatestVersionAndDownloadUrlFromGithub(out string url, out string latestVersion, string owner = "SweetSmellFox", string repo = "MFAAvalonia", bool onlyCheck = false)
+    public static void GetLatestVersionAndDownloadUrlFromGithub(out string url, out string latestVersion, string owner = "SweetSmellFox", string repo = "MFAAvalonia", bool onlyCheck = false, string targetVersion = "")
     {
         url = string.Empty;
         latestVersion = string.Empty;
@@ -1004,8 +1011,17 @@ public static class VersionChecker
                         {
                             continue;
                         }
-                        latestVersion = tag["tag_name"]?.ToString();
-                        if (!string.IsNullOrEmpty(latestVersion))
+                        latestVersion = tag["tag_name"]?.ToString() ?? string.Empty;
+                        if (!string.IsNullOrEmpty(targetVersion) && latestVersion.Trim().Equals(targetVersion.Trim(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (onlyCheck && repo != "MFAAvalonia")
+                                SaveRelease(tag, "body");
+                            if (!onlyCheck && repo != "MFAAvalonia")
+                                SaveAnnouncement(tag, "body");
+                            url = GetDownloadUrlFromGitHubRelease(latestVersion, owner, repo);
+                            return;
+                        }
+                        if (string.IsNullOrEmpty(targetVersion) && !string.IsNullOrEmpty(latestVersion))
                         {
                             if (onlyCheck && repo != "MFAAvalonia")
                                 SaveRelease(tag, "body");
@@ -1642,7 +1658,7 @@ public static class VersionChecker
             string endpointPart;
             if (userHostParts.Length == 2)
             {
-                
+
                 var credentialsPart = userHostParts[0];
                 endpointPart = userHostParts[1];
                 var creds = credentialsPart.Split(':');

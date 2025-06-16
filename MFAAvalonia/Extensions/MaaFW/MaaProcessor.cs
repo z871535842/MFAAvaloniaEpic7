@@ -819,10 +819,13 @@ public class MaaProcessor
                         if (!Path.Exists($"{resourcePath}/pipeline/"))
                             break;
                         var jsonFiles = Directory.GetFiles(Path.GetFullPath($"{resourcePath}/pipeline/"), "*.json", SearchOption.AllDirectories);
-
+                        var jsoncFiles = Directory.GetFiles(Path.GetFullPath($"{resourcePath}/pipeline/"), "*.jsonc", SearchOption.AllDirectories);
+                        var allFiles = jsonFiles.Concat(jsoncFiles).ToArray();
                         var taskDictionaryA = new Dictionary<string, MaaNode>();
-                        foreach (var file in jsonFiles)
+                        foreach (var file in allFiles)
                         {
+                            if (file.Contains("default_pipeline.json", StringComparison.OrdinalIgnoreCase))
+                                continue;
                             var content = File.ReadAllText(file);
                             LoggerHelper.Info($"Loading Pipeline: {file}");
                             try

@@ -47,6 +47,15 @@ public static class VersionChecker
             CheckVersion = ConfigurationManager.Current.GetValue(ConfigurationKeys.EnableCheckVersion, true),
         };
 
+        if (config.AutoUpdateResource && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
+        {
+            AddResourceUpdateTask(config.AutoUpdateMFA);
+        }
+        else if (config.CheckVersion && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
+        {
+            AddResourceCheckTask();
+        }
+        
         if (config.AutoUpdateMFA)
         {
             AddMFAUpdateTask();
@@ -56,14 +65,6 @@ public static class VersionChecker
             AddMFACheckTask();
         }
 
-        if (config.AutoUpdateResource && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
-        {
-            AddResourceUpdateTask(config.AutoUpdateMFA);
-        }
-        else if (config.CheckVersion && !GetResourceVersion().Contains("debug", StringComparison.OrdinalIgnoreCase))
-        {
-            AddResourceCheckTask();
-        }
         TaskManager.RunTaskAsync(async () => await ExecuteTasksAsync(),
             () => ToastNotification.Show("自动更新时发生错误！"), "启动检测");
     }
@@ -1628,8 +1629,7 @@ public static class VersionChecker
         return Instances.VersionUpdateSettingsUserControlModel.UpdateChannelIndex == 0;
     }
 
-
-    private static HttpClient CreateHttpClientWithProxy()
+    public static HttpClient CreateHttpClientWithProxy()
     {
         var _proxyAddress = Instances.VersionUpdateSettingsUserControlModel.ProxyAddress;
         NetworkCredential? credentials = null;
@@ -1658,7 +1658,7 @@ public static class VersionChecker
             {
                 throw new FormatException("代理地址格式错误，应为 '[<username>:<password>@]<host>:<port>'");
             }
-            string[] hostParts = endpointPart.Split(':');
+            var hostParts = endpointPart.Split(':');
             if (hostParts.Length != 2)
                 throw new FormatException("主机部分格式错误，应为 '<host>:<port>'");
 

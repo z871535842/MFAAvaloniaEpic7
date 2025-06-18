@@ -1197,7 +1197,7 @@ public static class VersionChecker
             Architecture.Arm64 => "arm64",
             _ => "unknown"
         };
-        var channel = AllowBetaVersion() ? "beta" : "stable";
+        var channel = AllowBetaVersion() ? "alpha" : "stable";
         var multiplatformString = multiplatform ? $"os={os}&arch={arch}&" : "";
         var releaseUrl = isUI
             ? $"https://mirrorchyan.com/api/resources/{resId}/latest?channel={channel}&current_version={version}&{cdkD}os={os}&arch={arch}"

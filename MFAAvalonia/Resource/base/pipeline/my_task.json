@@ -1,0 +1,79 @@
+{
+    "startShop": {
+        "next":["covenantLocation",
+        "mysticLocation",
+        "swipe"
+        ]
+    },
+    "covenantLocation": {
+        "recognition":"TemplateMatch",
+        "roi":[500,80,780,640],
+        "template":"covenantLocation.png",
+        "threshold":0.960,
+        "action":"Click",
+        "target_offset":[560,20,0,0],
+        "focus": {
+            "start": "发现书签"
+        },
+        "next":"confirm",
+        "is_sub":true
+    },
+    "mysticLocation": {
+        "recognition":"TemplateMatch",
+        "roi":[500,80,780,640],
+        "template":"mysticLocation.png",
+        "threshold":0.960,
+        "action":"Click",
+        "target_offset":[560,20,0,0],
+        "focus": {
+            "start": "发现神秘书签"
+        },
+        "next":"confirm",
+        "is_sub":true
+    },
+    "confirm": {
+        "post_delay":2500,
+        "recognition":"TemplateMatch",
+        "roi":[650,465,230,85],
+        "template":"buybutton.png",
+        "threshold":0.960,
+        "action":"Click"
+    },
+    "swipe":{
+        "recognition":"DirectHit",
+        "action":"Swipe",
+        "begin":[500,580,0,0],
+        "end":[500,80,0,0],
+        "next":"startShop2"
+    },
+    "startShop2": {
+        "next":["covenantLocation",
+        "mysticLocation",
+        "refresh"
+        ]
+    },
+    "refresh":{
+        "recognition":"TemplateMatch",
+        "template":"refreshButton-zh-CN.png",
+        "threshold":0.960,
+        "roi":[24,607,370,113],
+        "action":"Click",
+        "next":"confirm2"
+    },
+    "confirm2": {
+        "recognition":"TemplateMatch",
+        "template":"refreshYesButton-zh-CN.png",
+        "threshold":0.960,
+        "roi":[590,368,311,130],
+        "action":"Click",
+        "next":"scanconfirm"
+    },
+    "scanconfirm": {
+        "recognition":"TemplateMatch",
+        "template":"buyscan.png",
+        "threshold":0.960,
+        "roi":[1140,550,200,80],
+        "action":"DoNothing",
+        "next":"startShop"
+    }
+}

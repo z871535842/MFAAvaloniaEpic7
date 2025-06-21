@@ -151,6 +151,12 @@
 		<Content Include="Assets/logo.ico" CopyToPublishDirectory="PreserveNewest">
 			<LinuxPath>/usr/share/icons/MFAAvalonia.ico</LinuxPath>
 		</Content>
+    <Content Include="interface.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Resource/**/*.*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
 	</ItemGroup>
 
     <ItemGroup>

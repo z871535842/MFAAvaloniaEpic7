@@ -412,7 +412,7 @@ public static class VersionChecker
                         {
                             try
                             {
-                                if (!Path.GetFileName(tempPath).Contains("MFAUpdater")
+                                if (!Path.GetFileName(delPath).Contains("MFAUpdater")
                                     && !Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
                                 {
                                     LoggerHelper.Info("Deleting file: " + delPath);
@@ -435,7 +435,7 @@ public static class VersionChecker
                         {
                             try
                             {
-                                if (!Path.GetFileName(tempPath).Contains("MFAUpdater")
+                                if (!Path.GetFileName(delPath).Contains("MFAUpdater")
                                     && !Path.GetFileName(delPath).Contains("MFAAvalonia")
                                     && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
                                 {

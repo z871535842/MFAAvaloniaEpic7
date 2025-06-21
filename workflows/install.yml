@@ -72,7 +72,7 @@ jobs:
         if: ${{ matrix.os != 'android' }}
         uses: robinraju/release-downloader@v1
         with:
-          repository: SweetSmellFox/MFAAvalonia
+          repository: z871535842/MFAAvalonia
           fileName: "MFAAvalonia-*-${{ matrix.os }}-${{ matrix.arch }}*"
           latest: true
           out-file-path: "MFAAvalonia"

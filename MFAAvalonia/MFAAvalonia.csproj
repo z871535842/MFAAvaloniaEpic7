@@ -36,8 +36,8 @@
         <ApplicationRevision>0</ApplicationRevision>
         <ApplicationVersion>1.1.0</ApplicationVersion>
         <Version>1.1</Version>
-        <FileVersion>1.4.0</FileVersion>
-        <AssemblyVersion>1.4.0</AssemblyVersion>
+        <FileVersion>1.4.1</FileVersion>
+        <AssemblyVersion>1.4.1</AssemblyVersion>
         <InformationalVersion>0.0.1</InformationalVersion>
     </PropertyGroup>
 
@@ -67,7 +67,7 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.1" />
         <PackageReference Include="Avalonia.Themes.Simple" Version="11.3.1" />
         <PackageReference Include="AvaloniaEdit.TextMate" Version="11.3.0" />
-        <PackageReference Include="AvaloniaExtensions.Axaml" Version="1.0.3" />
+        <PackageReference Include="AvaloniaExtensions.Axaml" Version="1.0.4.1" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
 		<PackageReference Include="Avalonia.Xaml.Interactions" Version="11.3.0.6" />
 		<PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.3.0.6" />

@@ -412,7 +412,8 @@ public static class VersionChecker
                         {
                             try
                             {
-                                if (!Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
+                                if (!Path.GetFileName(tempPath).Contains("MFAUpdater")
+                                    && !Path.GetFileName(delPath).Contains("MFAAvalonia") && !Path.GetFileName(delPath).Contains(Process.GetCurrentProcess().MainModule?.ModuleName ?? string.Empty))
                                 {
                                     LoggerHelper.Info("Deleting file: " + delPath);
                                     File.Delete(delPath);
@@ -636,12 +637,12 @@ public static class VersionChecker
             // 构建完整路径
             string sourceUpdaterPath = Path.Combine(sourceDirectory, updaterName); // 源目录路径
             string targetUpdaterPath = Path.Combine(utf8BaseDirectory, updaterName); // 目标目录路径
-            bool update = false;
+            bool update = true;
             try
             {
                 if (File.Exists(targetUpdaterPath) && File.Exists(sourceUpdaterPath))
                 {
-                    update = true;
+
                     var targetVersionInfo = FileVersionInfo.GetVersionInfo(targetUpdaterPath);
                     var sourceVersionInfo = FileVersionInfo.GetVersionInfo(sourceUpdaterPath);
                     var targetVersion = targetVersionInfo.FileVersion; // 或 ProductVersion
@@ -667,15 +668,18 @@ public static class VersionChecker
                 if (!File.Exists(sourceUpdaterPath))
                 {
                     LoggerHelper.Error($"更新器在源目录缺失: {sourceUpdaterPath}");
+                    update = false;
                 }
             }
             catch (IOException ex)
             {
+                update = false;
                 LoggerHelper.Error($"文件操作失败: {ex.Message} (错误代码: {ex.HResult})");
                 throw new InvalidOperationException("文件复制过程中发生I/O错误", ex);
             }
             catch (UnauthorizedAccessException ex)
             {
+                update = false;
                 LoggerHelper.Error($"权限不足: {ex.Message}");
                 throw new SecurityException("文件访问权限被拒绝", ex);
             }
@@ -696,7 +700,7 @@ public static class VersionChecker
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        LoggerHelper.Error(e);
                     }
                 }
                 LoggerHelper.Info($"成功复制更新器到目标目录: {targetUpdaterPath}");

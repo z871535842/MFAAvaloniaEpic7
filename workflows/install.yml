@@ -82,6 +82,7 @@ jobs:
         if: ${{ matrix.os != 'android' }}
         shell: bash
         run: |
+          rm -rf MFAAvalonia/resource/base/model
           cp -r MFAAvalonia/* install
 
       - uses: actions/upload-artifact@v4
